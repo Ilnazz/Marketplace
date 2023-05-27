@@ -1,0 +1,107 @@
+﻿<ui:UiPage x:Class="Marketplace.Pages.ProductsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      xmlns:viewmodels="clr-namespace:Marketplace.PageViewModels"
+      mc:Ignorable="d"
+      d:DataContext="{d:DesignInstance viewmodels:ProductsPageVm}"
+      x:Name="Root">
+
+    <ui:UiPage.DataContext>
+        <viewmodels:ProductsPageVm/>
+    </ui:UiPage.DataContext>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Margin="0 0 0 10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <ui:AutoSuggestBox Margin="0 0 10 0"
+                               Text="{Binding SearchingText,
+                                              UpdateSourceTrigger=PropertyChanged}"
+                               VerticalAlignment="Bottom"/>
+
+            <StackPanel Margin="0 0 10 0"
+                        Grid.Column="1">
+                <TextBlock Text="Сортировка"
+                           Margin="0 0 0 5"/>
+                <ComboBox ItemsSource="{Binding Sortings, Mode=OneWay}"
+                          DisplayMemberPath="Name"
+                          SelectedItem="{Binding SelectedSorting}"/>
+            </StackPanel>
+
+            <StackPanel Margin="0 0 10 0"
+                        Grid.Column="2">
+                <TextBlock Text="Категория"
+                           Margin="0 0 0 5"/>
+                <ComboBox ItemsSource="{Binding Categories, Mode=OneWay}"
+                          DisplayMemberPath="Name"
+                          SelectedItem="{Binding SelectedCategory}"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="3">
+                <TextBlock Text="Производитель"
+                           Margin="0 0 0 5"/>
+                <ComboBox ItemsSource="{Binding Manufacturers, Mode=OneWay}"
+                          DisplayMemberPath="Name"
+                          SelectedItem="{Binding SelectedManufacturer}"/>
+            </StackPanel>
+        </Grid>
+
+        <ui:VirtualizingItemsControl ItemsSource="{Binding Products, Mode=OneWay}"
+                                     Grid.Row="1">
+            <ui:VirtualizingItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <ui:VirtualizingWrapPanel SpacingMode="BetweenItemsOnly"/>
+                </ItemsPanelTemplate>
+            </ui:VirtualizingItemsControl.ItemsPanel>
+            <ui:VirtualizingItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <ui:CardAction Margin="0 0 10 10"
+                                   IsChevronVisible="False"
+                                   Command="{Binding Path=DataContext.OpenProductPageCommand,
+                                                     ElementName=Root}"
+                                   CommandParameter="{Binding}"
+                                   Width="250">
+                        <StackPanel>
+                            <ui:SymbolIcon Symbol="Image16"
+                                            FontSize="128"
+                                            Margin="0 0 10 0"/>
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="0 0 0 5">
+                                <TextBlock Text="{Binding Cost, StringFormat=0, Mode=OneWay}"
+                                            FontSize="16"
+                                            FontWeight="Black"
+                                            Margin="0 0 5 0"/>
+                                <TextBlock Text="₽"
+                                            FontSize="16"/>
+                            </StackPanel>
+                            <TextBlock Text="{Binding Name, Mode=OneWay}"
+                                        Margin="0 0 0 5"/>
+                            <TextBlock Text="{Binding ProductManufacturer.Name, Mode=OneWay}"
+                                        FontWeight="Light"
+                                        Margin="0 0 0 10"/>
+
+                            <ui:Button Content="В корзину"
+                                       Command="{Binding Path=DataContext.AddProductToBasketCommand,
+                                                         ElementName=Root}"/>
+
+                            <ui:Button Content="Оформить"/>
+                        </StackPanel>
+                    </ui:CardAction>
+                </DataTemplate>
+            </ui:VirtualizingItemsControl.ItemTemplate>
+        </ui:VirtualizingItemsControl>
+    </Grid>
+</ui:UiPage>

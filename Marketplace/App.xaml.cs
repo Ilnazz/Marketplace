@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
+using Marketplace.Database.Models;
+using Marketplace.WindowViewModels;
+using Marketplace.WindowViews;
 
-namespace Marketplace
+namespace Marketplace;
+
+public partial class App : Application
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application
-    {
-    }
+    public static User? CurrentUser { get; set; }
+
+    protected override void OnStartup(StartupEventArgs e)
+        => new ContainerWindow(new NavigationWindowVm()).Show();
 }
