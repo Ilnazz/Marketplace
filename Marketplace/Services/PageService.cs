@@ -5,7 +5,7 @@ using Wpf.Ui.Mvvm.Contracts;
 
 namespace Marketplace.Services;
 
-public class NavigationPageService : IPageService
+public class PageService : IPageService
 {
     public FrameworkElement? GetPage(Type pageType)
     {

@@ -6,5 +6,21 @@
     <DataTemplate DataType="{x:Type windowvms:NavigationWindowVm}">
         <windowviews:NavigationWindowView/>
     </DataTemplate>
-    
+
+    <DataTemplate DataType="{x:Type windowvms:AuthWindowVm}">
+        <windowviews:AuthWindowView/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type windowvms:RegWindowVm}">
+        <windowviews:RegWindowView/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type windowvms:OrderWindowVm}">
+        <windowviews:OrderWindowView/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type windowvms:ProductWindowVm}">
+        <windowviews:ProductWindowView/>
+    </DataTemplate>
+
 </ResourceDictionary>

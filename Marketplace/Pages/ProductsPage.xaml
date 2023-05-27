@@ -59,7 +59,7 @@
             </StackPanel>
         </Grid>
 
-        <ui:VirtualizingItemsControl ItemsSource="{Binding Products, Mode=OneWay}"
+        <ui:VirtualizingItemsControl ItemsSource="{Binding ProductModels, Mode=OneWay}"
                                      Grid.Row="1">
             <ui:VirtualizingItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -68,12 +68,8 @@
             </ui:VirtualizingItemsControl.ItemsPanel>
             <ui:VirtualizingItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <ui:CardAction Margin="0 0 10 10"
-                                   IsChevronVisible="False"
-                                   Command="{Binding Path=DataContext.OpenProductPageCommand,
-                                                     ElementName=Root}"
-                                   CommandParameter="{Binding}"
-                                   Width="250">
+                    <ui:Card Margin="0 0 10 10"
+                             Width="250">
                         <StackPanel>
                             <ui:SymbolIcon Symbol="Image16"
                                             FontSize="128"
@@ -89,17 +85,35 @@
                             </StackPanel>
                             <TextBlock Text="{Binding Name, Mode=OneWay}"
                                         Margin="0 0 0 5"/>
-                            <TextBlock Text="{Binding ProductManufacturer.Name, Mode=OneWay}"
+                            <TextBlock Text="{Binding Manufacturer.Name, Mode=OneWay}"
                                         FontWeight="Light"
                                         Margin="0 0 0 10"/>
 
-                            <ui:Button Content="В корзину"
-                                       Command="{Binding Path=DataContext.AddProductToBasketCommand,
-                                                         ElementName=Root}"/>
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="0 0 0 10">
+                                <ui:Button Content="В корзину"
+                                           Command="{Binding PutToBasketCommand}"
+                                           Margin="0 0 10 0"/>
 
-                            <ui:Button Content="Оформить"/>
+                                <StackPanel Orientation="Horizontal"
+                                            Visibility="{Binding IsInBasket, Converter={StaticResource BoolToVisibilityConverter}}">
+                                    <ui:Button Content="-"
+                                               Command="{Binding RemoveOneFromBasketCommand}"/>
+                                    <TextBlock Text="{Binding QuantityInBasket}"
+                                               Margin="10 0"
+                                               VerticalAlignment="Center"/>
+                                    <ui:Button Content="+"
+                                               Command="{Binding AddOneToBasketCommand}"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <ui:Button Content="Подробнее"
+                                       HorizontalAlignment="Stretch"
+                                       Command="{Binding DataContext.OpenProductModelWindowCommand,
+                                                         ElementName=Root}"
+                                       CommandParameter="{Binding}"/>
                         </StackPanel>
-                    </ui:CardAction>
+                    </ui:Card>
                 </DataTemplate>
             </ui:VirtualizingItemsControl.ItemTemplate>
         </ui:VirtualizingItemsControl>

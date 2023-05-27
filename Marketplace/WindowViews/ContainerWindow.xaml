@@ -6,7 +6,8 @@
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
              ExtendsContentIntoTitleBar="True"
              mc:Ignorable="d"
-             Title="{Binding Title}">
+             Title="{Binding Title}"
+             WindowStartupLocation="CenterScreen">
 
     <ContentControl Content="{Binding}"/>
 

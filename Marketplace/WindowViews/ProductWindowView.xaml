@@ -7,19 +7,23 @@
       xmlns:windowvms="clr-namespace:Marketplace.WindowViewModels"
       mc:Ignorable="d"
       d:DataContext="{d:DesignInstance windowvms:ProductWindowVm}">
-
-    <ui:Card VerticalAlignment="Stretch"
-             VerticalContentAlignment="Top">
+    <ui:Card VerticalAlignment="Stretch">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
 
-            <ui:SymbolIcon FontSize="256" Width="300" Symbol="Image48"/>
+            <!--<ui:SymbolIcon FontSize="128" Symbol="Image48"/>-->
+            <Rectangle Width="200" Height="400" Fill="Brown"/>
 
             <StackPanel Grid.Column="1">
-                <TextBlock Text="{Binding Name}"/>
+                <TextBlock Text="{Binding Name}"
+                            FontSize="20"
+                            FontWeight="Medium"
+                            Grid.Row="0"
+                            Margin="0 0 0 10"/>
+                <TextBlock Text="{Binding Description}"/>
             </StackPanel>
         </Grid>
     </ui:Card>

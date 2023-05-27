@@ -1,21 +1,20 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.Input;
 using Marketplace.Database;
 using Marketplace.Database.Models;
-using Marketplace.Pages;
+using Marketplace.WindowViewModels;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Windows.Data;
+using Wpf.Ui.Controls;
 
 namespace Marketplace.PageViewModels;
 
 public partial class ProductsPageVm : PageVmBase
 {
     #region Properties
-    public IEnumerable<Product> Products => GetFilteredAndSortedProducts();
+    public IEnumerable<ProductModel> ProductModels =>
+        GetFilteredAndSortedProducts().Select(p => new ProductModel(p));
 
     private string _searchingText = string.Empty;
     public string SearchingText
@@ -26,7 +25,7 @@ public partial class ProductsPageVm : PageVmBase
             _searchingText = value;
 
             OnPropertyChanged();
-            OnPropertyChanged(nameof(Products));
+            OnPropertyChanged(nameof(ProductModels));
         }
     }
 
@@ -50,7 +49,7 @@ public partial class ProductsPageVm : PageVmBase
             _slectedSorting = value;
 
             OnPropertyChanged();
-            OnPropertyChanged(nameof(Products));
+            OnPropertyChanged(nameof(ProductModels));
         }
     }
 
@@ -65,7 +64,7 @@ public partial class ProductsPageVm : PageVmBase
             _selectedCategory = value;
 
             OnPropertyChanged();
-            OnPropertyChanged(nameof(Products));
+            OnPropertyChanged(nameof(ProductModels));
         }
     }
 
@@ -80,7 +79,7 @@ public partial class ProductsPageVm : PageVmBase
             _selectedManufacturer = value;
 
             OnPropertyChanged();
-            OnPropertyChanged(nameof(Products));
+            OnPropertyChanged(nameof(ProductModels));
         }
     }
     
@@ -88,14 +87,24 @@ public partial class ProductsPageVm : PageVmBase
 
     #region Commands
     [RelayCommand]
-    private void OpenProductPage(Product product)
+    private void OpenProductModelWindow(ProductModel product)
     {
-    }
+        var productWindowVm = new ProductWindowVm(product);
 
-    [RelayCommand]
-    private void AddProductToBasket(Product product)
-    {
+        var messageBox = new MessageBox
+        {
+            Content = productWindowVm,
 
+            ButtonLeftName = "Сохранить",
+            ButtonRightName = "Отменить",
+
+            Height = 400,
+            Width = 400,
+
+            ResizeMode = System.Windows.ResizeMode.CanResize,
+            ShowInTaskbar = false
+        };
+        messageBox.ShowDialog();
     }
     #endregion
 
