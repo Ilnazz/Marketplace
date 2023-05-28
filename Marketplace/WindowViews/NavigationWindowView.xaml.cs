@@ -50,12 +50,12 @@ public partial class NavigationWindowView : UserControl
                 Icon = Wpf.Ui.Common.SymbolRegular.Box24,
                 PageType = typeof(ProductsPage)
             },
-            new NavigationItem
-            {
-                Content = "Заказы",
-                Icon = Wpf.Ui.Common.SymbolRegular.ReOrder24,
-                PageType = typeof(OrdersPage)
-            }
+            //new NavigationItem
+            //{
+            //    Content = "Заказы",
+            //    Icon = Wpf.Ui.Common.SymbolRegular.ReOrder24,
+            //    PageType = typeof(OrdersPage)
+            //}
         };
 
         var basketNavItem = new NavigationItem
@@ -66,7 +66,6 @@ public partial class NavigationWindowView : UserControl
         };
 
         var basketNavItemDefaultBrush = basketNavItem.IconForeground;
-
         App.BasketService.StateChanged += () =>
         {
             if (App.BasketService.TotalItemsCount > 0)

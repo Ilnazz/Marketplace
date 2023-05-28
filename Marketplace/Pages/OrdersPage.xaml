@@ -9,6 +9,5 @@
       d:DataContext="{d:DesignInstance viewmodels:OrdersPageVm}"
       Title="OrdersPage">
     <Grid>
-        <TextBlock Text="Заказы"/>
     </Grid>
 </ui:UiPage>
