@@ -35,6 +35,8 @@ public class GuestBasketService<T> : IBasketService<T> where T : notnull
             throw new ArgumentException("Item count in basket lesser than given count to remove", nameof(item));
 
         _itemAndCounts[item] -= count;
+        if (_itemAndCounts[item] == 0)
+            _itemAndCounts.Remove(item);
 
         StateChanged?.Invoke();
     }

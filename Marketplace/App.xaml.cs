@@ -1,5 +1,7 @@
 ﻿using System.Windows;
+using Marketplace.Database;
 using Marketplace.Database.Models;
+using Marketplace.Pages;
 using Marketplace.Services;
 using Marketplace.WindowViewModels;
 using Marketplace.WindowViews;
@@ -27,5 +29,6 @@ public partial class App : Application
         BasketService = new GuestBasketService<Product>();
 
         new ContainerWindow(new NavigationWindowVm()).Show();
+        NavigationService.Navigate(typeof(ProductsPage));
     }
 }

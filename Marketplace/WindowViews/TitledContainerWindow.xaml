@@ -1,4 +1,4 @@
-﻿<ui:UiWindow x:Class="Marketplace.WindowViews.ContainerWindow"
+﻿<ui:UiWindow x:Class="Marketplace.WindowViews.TitledContainerWindow"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -10,6 +10,17 @@
              ResizeMode="NoResize"
              SizeToContent="WidthAndHeight">
 
-    <ContentControl Content="{Binding}"/>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <ui:TitleBar Title="{Binding Title}"
+                     Grid.Row="0"/>
+
+        <ContentControl Content="{Binding}"
+                        Grid.Row="1"/>
+    </Grid>
 
 </ui:UiWindow>

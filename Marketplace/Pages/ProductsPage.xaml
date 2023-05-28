@@ -6,8 +6,7 @@
       xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
       xmlns:viewmodels="clr-namespace:Marketplace.PageViewModels"
       mc:Ignorable="d"
-      d:DataContext="{d:DesignInstance viewmodels:ProductsPageVm}"
-      x:Name="Root">
+      d:DataContext="{d:DesignInstance viewmodels:ProductsPageVm}">
 
     <ui:UiPage.DataContext>
         <viewmodels:ProductsPageVm/>
@@ -60,7 +59,8 @@
         </Grid>
 
         <ui:VirtualizingItemsControl ItemsSource="{Binding ProductModels, Mode=OneWay}"
-                                     Grid.Row="1">
+                                     Grid.Row="1"
+                                     ScrollViewer.CanContentScroll="True">
             <ui:VirtualizingItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <ui:VirtualizingWrapPanel SpacingMode="BetweenItemsOnly"/>
@@ -69,13 +69,23 @@
             <ui:VirtualizingItemsControl.ItemTemplate>
                 <DataTemplate>
                     <ui:Card Margin="0 0 10 10"
-                             Width="250">
+                             Width="225">
                         <StackPanel>
-                            <ui:SymbolIcon Symbol="Image16"
-                                            FontSize="128"
-                                            Margin="0 0 10 0"/>
+                            <Image HorizontalAlignment="Stretch"
+                                   VerticalAlignment="Stretch"
+                                   Stretch="UniformToFill"
+                                   Grid.Row="0">
+                                <Image.Source>
+                                    <Binding Path="CurrentPhoto">
+                                        <Binding.TargetNullValue>
+                                            <BitmapImage UriSource="../Resources/Images/LightGrayPixel.png"/>
+                                        </Binding.TargetNullValue>
+                                    </Binding>
+                                </Image.Source>
+                            </Image>
+
                             <StackPanel Orientation="Horizontal"
-                                        Margin="0 0 0 5">
+                                        Margin="0 10 0 5">
                                 <TextBlock Text="{Binding Cost, StringFormat=0, Mode=OneWay}"
                                             FontSize="16"
                                             FontWeight="Black"
@@ -84,7 +94,8 @@
                                             FontSize="16"/>
                             </StackPanel>
                             <TextBlock Text="{Binding Name, Mode=OneWay}"
-                                        Margin="0 0 0 5"/>
+                                       TextWrapping="Wrap"
+                                       Margin="0 0 0 5"/>
                             <TextBlock Text="{Binding Manufacturer.Name, Mode=OneWay}"
                                         FontWeight="Light"
                                         Margin="0 0 0 10"/>
@@ -92,11 +103,12 @@
                             <StackPanel Orientation="Horizontal"
                                         Margin="0 0 0 10">
                                 <ui:Button Content="В корзину"
-                                           Command="{Binding PutToBasketCommand}"
-                                           Margin="0 0 10 0"/>
+                                           Command="{Binding PutToBasketCommand}"/>
 
                                 <StackPanel Orientation="Horizontal"
-                                            Visibility="{Binding IsInBasket, Converter={StaticResource BoolToVisibilityConverter}}">
+                                            Visibility="{Binding IsInBasket,
+                                                                 Converter={StaticResource BoolToVisibilityConverter}}"
+                                            Margin="10 0 0 0">
                                     <ui:Button Content="-"
                                                Command="{Binding RemoveOneFromBasketCommand}"/>
                                     <TextBlock Text="{Binding QuantityInBasket}"
@@ -109,9 +121,7 @@
 
                             <ui:Button Content="Подробнее"
                                        HorizontalAlignment="Stretch"
-                                       Command="{Binding DataContext.OpenProductModelWindowCommand,
-                                                         ElementName=Root}"
-                                       CommandParameter="{Binding}"/>
+                                       Command="{Binding OpenProductModelWindowCommand}"/>
                         </StackPanel>
                     </ui:Card>
                 </DataTemplate>

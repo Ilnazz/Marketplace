@@ -3,9 +3,9 @@ using Wpf.Ui.Controls;
 
 namespace Marketplace.WindowViews;
 
-public partial class ContainerWindow : UiWindow
+public partial class TitledContainerWindow : UiWindow
 {
-    public ContainerWindow(WindowVmBase windowVm)
+    public TitledContainerWindow(WindowVmBase windowVm)
     {
         InitializeComponent();
 
@@ -13,9 +13,5 @@ public partial class ContainerWindow : UiWindow
 
         windowVm.CloseWindowMethod = this.Close;
         this.Closing += (_, e) => e.Cancel = windowVm.OnClosing() == false;
-
-        Loaded += (_, _) =>
-        {
-        };
     }
 }

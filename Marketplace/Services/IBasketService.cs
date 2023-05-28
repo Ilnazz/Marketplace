@@ -24,10 +24,8 @@ public interface IBasketService<T> where T : notnull
     int GetCount(T item)
     {
         ArgumentNullException.ThrowIfNull(item, nameof(item));
-        var itemAndCounts = GetItemAndCounts();
-        if (itemAndCounts.TryGetValue(item, out var count) == false)
-            throw new ArgumentException("There is no such item in basket", nameof(item));
 
-        return count;
+        var itemAndCounts = GetItemAndCounts();
+        return itemAndCounts.TryGetValue(item, out var count) ? count : 0;
     }
 }

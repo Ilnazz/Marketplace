@@ -2,11 +2,11 @@
 using Marketplace.Database;
 using Marketplace.Database.Models;
 using Marketplace.WindowViewModels;
+using Marketplace.WindowViews;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Wpf.Ui.Controls;
 
 namespace Marketplace.PageViewModels;
 
@@ -83,29 +83,6 @@ public partial class ProductsPageVm : PageVmBase
         }
     }
     
-    #endregion
-
-    #region Commands
-    [RelayCommand]
-    private void OpenProductModelWindow(ProductModel product)
-    {
-        var productWindowVm = new ProductWindowVm(product);
-
-        var messageBox = new MessageBox
-        {
-            Content = productWindowVm,
-
-            ButtonLeftName = "Сохранить",
-            ButtonRightName = "Отменить",
-
-            Height = 400,
-            Width = 400,
-
-            ResizeMode = System.Windows.ResizeMode.CanResize,
-            ShowInTaskbar = false
-        };
-        messageBox.ShowDialog();
-    }
     #endregion
 
     #region Fields
