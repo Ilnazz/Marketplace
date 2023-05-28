@@ -9,10 +9,7 @@ public partial class NavigationWindowView : UserControl
     {
         InitializeComponent();
 
-        DataContext = this;
-
-        NavigationSideBar.PageService = new PageService();
-
-        App.Instance.NavigationService = NavigationSideBar;
+        NavigationSideBar.PageService = App.PageService;
+        App.NavigationService = NavigationSideBar;
     }
 }

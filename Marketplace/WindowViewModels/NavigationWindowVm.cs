@@ -15,9 +15,9 @@ public partial class NavigationWindowVm : WindowVmBase
 
     public ObservableCollection<INavigationControl> FooterNavItems { get; private set; }
 
-    [ObservableProperty]
-    private Brush _basketNavItemForeground;
     #endregion
+
+    private static readonly BrushConverter _brushConverter = new();
 
     public NavigationWindowVm()
     {
@@ -42,28 +42,32 @@ public partial class NavigationWindowVm : WindowVmBase
             }
         };
 
-        var basketNavigationItem = new NavigationItem
+        var basketNavItem = new NavigationItem
         {
             Content = "Корзина",
             Icon = Wpf.Ui.Common.SymbolRegular.PaintBucket24,
             PageType = typeof(BasketPage),
         };
-        basketNavigationItem.SetBinding(NavigationItem.IconForegroundProperty, new Binding(nameof(BasketNavItemForeground))
-        {
-            Mode = BindingMode.OneWay,
-        });
 
-        App.Instance.BasketService.StateChanged += () =>
+        var basketNavItemDefaultBrush = basketNavItem.IconForeground;
+
+        App.BasketService.StateChanged += () =>
         {
-            if (App.Instance.BasketService.ItemCount > 0)
-                BasketNavItemForeground = Brushes.Red;
+            if (App.BasketService.TotalItemsCount > 0)
+            {
+                basketNavItem.IconForeground = Brushes.Red;
+                basketNavItem.Content = $"В корзине: {App.BasketService.TotalItemsCount}";
+            }
             else
-                BasketNavItemForeground = Brushes.White;
+            {
+                basketNavItem.IconForeground = basketNavItemDefaultBrush;
+                basketNavItem.Content = "Корзина";
+            }
         };
 
         FooterNavItems = new ObservableCollection<INavigationControl>
         {
-            basketNavigationItem,
+            basketNavItem,
             new NavigationItem
             {
                 Content = "Личный кабинет",

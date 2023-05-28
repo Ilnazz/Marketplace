@@ -10,21 +10,22 @@ namespace Marketplace;
 
 public partial class App : Application
 {
-    public static App Instance { get; private set; }
+    public static User? CurrentUser { get; set; }
 
-    public User? CurrentUser { get; set; }
+    public static AuthRegService AuthRegService { get; set; }
 
-    public IPageService PageService { get; private set; }
+    public static IPageService PageService { get; set; }
 
-    public INavigation NavigationService { get; set; }
+    public static INavigation NavigationService { get; set; }
 
-    public IBasketService<Product> BasketService { get; set; }
-
-    public App() => Instance = this;
+    public static IBasketService<Product> BasketService { get; set; }
 
     protected override void OnStartup(StartupEventArgs e)
     {
         PageService = new PageService();
+        AuthRegService = new AuthRegService();
+        BasketService = new GuestBasketService<Product>();
+
         new ContainerWindow(new NavigationWindowVm()).Show();
     }
 }

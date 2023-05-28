@@ -22,5 +22,5 @@
     <DataTemplate DataType="{x:Type windowvms:ProductWindowVm}">
         <windowviews:ProductWindowView/>
     </DataTemplate>
-
+    
 </ResourceDictionary>

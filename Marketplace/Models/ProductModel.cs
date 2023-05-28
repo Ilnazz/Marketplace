@@ -75,14 +75,15 @@ public partial class ProductModel : ObservableObject
     [RelayCommand]
     private void AddOneToBasket()
     {
-        //App.BasketService.AddProductToBasket(product);
         QuantityInBasket += 1;
+        App.BasketService.AddToBasket(_product, 1);
     }
 
     [RelayCommand(CanExecute = nameof(CanRemoveOneFromBasket))]
     private void RemoveOneFromBasket()
     {
         QuantityInBasket -= 1;
+        App.BasketService.RemoveFromBasket(_product, 1);
     }
     private bool CanRemoveOneFromBasket() => QuantityInBasket > 0;
     #endregion

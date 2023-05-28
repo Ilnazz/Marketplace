@@ -28,11 +28,11 @@ public partial class AuthWindowVm : WindowVmBase
     {
         ValidateAllProperties();
 
-        if (AuthRegService.AuthorizeUser(Login!, Password!) == false)
-        {
-            new MessageBox().Show("Ошибка", "Неверные логин и/или пароль.");
-            return;
-        }
+        //if (App.AuthRegService.AuthorizeUser(Login!, Password!) == false)
+        //{
+        //    new MessageBox().Show("Ошибка", "Неверные логин и/или пароль.");
+        //    return;
+        //}
 
     }
     private bool CanAuthorize() => HasErrors == false;

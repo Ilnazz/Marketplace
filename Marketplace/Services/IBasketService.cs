@@ -1,24 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
-using Marketplace.Database.Models;
 
 namespace Marketplace.Services;
 
-public interface IBasketService<T>
+public interface IBasketService<T> where T : notnull
 {
-    IEnumerable<Product> Items { get; }
-
-    int ItemCount { get; }
+    int TotalItemsCount { get; }
 
     event Action? StateChanged;
 
-    void AddToBasket(T item, int quantity);
+    void AddToBasket(T item, int count);
 
-    void RemoveFromBasket(T item, int quantity);
+    void RemoveFromBasket(T item, int count);
+
+    IReadOnlyDictionary<T, int> GetItemAndCounts();
 
     void AddToBasket(T item)
         => AddToBasket(item, 1);
 
     void RemoveFromBasket(T item)
         => RemoveFromBasket(item, 1);
+
+    int GetCount(T item)
+    {
+        ArgumentNullException.ThrowIfNull(item, nameof(item));
+        var itemAndCounts = GetItemAndCounts();
+        if (itemAndCounts.TryGetValue(item, out var count) == false)
+            throw new ArgumentException("There is no such item in basket", nameof(item));
+
+        return count;
+    }
 }

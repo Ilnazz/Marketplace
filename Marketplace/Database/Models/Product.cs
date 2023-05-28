@@ -19,6 +19,8 @@ public partial class Product
 
     public int ProductManufacturerId { get; set; }
 
+    public virtual ICollection<BasketProduct> BasketProducts { get; set; } = new List<BasketProduct>();
+
     public virtual ICollection<OrderProduct> OrderProducts { get; set; } = new List<OrderProduct>();
 
     public virtual ProductCategory ProductCategory { get; set; } = null!;
