@@ -19,6 +19,12 @@ public partial class Product
 
     public int ProductManufacturerId { get; set; }
 
+    public int DiscountPercent { get; set; }
+
+    public int QuantityInStock { get; set; }
+
+    public bool IsRemoved { get; set; }
+
     public virtual ICollection<BasketProduct> BasketProducts { get; set; } = new List<BasketProduct>();
 
     public virtual ICollection<OrderProduct> OrderProducts { get; set; } = new List<OrderProduct>();

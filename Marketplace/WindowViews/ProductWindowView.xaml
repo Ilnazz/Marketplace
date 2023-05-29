@@ -87,6 +87,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <TextBlock Text="{Binding ProductModel.Name}"
@@ -123,24 +124,60 @@
                 <TextBlock Text="{Binding ProductModel.Manufacturer.Name}"/>
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal"
-                        Grid.Row="5"
-                        Margin="0 0 0 10">
-                <TextBlock Text="Цена:"
-                            Margin="0 0 5 0"
-                            FontWeight="Medium"/>
-                <TextBlock Text="{Binding ProductModel.Cost, StringFormat=0, Mode=OneWay}"
-                            Margin="0 0 5 0"/>
-                <TextBlock Text="₽"/>
+            <StackPanel Grid.Row="5"
+                        Orientation="Horizontal"
+                        Margin="0 0 0 5">
+                <TextBlock Text="Продавец:"
+                           FontWeight="Medium"
+                           Margin="0 0 5 0"/>
+                <TextBlock Text="{Binding ProductModel.Salesman.FullName}"/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal"
                         Grid.Row="6"
+                        Margin="0 0 0 10">
+                <TextBlock Text="Цена:"
+                            Margin="0 0 5 0"
+                            FontWeight="Medium"/>
+                <TextBlock Margin="0 0 2.5 0"
+                           Text="{Binding ProductModel.CostWithDiscount, StringFormat='{}{0:# ###} ₽', Mode=OneWay}"/>
+                <TextBlock Text="{Binding ProductModel.Cost, StringFormat=0, Mode=OneWay}"
+                            TextDecorations="Strikethrough"
+                            VerticalAlignment="Bottom"
+                            Margin="2.5 0 0 0">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ProductModel.HasDiscount, Mode=OneWay}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal"
+                        Grid.Row="7"
                         HorizontalAlignment="Right">
-                <ui:Button Content="В корзину"
-                            Command="{Binding ProductModel.PutToBasketCommand}"/>
+                <ui:Button Command="{Binding ProductModel.PutToBasketCommand}"
+                            CommandParameter="{Binding ElementName=MessageFlyout}">
+                    <ui:Button.Style>
+                        <Style TargetType="{x:Type ui:Button}" BasedOn="{StaticResource {x:Type ui:Button}}">
+                            <Setter Property="Content" Value="В корзину"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ProductModel.AvailableInStock}" Value="False">
+                                    <Setter Property="Content" Value="Нет в наличии"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ui:Button.Style>
+                </ui:Button>
 
                 <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            DockPanel.Dock="Right"
                             Visibility="{Binding ProductModel.IsInBasket,
                                                     Converter={StaticResource BoolToVisibilityConverter}}"
                             Margin="10 0 0 0">
@@ -150,7 +187,11 @@
                                 Margin="10 0"
                                 VerticalAlignment="Center"/>
                     <ui:Button Content="+"
-                                Command="{Binding ProductModel.AddOneToBasketCommand}"/>
+                                Command="{Binding ProductModel.AddOneToBasketCommand}"
+                                CommandParameter="{Binding ElementName=MessageFlyout}"/>
+                    <ui:Flyout x:Name="MessageFlyout"
+                                Margin="5 0 0 0"
+                                Content="Больше нет 😞"/>
                 </StackPanel>
             </StackPanel>
         </Grid>

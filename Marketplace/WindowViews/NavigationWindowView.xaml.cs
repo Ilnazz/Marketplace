@@ -5,7 +5,6 @@ using Wpf.Ui.Controls.Interfaces;
 using Wpf.Ui.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Windows.Media;
-using Wpf.Ui.Controls.Navigation;
 
 namespace Marketplace.WindowViews;
 
@@ -37,7 +36,7 @@ public partial class NavigationWindowView : UserControl
         App.NavigationService = NavigationSideBar;
 
         NavigationSideBar.Navigated += (_, _) =>
-            CurrentPageTitle = $"{NavigationSideBar.Current!.Content}";  
+            CurrentPageTitle = $"{NavigationSideBar.Current!.Content}";
     }
 
     private void InitiNavigationItems()

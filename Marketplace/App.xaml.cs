@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using Marketplace.Database;
 using Marketplace.Database.Models;
 using Marketplace.Pages;
 using Marketplace.Services;
@@ -19,6 +18,7 @@ public partial class App : Application
     public static IPageService PageService { get; set; }
 
     public static INavigation NavigationService { get; set; }
+    public static Window NavigationWindow { get; set; }
 
     public static IBasketService<Product> BasketService { get; set; }
 
@@ -28,7 +28,8 @@ public partial class App : Application
         AuthRegService = new AuthRegService();
         BasketService = new GuestBasketService<Product>();
 
-        new ContainerWindow(new NavigationWindowVm()).Show();
+        NavigationWindow = new ContainerWindow(new NavigationWindowVm());
+        NavigationWindow.Show();
         NavigationService.Navigate(typeof(ProductsPage));
     }
 }

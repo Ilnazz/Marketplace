@@ -14,7 +14,7 @@
     
     <Grid Margin="0 10 0 0">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="3*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
@@ -32,6 +32,7 @@
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="175"/>
+                                <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
@@ -77,7 +78,18 @@
                                                FontSize="15"
                                                FontWeight="Thin"
                                                Margin="0 0 5 0"/>
-                                    <TextBlock Text="{Binding Manufacturer.Name}"
+                                    <TextBlock Text="{Binding Manufacturer.Name, Mode=OneWay}"
+                                               VerticalAlignment="Bottom"
+                                               FontSize="15"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal"
+                                            Margin="0 0 0 5">
+                                    <TextBlock Text="Продавец:"
+                                               FontSize="15"
+                                               FontWeight="Thin"
+                                               Margin="0 0 5 0"/>
+                                    <TextBlock Text="{Binding Salesman.FullName, Mode=OneWay}"
                                                VerticalAlignment="Bottom"
                                                FontSize="15"/>
                                 </StackPanel>
@@ -89,14 +101,24 @@
                                                FontSize="15"
                                                FontWeight="Thin"
                                                Margin="0 0 5 0"/>
-                                    <TextBlock Text="{Binding Cost, StringFormat=0, Mode=OneWay}"
-                                               VerticalAlignment="Bottom"
-                                               FontSize="15"
+                                    <TextBlock Margin="0 0 2.5 0"
                                                FontWeight="Medium"
-                                               Margin="0 0 2.5 0"/>
-                                     <TextBlock Text="₽"
-                                                VerticalAlignment="Bottom"
-                                                FontSize="15"/>
+                                               Text="{Binding CostWithDiscount, StringFormat='{}{0:# ###} ₽', Mode=OneWay}"/>
+                                    <TextBlock Text="{Binding Cost, StringFormat=0, Mode=OneWay}"
+                                                TextDecorations="Strikethrough"
+                                                FontSize="14"
+                                                Margin="2.5 0 0 0">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding HasDiscount, Mode=OneWay}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
                                 </StackPanel>
                             </StackPanel>
 
@@ -107,9 +129,9 @@
 
                             <StackPanel Grid.Column="2"
                                         VerticalAlignment="Top"
-                                        HorizontalAlignment="Right"
+                                        HorizontalAlignment="Center"
                                         Orientation="Horizontal"
-                                        Visibility="{Binding IsInBasket,
+                                        Visibility="{Binding IsInBasket, Mode=OneWay,
                                                              Converter={StaticResource BoolToVisibilityConverter}}"
                                         Margin="10 0 0 0">
                                 <ui:Button Content="-"
@@ -118,7 +140,38 @@
                                             Margin="10 0"
                                             VerticalAlignment="Center"/>
                                 <ui:Button Content="+"
-                                            Command="{Binding AddOneToBasketCommand}"/>
+                                            Command="{Binding AddOneToBasketCommand}"
+                                            CommandParameter="{Binding ElementName=MessageFlyout}"/>
+                                <ui:Flyout x:Name="MessageFlyout"
+                                           Margin="5 0 0 0"
+                                           Content="Больше нет 😞"
+                                           Foreground="Red"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="3">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding TotalCostWithDiscount, StringFormat=# ###, Mode=OneWay}"
+                                               FontSize="16"
+                                               FontWeight="Black"/>
+                                    <TextBlock Text="₽"
+                                               Margin="2.5 0 0 0"
+                                               FontSize="16"
+                                               FontWeight="Medium"/>
+                                </StackPanel>
+
+                                <TextBlock Text="{Binding TotalCost, StringFormat=# ###, Mode=OneWay}"
+                                           TextDecorations="Strikethrough">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding HasDiscount}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
                             </StackPanel>
                         </Grid>
                     </ui:Card>
@@ -128,18 +181,62 @@
 
         <ui:Card Grid.Column="1"
                  VerticalAlignment="Top"
-                 Margin="10 0 0 0">
+                 Margin="10 10 0 0">
             <StackPanel>
+                <TextBlock Text="Итого"
+                           FontSize="18"
+                           FontWeight="Bold"
+                           Margin="0 0 0 10"/>
+                <DockPanel>
+                    <TextBlock Text="{Binding TotalProductsCount, StringFormat='{}Товары ({0})'}"/>
+                    <TextBlock Text="{Binding TotalProductsCostWithDiscount, StringFormat='{}{0:# ###} ₽'}"
+                               HorizontalAlignment="Right"
+                               FontWeight="Medium"
+                               DockPanel.Dock="Right"
+                               Margin="0 0 0 5"/>
+                </DockPanel>
+                <DockPanel>
+                    <TextBlock Text="Скидка"/>
+                    <TextBlock Text="{Binding TotalDiscountSum, StringFormat='{}-{0:# ###} ₽'}"
+                               HorizontalAlignment="Right"
+                               Foreground="Red"
+                               FontWeight="Medium"
+                               DockPanel.Dock="Right"/>
+                    <DockPanel.Style>
+                        <Style TargetType="DockPanel">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsThereDiscount}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DockPanel.Style>
+                </DockPanel>
                 <ui:Button Content="Перейти к оформлению"
+                           Command="{Binding OpenOrderWindowCommand}"
                            Appearance="Primary"
+                           Margin="0 10 0 0"
                            HorizontalAlignment="Stretch"/>
             </StackPanel>
+
+            <ui:Card.Style>
+                <Style TargetType="{x:Type ui:Card}" BasedOn="{StaticResource {x:Type ui:Card}}">
+                    <Setter Property="Visibility" Value="Visible"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsEmpty}" Value="True">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ui:Card.Style>
         </ui:Card>
 
         <ui:Card HorizontalAlignment="Stretch"
                  HorizontalContentAlignment="Center"
                  VerticalAlignment="Stretch"
-                 VerticalContentAlignment="Center">
+                 VerticalContentAlignment="Center"
+                 Grid.ColumnSpan="2">
             <StackPanel>
                 <TextBlock Text="В корзине нет товаров"
                            HorizontalAlignment="Center"

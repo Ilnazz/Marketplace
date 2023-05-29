@@ -69,12 +69,11 @@
             <ui:VirtualizingItemsControl.ItemTemplate>
                 <DataTemplate>
                     <ui:Card Margin="0 0 10 10"
-                             Width="225"
+                             Width="275"
                              VerticalAlignment="Stretch"
                              VerticalContentAlignment="Stretch">
                         <Grid>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
@@ -95,32 +94,69 @@
                                 </Image.Source>
                             </Image>
 
-                            <StackPanel Orientation="Horizontal"
-                                        Margin="0 10 0 5"
-                                        Grid.Row="1">
-                                <TextBlock Text="{Binding Cost, StringFormat=0, Mode=OneWay}"
-                                            FontSize="16"
-                                            FontWeight="Black"
-                                            Margin="0 0 2.5 0"/>
+                            <DockPanel Margin="0 10 0 5"
+                                       Grid.Row="1">
+                                <TextBlock FontSize="16"
+                                           FontWeight="Black"
+                                           Text="{Binding CostWithDiscount, StringFormat=0, Mode=OneWay}"
+                                           Margin="0 0 2.5 0"/>
                                 <TextBlock Text="₽"
-                                            FontSize="16"/>
-                            </StackPanel>
+                                           FontSize="16"
+                                           FontWeight="Medium"/>
+                                <TextBlock Text="{Binding Cost, StringFormat=0, Mode=OneWay}"
+                                           TextDecorations="Strikethrough"
+                                           VerticalAlignment="Bottom"
+                                           Margin="2.5 0 0 0">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding HasDiscount, Mode=OneWay}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+
+                                <TextBlock Text="{Binding DiscountPercent, StringFormat='{}-{0:0}%', Mode=OneWay}"
+                                           VerticalAlignment="Bottom"
+                                           DockPanel.Dock="Right"
+                                           HorizontalAlignment="Right"
+                                           Foreground="Green">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding HasDiscount}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </DockPanel>
                             
                             <TextBlock Text="{Binding Name, Mode=OneWay}"
                                        TextWrapping="Wrap"
                                        Grid.Row="2"
-                                       Margin="0 0 0 5"/>
+                                       Margin="0 0 0 10"/>
                             
-                            <TextBlock Text="{Binding Manufacturer.Name, Mode=OneWay}"
-                                        FontWeight="Light"
+                            <DockPanel Margin="0 0 0 5"
                                        Grid.Row="3"
-                                        Margin="0 0 0 10"/>
-
-                            <DockPanel Margin="0 0 0 10"
-                                       Grid.Row="4"
                                        VerticalAlignment="Bottom">
-                                <ui:Button Content="В корзину"
-                                           Command="{Binding PutToBasketCommand}"s/>
+                                <ui:Button Command="{Binding PutToBasketCommand}">
+                                    <ui:Button.Style>
+                                        <Style TargetType="{x:Type ui:Button}" BasedOn="{StaticResource {x:Type ui:Button}}">
+                                            <Setter Property="Content" Value="В корзину"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding AvailableInStock}" Value="False">
+                                                    <Setter Property="Content" Value="Нет в наличии"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ui:Button.Style>
+                                </ui:Button>
 
                                 <StackPanel Orientation="Horizontal"
                                             HorizontalAlignment="Right"
@@ -134,12 +170,16 @@
                                                Margin="10 0"
                                                VerticalAlignment="Center"/>
                                     <ui:Button Content="+"
-                                               Command="{Binding AddOneToBasketCommand}"/>
+                                               Command="{Binding AddOneToBasketCommand}"
+                                               CommandParameter="{Binding ElementName=MessageFlyout}"/>
+                                    <ui:Flyout x:Name="MessageFlyout"
+                                               Margin="5 0 0 0"
+                                               Content="Больше нет 😞"/>
                                 </StackPanel>
                             </DockPanel>
 
                             <ui:Button Content="Подробнее"
-                                       Grid.Row="5"
+                                       Grid.Row="4"
                                        HorizontalAlignment="Stretch"
                                        Command="{Binding OpenProductModelWindowCommand}"/>
                         </Grid>

@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Windows;
+using System.Windows.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Marketplace.Services;
-using Wpf.Ui.Controls;
+using Marketplace.Database;
+using Microsoft.EntityFrameworkCore;
 
 namespace Marketplace.WindowViewModels;
 
@@ -27,23 +29,50 @@ public partial class AuthWindowVm : WindowVmBase
     private void Authorize()
     {
         ValidateAllProperties();
+        if (HasErrors)
+            return;
 
-        //if (App.AuthRegService.AuthorizeUser(Login!, Password!) == false)
-        //{
-        //    new MessageBox().Show("Ошибка", "Неверные логин и/или пароль.");
-        //    return;
-        //}
+        if (App.AuthRegService.TryAuthorizeUser(Login!, Password!))
+            CloseWindow();
 
+        var dialogWindow = new Wpf.Ui.Controls.MessageBox
+        {
+            Content = new TextBlock
+            {
+                Text = "Пользователь с такими данными не зарегистрирован.",
+                TextWrapping = TextWrapping.Wrap,
+                FontSize = 18,
+                TextAlignment = TextAlignment.Center,
+            },
+            Width = 500,
+            SizeToContent = SizeToContent.Height,
+            ResizeMode = ResizeMode.NoResize,
+            Title = "Ошибка"
+        };
+        var okBtn = new Wpf.Ui.Controls.Button
+        {
+            Content = "Ок",
+            HorizontalAlignment = HorizontalAlignment.Stretch,
+        };
+        okBtn.Click += (_, _) => dialogWindow.Close();
+        dialogWindow.Footer = okBtn;
+        dialogWindow.ShowDialog();
     }
     private bool CanAuthorize() => HasErrors == false;
 
     [RelayCommand]
-    private void GoToRegWindow()
+    private void OpenRegWindow()
     {
+
     }
     #endregion
 
     public AuthWindowVm()
     {
+        Title = "Вход в аккаунт";
+
+        DatabaseContext.Entities.Clients.Load();
+        DatabaseContext.Entities.Salesmen.Load();
+        DatabaseContext.Entities.Employees.Load();
     }
 }

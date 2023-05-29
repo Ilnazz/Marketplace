@@ -6,4 +6,9 @@
       xmlns:windowvms="clr-namespace:Marketplace.WindowViewModels"
       mc:Ignorable="d"
       d:DataContext="{d:DesignInstance windowvms:OrderWindowVm}">
+
+    <Grid>
+        
+    </Grid>
+    
 </UserControl>

@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.Input;
 using Marketplace.Database.Models;
 using Marketplace.WindowViewModels;
 using Marketplace.WindowViews;
+using Wpf.Ui.Controls;
 
 namespace Marketplace.Database;
 
@@ -30,6 +31,21 @@ public partial class ProductModel : ObservableObject
             OnPropertyChanged();
         }
     }
+
+    public int DiscountPercent
+    {
+        get => _product.DiscountPercent;
+        set
+        {
+            _product.DiscountPercent = value;
+            OnPropertyChanged();
+        }
+    }
+    public bool HasDiscount => DiscountPercent > 0;
+    public decimal CostWithDiscount => Cost - Cost * ((decimal)DiscountPercent / 100);
+
+    public decimal TotalCost => Cost * QuantityInBasket;
+    public decimal TotalCostWithDiscount => CostWithDiscount * QuantityInBasket;
 
     public string Description
     {
@@ -60,6 +76,27 @@ public partial class ProductModel : ObservableObject
             OnPropertyChanged();
         }
     }
+
+    public Salesman Salesman
+    {
+        get => _product.Salesman;
+        set
+        {
+            _product.Salesman = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public int QuantityInStock
+    {
+        get => _product.QuantityInStock;
+        set
+        {
+            _product.QuantityInStock = value;
+            OnPropertyChanged();
+        }
+    }
+    public bool AvailableInStock => QuantityInStock > 0;
     #endregion
 
     [RelayCommand]
@@ -75,18 +112,22 @@ public partial class ProductModel : ObservableObject
 
 
     [RelayCommand(CanExecute = nameof(CanPutToBasket))]
-    private void PutToBasket()
+    private void PutToBasket(Flyout messageFlyout)
     {
-        AddOneToBasket();
+        AddOneToBasket(messageFlyout);
         PutToBasketCommand.NotifyCanExecuteChanged();
     }
-    private bool CanPutToBasket() => QuantityInBasket == 0;
+    private bool CanPutToBasket() => AvailableInStock && QuantityInBasket == 0;
 
 
     [RelayCommand]
-    private void AddOneToBasket()
+    private void AddOneToBasket(Flyout messageFlyout)
     {
-        App.BasketService.AddToBasket(_product, 1);
+        if (QuantityInBasket >= QuantityInStock)
+            messageFlyout.Show();
+        else
+            App.BasketService.AddToBasket(_product, 1);
+
         RemoveOneFromBasketCommand.NotifyCanExecuteChanged();
         OnPropertyChanged(nameof(QuantityInBasket));
         OnPropertyChanged(nameof(IsInBasket));

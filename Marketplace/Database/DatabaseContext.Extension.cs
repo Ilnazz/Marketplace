@@ -15,6 +15,9 @@ public partial class DatabaseContext
         {
             entity.Navigation(d => d.ProductCategory).AutoInclude();
             entity.Navigation(d => d.ProductManufacturer).AutoInclude();
+            entity.Navigation(d => d.ProductPhotos).AutoInclude();
+            entity.Navigation(d => d.Salesman).AutoInclude();
+            entity.Navigation(d => d.ProductPhotos).AutoInclude();
         });
     }
 }

@@ -155,6 +155,8 @@ public partial class DatabaseContext : DbContext
 
             entity.ToTable("Order_Product");
 
+            entity.Property(e => e.Cost).HasColumnType("money");
+
             entity.HasOne(d => d.Order).WithMany(p => p.OrderProducts)
                 .HasForeignKey(d => d.OrderId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
