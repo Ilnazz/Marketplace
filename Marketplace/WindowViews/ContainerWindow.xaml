@@ -7,7 +7,7 @@
              ExtendsContentIntoTitleBar="True"
              mc:Ignorable="d"
              WindowStartupLocation="CenterScreen"
-             WindowBackdropType="Acrylic"
+             WindowBackdropType="Auto"
              ResizeMode="NoResize"
              SizeToContent="WidthAndHeight">
 

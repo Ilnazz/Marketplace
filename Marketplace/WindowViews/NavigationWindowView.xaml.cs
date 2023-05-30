@@ -41,26 +41,10 @@ public partial class NavigationWindowView : UserControl
 
     private void InitiNavigationItems()
     {
-        NavItems = new ObservableCollection<INavigationControl>
-        {
-            new NavigationItem
-            {
-                Content = "Товары",
-                Icon = Wpf.Ui.Common.SymbolRegular.Box24,
-                PageType = typeof(ProductsPage)
-            },
-            //new NavigationItem
-            //{
-            //    Content = "Заказы",
-            //    Icon = Wpf.Ui.Common.SymbolRegular.ReOrder24,
-            //    PageType = typeof(OrdersPage)
-            //}
-        };
-
         var basketNavItem = new NavigationItem
         {
             Content = "Корзина",
-            Icon = Wpf.Ui.Common.SymbolRegular.PaintBucket24,
+            Icon = Wpf.Ui.Common.SymbolRegular.Cart24,
             PageType = typeof(BasketPage),
         };
 
@@ -82,15 +66,21 @@ public partial class NavigationWindowView : UserControl
                 CurrentPageTitle = $"{basketNavItem.Content}";
         };
 
-        FooterNavItems = new ObservableCollection<INavigationControl>
+        NavItems = new ObservableCollection<INavigationControl>
         {
-            basketNavItem,
             new NavigationItem
             {
                 Content = "Личный кабинет",
                 Icon = Wpf.Ui.Common.SymbolRegular.Person24,
                 PageType = typeof(UserPage)
-            }
+            },
+            new NavigationItem
+            {
+                Content = "Товары",
+                Icon = Wpf.Ui.Common.SymbolRegular.Box24,
+                PageType = typeof(ProductsPage)
+            },
+            basketNavItem
         };
     }
 }

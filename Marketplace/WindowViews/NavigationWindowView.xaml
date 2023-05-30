@@ -36,7 +36,6 @@
 
         <ui:NavigationCompact x:Name="NavigationSideBar"
                             Items="{Binding NavItems, Mode=OneWay}"
-                            Footer="{Binding FooterNavItems, Mode=OneWay}"
                             Frame="{Binding ElementName=NavigationFrame}"
                             Grid.Row="1"
                             Grid.Column="0"

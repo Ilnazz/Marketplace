@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <None Remove="Resources\Images\LightGrayPixel.png" />
+    <None Remove="Resources\Images\UserPhotoPlaceholder.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +24,9 @@
 
   <ItemGroup>
     <Resource Include="Resources\Images\LightGrayPixel.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\UserPhotoPlaceholder.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

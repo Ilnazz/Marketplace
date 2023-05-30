@@ -15,4 +15,8 @@ public class User
     public string Password { get; set; } = null!;
 
     public byte[]? Photo { get; set; } = null!;
+
+    #region Extensions
+    public string FullName => $"{Surname} {Name} {Patronymic}";
+    #endregion
 }

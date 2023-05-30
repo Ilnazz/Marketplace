@@ -4,13 +4,101 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-      xmlns:viewmodels="clr-namespace:Marketplace.PageViewModels"
+      xmlns:pagevms="clr-namespace:Marketplace.PageViewModels"
       mc:Ignorable="d"
-      d:DataContext="{d:DesignInstance viewmodels:ProductsPageVm}">
+      d:DataContext="{d:DesignInstance pagevms:UserPageVm}">
 
-    <Grid>
-        <StackPanel Orientation="Horizontal">
-            <Image Source="{Binding}"/>
-        </StackPanel>
+    <ui:UiPage.DataContext>
+        <pagevms:UserPageVm/>
+    </ui:UiPage.DataContext>
+
+    <Grid Margin="0 10 0 0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <ui:Card Margin="0 0 10 0"
+                 VerticalAlignment="Top">
+            <StackPanel>
+                <Image HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Stretch="UniformToFill"
+                        Width="100"
+                        Height="100"
+                        Margin="0 0 10 20">
+                    <Image.Source>
+                        <Binding Path="Photo">
+                            <Binding.TargetNullValue>
+                                <BitmapImage UriSource="../Resources/Images/UserPhotoPlaceholder.png"/>
+                            </Binding.TargetNullValue>
+                        </Binding>
+                    </Image.Source>
+                </Image>
+                <ui:Button Content="Загрузить фотографию"/>
+            </StackPanel>
+        </ui:Card>
+
+        <ui:Card Grid.Column="1"
+                 VerticalAlignment="Top">
+            <StackPanel Width="300">
+                <TextBlock Text="Фамилия"
+                            Margin="0 0 0 5"/>
+                <ui:TextBox Text="{Binding Surname}"
+                            MaxLength="50"
+                            Margin="0 0 0 25"/>
+
+                <TextBlock Text="Имя"
+                           Margin="0 0 0 5"/>
+                <ui:TextBox Text="{Binding Name}"
+                            MaxLength="50"
+                            Margin="0 0 0 25"/>
+
+                <TextBlock Text="Отчество"
+                           Margin="0 0 0 5"/>
+                <ui:TextBox Text="{Binding Patronymic}"
+                            MaxLength="50"
+                            Margin="0 0 0 25"/>
+
+                <TextBlock Text="Логин"
+                           Margin="0 0 0 5"/>
+                <ui:TextBox Text="{Binding Login}"
+                            MaxLength="50"
+                            Margin="0 0 0 25"/>
+            </StackPanel>
+            
+            <ui:Card.Style>
+                <Style TargetType="{x:Type ui:Card}" BasedOn="{StaticResource {x:Type ui:Card}}">
+                    <Setter Property="Visibility" Value="Visible"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsAuthorized}" Value="False">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ui:Card.Style>
+        </ui:Card>
+
+        <ui:Card Grid.Column="1"
+                 VerticalAlignment="Top">
+            <StackPanel>
+                <TextBlock Text="Гость"
+                           FontSize="18"/>
+                <ui:Button Content="Войти в аккаунт"
+                           FontSize="16"
+                           Margin="0 10 0 0"
+                           Command="{Binding AuthorizeCommand}"/>
+            </StackPanel>
+            <ui:Card.Style>
+                <Style TargetType="{x:Type ui:Card}" BasedOn="{StaticResource {x:Type ui:Card}}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsAuthorized}" Value="False">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ui:Card.Style>
+        </ui:Card>
     </Grid>
 </ui:UiPage>
