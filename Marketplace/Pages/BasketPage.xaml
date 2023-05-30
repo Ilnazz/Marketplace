@@ -12,7 +12,7 @@
         <viewmodels:BasketPageVm/>
     </ui:UiPage.DataContext>
     
-    <Grid Margin="0 10 0 0">
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
             <ColumnDefinition Width="*"/>
@@ -27,7 +27,7 @@
             </ui:VirtualizingItemsControl.ItemsPanel>
             <ui:VirtualizingItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <ui:Card Margin="0 10 0 0"
+                    <ui:Card Margin="0 0 0 10"
                              Height="250">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -181,7 +181,7 @@
 
         <ui:Card Grid.Column="1"
                  VerticalAlignment="Top"
-                 Margin="10 10 0 0">
+                 Margin="10 0 0 0">
             <StackPanel>
                 <TextBlock Text="Итого"
                            FontSize="18"

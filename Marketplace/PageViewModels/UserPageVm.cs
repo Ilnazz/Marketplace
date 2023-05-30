@@ -25,7 +25,7 @@ public partial class UserPageVm : PageVmBase
         get => _user?.Surname;
         set
         {
-            _user.Surname = value;
+                _user.Surname = value;
             OnPropertyChanged();
         }
     }

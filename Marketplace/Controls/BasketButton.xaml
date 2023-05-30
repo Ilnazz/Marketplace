@@ -1,0 +1,32 @@
+﻿<ui:Button x:Class="Marketplace.Controls.BasketButton"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+           Style="{StaticResource NavButtonStyle}">
+    <ui:Button.Content>
+        <Grid>
+            <StackPanel>
+                <ui:SymbolIcon Symbol="Cart16"/>
+                <TextBlock Text="Корзина"/>
+                <Border HorizontalAlignment="Stretch"
+                        Margin="0 1.25 0 0"
+                        CornerRadius="1.25"
+                        BorderThickness="1.25">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Setter Property="BorderBrush" Value="Transparent"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsActive}" Value="True">
+                                    <Setter Property="BorderBrush" Value="#80B9EE"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                </Border>
+            </StackPanel>
+            <TextBlock Text="{Binding ItemsCount}"
+                        HorizontalAlignment="Right"
+                        Margin="0 -7.5 0 0"/>
+        </Grid>
+    </ui:Button.Content>
+</ui:Button>

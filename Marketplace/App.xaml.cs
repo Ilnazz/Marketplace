@@ -15,21 +15,17 @@ public partial class App : Application
 
     public static AuthRegService AuthRegService { get; set; }
 
-    public static IPageService PageService { get; set; }
-
     public static INavigation NavigationService { get; set; }
     public static Window NavigationWindow { get; set; }
 
     public static IBasketService<Product> BasketService { get; set; }
 
+    public static SearchService SearchService { get; set; }
+
     protected override void OnStartup(StartupEventArgs e)
     {
-        PageService = new PageService();
-        AuthRegService = new AuthRegService();
-        BasketService = new GuestBasketService<Product>();
-
         NavigationWindow = new ContainerWindow(new NavigationWindowVm());
         NavigationWindow.Show();
-        NavigationService.Navigate(typeof(ProductsPage));
+        App.NavigationService.Navigate(typeof(BookProductsPage));
     }
 }

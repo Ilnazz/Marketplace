@@ -4,21 +4,24 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-             xmlns:windowvms="clr-namespace:Marketplace.WindowViewModels"
+             xmlns:pages="clr-namespace:Marketplace.Pages"
+             xmlns:controls="clr-namespace:Marketplace.Controls"
              mc:Ignorable="d"
              Width="1280"
              Height="720">
-    
+
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
 
         <Grid Grid.Row="0"
               Grid.ColumnSpan="2">
@@ -35,28 +38,121 @@
         </Grid>
 
         <ui:NavigationCompact x:Name="NavigationSideBar"
-                            Items="{Binding NavItems, Mode=OneWay}"
-                            Frame="{Binding ElementName=NavigationFrame}"
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            Margin="5 0 0 0"/>
+                              Frame="{Binding ElementName=NavigationFrame}"
+                              Grid.Column="0"
+                              MaxWidth="225"
+                              Grid.Row="1"
+                              Grid.RowSpan="3"
+                              Margin="5 0 10 0">
 
-        <Grid Grid.Column="1"
-              Grid.Row="1"
-              Grid.RowSpan="2"
-              Margin="10 0 10 10">
+            <ui:NavigationCompact.Items>
+                <ui:NavigationHeader Text="Каталог"
+                                     Foreground="Black"
+                                     FontSize="20"
+                                     FontWeight="Medium"/>
+                <ui:NavigationItem Content="Электроника"
+                                   Icon="Phone20"
+                                   PageType="{x:Type pages:ElectronicProductsPage}"/>
+                <ui:NavigationItem Content="Одежда и обувь"
+                                   Icon="SportSoccer20"
+                                   PageType="{x:Type pages:ClothesAndShoesProductsPage}"/>
+                <ui:NavigationItem Content="Дом и сад"
+                                   Icon="Home20"
+                                   PageType="{x:Type pages:HouseAndGardenProductsPage}"/>
+                <ui:NavigationItem Content="Детские товары"
+                                   Icon="Icons20"
+                                   PageType="{x:Type pages:ChildrenProductsPage}"/>
+                <ui:NavigationItem Content="Красота и здоровье"
+                                   Icon="Accessibility20"
+                                   PageType="{x:Type pages:BeautyAndHealthProductsPage}"/>
+                <ui:NavigationItem Content="Бытовая техника"
+                                   Icon="Print20"
+                                   PageType="{x:Type pages:HomeApplianceProductsPage}"/>
+                <ui:NavigationItem Content="Спорт и отдых"
+                                   Icon="Sport20"
+                                   PageType="{x:Type pages:SportsAndRecreationProductsPage}"/>
+                <ui:NavigationItem Content="Строительство и ремонт"
+                                   Icon="Board20"
+                                   PageType="{x:Type pages:ConstructionAndRepairProductsPage}"/>
+                <ui:NavigationItem Content="Продукты питания"
+                                   Icon="FoodApple20"
+                                   PageType="{x:Type pages:FoodProductsPage}"/>
+                <ui:NavigationItem Content="Аптека"
+                                   Icon="BriefcaseMedical20"
+                                   PageType="{x:Type pages:PharmacyProductsPage}"/>
+                <ui:NavigationItem Content="Товары для животных"
+                                   Icon="AnimalCat20"
+                                   PageType="{x:Type pages:PetProductsPage}"/>
+                <ui:NavigationItem Content="Книги"
+                                   Icon="Library16"
+                                   PageType="{x:Type pages:BookProductsPage}"/>
+                <ui:NavigationItem Content="Туризм, рыбалка, охота"
+                                   Icon="FoodFish20"
+                                   PageType="{x:Type pages:TourismFishingHuntingProductsPage}"/>
+                <ui:NavigationItem Content="Автотовары"
+                                   Icon="Settings20"
+                                   PageType="{x:Type pages:AutomotiveProductsPage}"/>
+                <ui:NavigationItem Content="Мебель"
+                                   Icon="Bed20"
+                                   PageType="{x:Type pages:FurnitureProductsPage}"/>
+                <ui:NavigationItem Content="Хобби и творчество"
+                                   Icon="Image20"
+                                   PageType="{x:Type pages:HobbyAndCreativityProductsPage}"/>
+                <ui:NavigationItem Content="Ювелирные украшения"
+                                   Icon="Trophy20"
+                                   PageType="{x:Type pages:JewelryProductsPage}"/>
+                <ui:NavigationItem Content="Игры и консоли"
+                                   Icon="Games20"
+                                   PageType="{x:Type pages:GameAndConsoleProductsPage}"/>
+                <ui:NavigationItem Content="Канцелярские товары"
+                                   Icon="CalligraphyPenCheckmark20"
+                                   PageType="{x:Type pages:OfficeSupplyProductsPage}"/>
+                <ui:NavigationItem Content="Бытовая химия и гигиента"
+                                   Icon="DrinkBottle20"
+                                   PageType="{x:Type pages:HouseholdChemicalsAndHygieneProductsPage}"/>
+            </ui:NavigationCompact.Items>
+        </ui:NavigationCompact>
+
+        <Grid Grid.Row="2"
+              Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-
-            <TextBlock Text="{Binding CurrentPageTitle, Mode=OneWay}"
-                       FontSize="26"
-                       FontWeight="Medium"
-                       Margin="0 0 0 10"/>
-
-            <Frame x:Name="NavigationFrame"
-                   Grid.Row="1"/>
+            <TextBlock Text="{Binding CurrentPageTitle}"
+                       FontSize="32"/>
+            <ui:NavigationSeparator Grid.Row="1"/>
         </Grid>
+
+        <Grid Grid.Row="1"
+              Grid.Column="1"
+              Margin="0 3 10 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <ui:AutoSuggestBox x:Name="SearchBox"
+                               Grid.Column="0"
+                               Margin="0 0 15 0"
+                               VerticalAlignment="Center"/>
+            
+            <controls:UserButton x:Name="UserNavButton"
+                                 Tag="{x:Type pages:UserPage}"
+                                 Grid.Column="1"
+                                 Margin="0 0 15 0"
+                                 Click="TopNavButtonClick"/>
+
+            <controls:BasketButton x:Name="BasketNavButton"
+                                   Grid.Column="2"
+                                   Tag="{x:Type pages:BasketPage}"
+                                   Click="TopNavButtonClick"/>
+        </Grid>
+
+        <Frame x:Name="NavigationFrame"
+               Grid.Column="1"
+               Grid.Row="3"
+               Margin="0 10 10 10"/>
     </Grid>
 </UserControl>

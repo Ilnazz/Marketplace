@@ -1,8 +1,5 @@
-﻿using CommunityToolkit.Mvvm.Input;
-using Marketplace.Database;
+﻿using Marketplace.Database;
 using Marketplace.Database.Models;
-using Marketplace.WindowViewModels;
-using Marketplace.WindowViews;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -16,22 +13,9 @@ public partial class ProductsPageVm : PageVmBase
     public IEnumerable<ProductModel> ProductModels =>
         GetFilteredAndSortedProducts().Select(p => new ProductModel(p));
 
-    private string _searchingText = string.Empty;
-    public string SearchingText
-    {
-        get => _searchingText;
-        set
-        {
-            _searchingText = value;
-
-            OnPropertyChanged();
-            OnPropertyChanged(nameof(ProductModels));
-        }
-    }
-
     public IEnumerable<Sorting<Product>> Sortings { get; init; } = new[]
     {
-        new Sorting<Product>("По умолчанию", null! ),
+        new Sorting<Product>(DefaultSortingName, null! ),
 
         new Sorting<Product>("Название ↑", ps => ps.OrderBy(p => p.Name) ),
         new Sorting<Product>("Название ↓", ps => ps.OrderByDescending(p => p.Name) ),
@@ -47,21 +31,6 @@ public partial class ProductsPageVm : PageVmBase
         set
         {
             _slectedSorting = value;
-
-            OnPropertyChanged();
-            OnPropertyChanged(nameof(ProductModels));
-        }
-    }
-
-    public IEnumerable<ProductCategory> Categories { get; init; }
-
-    private ProductCategory _selectedCategory = null!;
-    public ProductCategory SelectedCategory
-    {
-        get => _selectedCategory;
-        set
-        {
-            _selectedCategory = value;
 
             OnPropertyChanged();
             OnPropertyChanged(nameof(ProductModels));
@@ -90,21 +59,28 @@ public partial class ProductsPageVm : PageVmBase
     private const string DefaultSortingName = "По умолчнию";
 
     private IEnumerable<Product> _allProducts = null!;
+
+    private string _searchText = string.Empty;
     #endregion
 
-    public ProductsPageVm()
+    public ProductsPageVm(DataTypes.Enums.ProductCategory category)
     {
         DatabaseContext.Entities.Products.Load();
-        
-        _allProducts = DatabaseContext.Entities.Products.Local.ToList();
 
-        Categories = DatabaseContext.Entities.ProductCategories.ToList().Prepend(new ProductCategory { Name = DefaultFilterName });
-        SelectedCategory = Categories.First();
+        _allProducts = DatabaseContext.Entities.Products.Local.Where(p => p.ProductCategoryId == (int)category);
 
-        Manufacturers = DatabaseContext.Entities.ProductManufacturers.ToList().Prepend(new ProductManufacturer { Name = DefaultFilterName });
+        Manufacturers = DatabaseContext.Entities.ProductManufacturers
+            .ToList()
+            .Prepend(new ProductManufacturer { Name = DefaultFilterName });
+
         SelectedManufacturer = Manufacturers.First();
-
         SelectedSorting = Sortings.First();
+
+        App.SearchService.SearchTextChanged += newSearchText =>
+        {
+            _searchText = newSearchText;
+            OnPropertyChanged(nameof(ProductModels));
+        };
     }
 
     #region Private methods
@@ -119,15 +95,11 @@ public partial class ProductsPageVm : PageVmBase
         => SelectedSorting.Sorter != null ? SelectedSorting.Sorter(products) : products;
 
     private bool ProductFilter(Product product)
-        => SearchingFilter(product) &&
-           CategoryFilter(product) &&
+        => SearchFilter(product) &&
            ManufacturerFilter(product);
 
-    private bool SearchingFilter(Product product)
-        =>  product.Name.ToLower().Contains(SearchingText.Trim().ToLower());
-
-    private bool CategoryFilter(Product product)
-        => SelectedCategory.Name == DefaultFilterName || product.ProductCategory == SelectedCategory;
+    private bool SearchFilter(Product product)
+        =>  product.Name.ToLower().Contains(_searchText.Trim().ToLower());
 
     private bool ManufacturerFilter(Product product)
         => SelectedManufacturer.Name == DefaultFilterName || product.ProductManufacturer == SelectedManufacturer;

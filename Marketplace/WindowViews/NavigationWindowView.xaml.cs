@@ -1,10 +1,13 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows.Controls;
-using Marketplace.Pages;
-using Wpf.Ui.Controls.Interfaces;
-using Wpf.Ui.Controls;
+﻿using System.Windows.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
-using System.Windows.Media;
+using System.Windows;
+using System;
+using Marketplace.Controls;
+using Marketplace.Pages;
+using Wpf.Ui.Controls;
+using Marketplace.Services;
+using System.Linq;
+using Marketplace.Database.Models;
 
 namespace Marketplace.WindowViews;
 
@@ -12,10 +15,6 @@ namespace Marketplace.WindowViews;
 public partial class NavigationWindowView : UserControl
 {
     #region Properties
-    public ObservableCollection<INavigationControl> NavItems { get; private set; }
-
-    public ObservableCollection<INavigationControl> FooterNavItems { get; private set; }
-
     [ObservableProperty]
     private string _currentPageTitle;
 
@@ -25,62 +24,54 @@ public partial class NavigationWindowView : UserControl
 
     public NavigationWindowView()
     {
-        Title = "Маркетплэйс";
-
         InitializeComponent();
-        InitiNavigationItems();
 
+        Title = "Маркетплэйс";
         DataContext = this;
 
-        NavigationSideBar.PageService = App.PageService;
-        App.NavigationService = NavigationSideBar;
-
-        NavigationSideBar.Navigated += (_, _) =>
-            CurrentPageTitle = $"{NavigationSideBar.Current!.Content}";
+        InitServices();
     }
 
-    private void InitiNavigationItems()
+    private void InitServices()
     {
-        var basketNavItem = new NavigationItem
+        App.NavigationService = NavigationSideBar;
+        App.NavigationService.PageService = new PageService();
+        App.NavigationService.Navigated += (_, _) =>
         {
-            Content = "Корзина",
-            Icon = Wpf.Ui.Common.SymbolRegular.Cart24,
-            PageType = typeof(BasketPage),
+            UserNavButton.IsActive = BasketNavButton.IsActive = false;
+
+            CurrentPageTitle = $"{NavigationSideBar.Current?.Content}";
+            App.SearchService.IsEnabled = true;
         };
 
-        var basketNavItemDefaultBrush = basketNavItem.IconForeground;
+        App.SearchService = new SearchService(SearchBox);
+        App.AuthRegService = new AuthRegService();
+
+        App.BasketService = new GuestBasketService<Product>();
         App.BasketService.StateChanged += () =>
-        {
-            if (App.BasketService.TotalItemsCount > 0)
-            {
-                basketNavItem.IconForeground = Brushes.Red;
-                basketNavItem.Content = $"Корзина ({App.BasketService.TotalItemsCount})";
-            }
-            else
-            {
-                basketNavItem.IconForeground = basketNavItemDefaultBrush;
-                basketNavItem.Content = "Корзина";
-            }
+            BasketNavButton.ItemsCount = App.BasketService.TotalItemsCount;
+    }
 
-            if (NavigationSideBar.Current == basketNavItem)
-                CurrentPageTitle = $"{basketNavItem.Content}";
-        };
+    private void TopNavButtonClick(object sender, RoutedEventArgs e)
+    {
+        var btn = (Wpf.Ui.Controls.Button)sender;
+        var pageType = (Type)btn.Tag;
+        
+        App.NavigationService.Navigate(pageType);
 
-        NavItems = new ObservableCollection<INavigationControl>
+        if (pageType == typeof(BasketPage))
         {
-            new NavigationItem
-            {
-                Content = "Личный кабинет",
-                Icon = Wpf.Ui.Common.SymbolRegular.Person24,
-                PageType = typeof(UserPage)
-            },
-            new NavigationItem
-            {
-                Content = "Товары",
-                Icon = Wpf.Ui.Common.SymbolRegular.Box24,
-                PageType = typeof(ProductsPage)
-            },
-            basketNavItem
-        };
+            UserNavButton.IsActive = false;
+            BasketNavButton.IsActive = true;
+            CurrentPageTitle = $"Корзина ({BasketNavButton.ItemsCount})";
+        }
+        else if (pageType == typeof(UserPage))
+        {
+            UserNavButton.IsActive = true;
+            BasketNavButton.IsActive = false;
+            CurrentPageTitle = $"Личный кабинет";
+        }
+
+        App.SearchService.IsEnabled = false;
     }
 }

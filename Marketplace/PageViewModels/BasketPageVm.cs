@@ -1,14 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Marketplace.Database;
 using Marketplace.Pages;
 using Marketplace.WindowViewModels;
 using Marketplace.WindowViews;
-using Wpf.Ui.Controls;
 
 namespace Marketplace.PageViewModels;
 
@@ -30,7 +28,7 @@ public partial class BasketPageVm : PageVmBase
     #endregion
 
     [RelayCommand]
-    private void GoToProductsPage() => App.NavigationService.Navigate(typeof(ProductsPage));
+    private void GoToProductsPage() => App.NavigationService.Navigate(typeof(BookProductsPage));
 
     [RelayCommand]
     private void OpenOrderWindow()
