@@ -7,9 +7,9 @@
              ExtendsContentIntoTitleBar="True"
              mc:Ignorable="d"
              WindowStartupLocation="CenterScreen"
-             WindowBackdropType="Auto"
-             ResizeMode="NoResize"
-             SizeToContent="WidthAndHeight">
+             WindowBackdropType="Mica"
+             SizeToContent="WidthAndHeight"
+             ResizeMode="NoResize">
 
     <ContentControl Content="{Binding}"/>
 

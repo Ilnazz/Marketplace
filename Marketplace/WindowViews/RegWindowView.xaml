@@ -6,9 +6,63 @@
       xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
       xmlns:windowvms="clr-namespace:Marketplace.WindowViewModels"
       mc:Ignorable="d"
-      d:DataContext="{d:DesignInstance windowvms:RegWindowVm}">
+      d:DataContext="{d:DesignInstance windowvms:RegWindowVm}"
+             Width="300">
 
-    <Grid>
-        
-    </Grid>
+    <UserControl.Resources>
+        <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+            <Setter Property="Margin" Value="10 10 10 22.5"/>
+            <Setter Property="Validation.ErrorTemplate">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <StackPanel>
+                            <AdornedElementPlaceholder x:Name="Placeholder"/>
+                            <TextBlock Text="{Binding ElementName=Placeholder,
+                                                      Path=AdornedElement.(Validation.Errors)/ErrorContent}"
+                                       Margin="0 2.5 0 0"
+                                       FontSize="14"
+                                       Foreground="Red"/>
+                        </StackPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <StackPanel>
+        <StackPanel>
+            <Label Content="Логин"
+                   Target="{Binding ElementName=LoginBox}"
+                   FontWeight="Bold"
+                   FontSize="18"/>
+            <TextBox x:Name="LoginBox"
+                     Text="{Binding Login, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True, ValidatesOnDataErrors=True}"
+                     Margin="0 0 0 30"
+                     MaxLength="30"/>
+
+            <Label Content="Пароль"
+                   Target="{Binding ElementName=PasswordBox}"
+                   FontWeight="Bold"
+                   FontSize="18"/>
+            <TextBox x:Name="PasswordBox"
+                     Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
+                     Margin="0 0 0 30"
+                     MaxLength="30"/>
+
+            <Label Content="Подтвержджение пароля"
+                   Target="{Binding ElementName=PasswordConfirmationBox}"
+                   FontWeight="Bold"
+                   FontSize="18"/>
+            <TextBox x:Name="PasswordConfirmationBox"
+                     Text="{Binding PasswordConfirmation, UpdateSourceTrigger=PropertyChanged}"
+                     Margin="0 0 0 30"
+                     MaxLength="30"/>
+        </StackPanel>
+
+        <ui:Button Content="Зарегистрироваться"
+                    FontWeight="Medium"
+                    Appearance="Light"
+                    HorizontalAlignment="Stretch"
+                    Command="{Binding RegisterCommand}"/>
+    </StackPanel>
 </UserControl>

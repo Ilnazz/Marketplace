@@ -15,8 +15,7 @@
         </Grid.ColumnDefinitions>
         
         <ui:VirtualizingItemsControl ItemsSource="{Binding ProductModels, Mode=OneWay}"
-                                     Grid.Column="0"
-                                     Margin="0 0 10 0">
+                                     Grid.Column="0">
             <ui:VirtualizingItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <ui:VirtualizingWrapPanel SpacingMode="BetweenItemsOnly"/>
@@ -24,7 +23,7 @@
             </ui:VirtualizingItemsControl.ItemsPanel>
             <ui:VirtualizingItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <ui:Card Width="225"
+                    <ui:Card Width="250"
                              VerticalAlignment="Stretch"
                              VerticalContentAlignment="Stretch"
                              Margin="0 0 10 10">
@@ -130,6 +129,7 @@
                                                CommandParameter="{Binding ElementName=MessageFlyout}"/>
                                     <ui:Flyout x:Name="MessageFlyout"
                                                Margin="5 0 0 0"
+                                               Foreground="Red"
                                                Content="Больше нет 😞"/>
                                 </StackPanel>
                             </DockPanel>
@@ -142,9 +142,20 @@
                     </ui:Card>
                 </DataTemplate>
             </ui:VirtualizingItemsControl.ItemTemplate>
+            <ui:VirtualizingItemsControl.Style>
+                <Style TargetType="{x:Type ui:VirtualizingItemsControl}">
+                    <Setter Property="Visibility" Value="Visible"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding AreThereProducts}" Value="False">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ui:VirtualizingItemsControl.Style>
         </ui:VirtualizingItemsControl>
 
-        <DockPanel Grid.Column="1">
+        <DockPanel Grid.Column="1"
+                   Margin="10 0 0 0">
             <StackPanel Margin="0 0 0 10"
                         DockPanel.Dock="Top">
                 <TextBlock Text="Сортировка"
@@ -163,5 +174,24 @@
                           SelectedItem="{Binding SelectedManufacturer}"/>
             </StackPanel>
         </DockPanel>
+
+        <ui:Card HorizontalAlignment="Stretch"
+                 HorizontalContentAlignment="Center"
+                 VerticalAlignment="Stretch"
+                 VerticalContentAlignment="Center">
+            <TextBlock Text="Нет товаров"
+                        FontSize="16"
+                        FontWeight="Medium"/>
+            <ui:Card.Style>
+                <Style TargetType="{x:Type ui:Card}" BasedOn="{StaticResource {x:Type ui:Card}}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding AreThereProducts}" Value="False">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ui:Card.Style>
+        </ui:Card>
     </Grid>
 </ui:UiPage>

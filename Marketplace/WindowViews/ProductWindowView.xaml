@@ -191,6 +191,7 @@
                                 CommandParameter="{Binding ElementName=MessageFlyout}"/>
                     <ui:Flyout x:Name="MessageFlyout"
                                 Margin="5 0 0 0"
+                               Foreground="Red"
                                 Content="Больше нет 😞"/>
                 </StackPanel>
             </StackPanel>

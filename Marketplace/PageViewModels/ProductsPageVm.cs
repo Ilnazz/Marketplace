@@ -34,6 +34,7 @@ public partial class ProductsPageVm : PageVmBase
 
             OnPropertyChanged();
             OnPropertyChanged(nameof(ProductModels));
+            OnPropertyChanged(nameof(AreThereProducts));
         }
     }
 
@@ -49,9 +50,11 @@ public partial class ProductsPageVm : PageVmBase
 
             OnPropertyChanged();
             OnPropertyChanged(nameof(ProductModels));
+            OnPropertyChanged(nameof(AreThereProducts));
         }
     }
-    
+
+    public bool AreThereProducts => ProductModels.Count() > 0;
     #endregion
 
     #region Fields
@@ -80,6 +83,7 @@ public partial class ProductsPageVm : PageVmBase
         {
             _searchText = newSearchText;
             OnPropertyChanged(nameof(ProductModels));
+            OnPropertyChanged(nameof(AreThereProducts));
         };
     }
 

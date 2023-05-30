@@ -16,6 +16,11 @@ public partial class ContainerWindow : UiWindow
 
         Loaded += (_, _) =>
         {
+            //WindowState = System.Windows.WindowState.Maximized;
+            //WindowState = System.Windows.WindowState.Normal;
+            //SizeToContent = System.Windows.SizeToContent.Width;
+            //SizeToContent = System.Windows.SizeToContent.Height;
+            //SizeToContent = System.Windows.SizeToContent.WidthAndHeight;
         };
     }
 }
