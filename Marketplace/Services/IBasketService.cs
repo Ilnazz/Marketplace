@@ -18,6 +18,13 @@ public interface IBasketService<T> where T : notnull
     void AddToBasket(T item)
         => AddToBasket(item, 1);
 
+    void ClearBasket()
+    {
+        var itemAndCounts = GetItemAndCounts();
+        foreach (var itemAndCount in itemAndCounts)
+            RemoveFromBasket(itemAndCount.Key, itemAndCount.Value);
+    }
+
     void RemoveFromBasket(T item)
         => RemoveFromBasket(item, 1);
 

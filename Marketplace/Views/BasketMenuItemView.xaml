@@ -24,4 +24,9 @@
                        Margin="0 -7.5 0 0"/>
         </Grid>
     </ui:MenuItem.Header>
+    <ui:MenuItem Header="Очистить"
+                 Command="{Binding ClearBasketCommand}"
+                 Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource False}}"
+                 SymbolIcon="Broom16"
+                 Cursor="Hand"/>
 </ui:MenuItem>
