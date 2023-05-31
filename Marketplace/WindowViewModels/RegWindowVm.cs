@@ -42,33 +42,33 @@ public partial class RegWindowVm : WindowVmBase
 
         if (App.AuthRegService.TryRegisterUser(Login!, Password!) == false)
         {
-            var dialogWindow = new Wpf.Ui.Controls.MessageBox
-            {
-                Content = new System.Windows.Controls.TextBlock
-                {
-                    Text = "Пользователь с такими данными уже зарегистрирован.",
-                    TextWrapping = TextWrapping.Wrap,
-                    FontSize = 18,
-                    TextAlignment = TextAlignment.Center,
-                },
-                Width = 500,
-                SizeToContent = SizeToContent.Height,
-                ResizeMode = ResizeMode.NoResize,
-                Title = "Ошибка"
-            };
-            var okBtn = new Wpf.Ui.Controls.Button
-            {
-                Content = "Ок",
-                HorizontalAlignment = HorizontalAlignment.Stretch,
-            };
-            okBtn.Click += (_, _) => dialogWindow.Close();
-            dialogWindow.Footer = okBtn;
-            dialogWindow.ShowDialog();
+            App.AuthRegService.TryAuthorizeUser(Login!, Password!);
+            CloseWindow();
             return;
         }
 
-        App.AuthRegService.TryAuthorizeUser(Login!, Password!);
-        CloseWindow();
+        var dialogWindow = new Wpf.Ui.Controls.MessageBox
+        {
+            Content = new System.Windows.Controls.TextBlock
+            {
+                Text = "Пользователь с такими данными уже зарегистрирован.",
+                TextWrapping = TextWrapping.Wrap,
+                FontSize = 18,
+                TextAlignment = TextAlignment.Center,
+            },
+            Width = 500,
+            SizeToContent = SizeToContent.Height,
+            ResizeMode = ResizeMode.NoResize,
+            Title = "Ошибка"
+        };
+        var okBtn = new Wpf.Ui.Controls.Button
+        {
+            Content = "Ок",
+            HorizontalAlignment = HorizontalAlignment.Stretch,
+        };
+        okBtn.Click += (_, _) => dialogWindow.Close();
+        dialogWindow.Footer = okBtn;
+        dialogWindow.ShowDialog();
     }
     private bool CanRegister() => HasErrors == false;
 

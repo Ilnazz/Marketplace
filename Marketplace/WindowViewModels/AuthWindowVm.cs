@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Marketplace.Database;
+using Marketplace.WindowViews;
 using Microsoft.EntityFrameworkCore;
 
 namespace Marketplace.WindowViewModels;
@@ -33,7 +34,10 @@ public partial class AuthWindowVm : WindowVmBase
             return;
 
         if (App.AuthRegService.TryAuthorizeUser(Login!, Password!))
+        {
             CloseWindow();
+            return;
+        }
 
         var dialogWindow = new Wpf.Ui.Controls.MessageBox
         {
@@ -63,7 +67,8 @@ public partial class AuthWindowVm : WindowVmBase
     [RelayCommand]
     private void OpenRegWindow()
     {
-
+        CloseWindow();
+        new TitledContainerWindow(new RegWindowVm()).ShowDialog();
     }
     #endregion
 

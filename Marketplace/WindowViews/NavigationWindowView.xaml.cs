@@ -49,7 +49,12 @@ public partial class NavigationWindowView : UserControl
 
         App.BasketService = new GuestBasketService<Product>();
         App.BasketService.StateChanged += () =>
+        {
             BasketNavButton.ItemsCount = App.BasketService.TotalItemsCount;
+
+            if (CurrentPageTitle.StartsWith("Корзина"))
+                CurrentPageTitle = $"Корзина ({BasketNavButton.ItemsCount})";
+        };
     }
 
     private void TopNavButtonClick(object sender, RoutedEventArgs e)
@@ -62,14 +67,26 @@ public partial class NavigationWindowView : UserControl
         if (pageType == typeof(BasketPage))
         {
             UserNavButton.IsActive = false;
+            OrdersNavButton.IsActive = false;
+
             BasketNavButton.IsActive = true;
             CurrentPageTitle = $"Корзина ({BasketNavButton.ItemsCount})";
         }
         else if (pageType == typeof(UserPage))
         {
-            UserNavButton.IsActive = true;
+            OrdersNavButton.IsActive = false;
             BasketNavButton.IsActive = false;
+
+            UserNavButton.IsActive = true;
             CurrentPageTitle = $"Личный кабинет";
+        }
+        else if (pageType == typeof(OrdersPage))
+        {
+            UserNavButton.IsActive = false;
+            BasketNavButton.IsActive = false;
+
+            OrdersNavButton.IsActive = true;
+            CurrentPageTitle = $"Заказы";
         }
 
         App.SearchService.IsEnabled = false;

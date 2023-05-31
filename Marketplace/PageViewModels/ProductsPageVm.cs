@@ -58,7 +58,7 @@ public partial class ProductsPageVm : PageVmBase
     #endregion
 
     #region Fields
-    private const string DefaultFilterName = "Нет";
+    private const string DefaultFilterName = "Любой";
     private const string DefaultSortingName = "По умолчнию";
 
     private IEnumerable<Product> _allProducts = null!;

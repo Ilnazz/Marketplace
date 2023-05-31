@@ -29,7 +29,7 @@
         </Style>
     </UserControl.Resources>
 
-    <StackPanel>
+    <StackPanel Margin="10">
         <StackPanel>
             <Label Content="Логин"
                    Target="{Binding ElementName=LoginBox}"
@@ -49,7 +49,7 @@
                      Margin="0 0 0 30"
                      MaxLength="30"/>
 
-            <Label Content="Подтвержджение пароля"
+            <Label Content="Подтверждение пароля"
                    Target="{Binding ElementName=PasswordConfirmationBox}"
                    FontWeight="Bold"
                    FontSize="18"/>

@@ -131,6 +131,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
             <ui:AutoSuggestBox x:Name="SearchBox"
@@ -145,8 +146,14 @@
                                  Margin="0 0 15 0"
                                  Click="TopNavButtonClick"/>
 
-            <controls:BasketButton x:Name="BasketNavButton"
+            <controls:OrdersButton x:Name="OrdersNavButton"
                                    Grid.Column="2"
+                                   Tag="{x:Type pages:OrdersPage}"
+                                   Margin="0 0 15 0"
+                                   Click="TopNavButtonClick"/>
+
+            <controls:BasketButton x:Name="BasketNavButton"
+                                   Grid.Column="3"
                                    Tag="{x:Type pages:BasketPage}"
                                    Click="TopNavButtonClick"/>
         </Grid>

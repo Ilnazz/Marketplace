@@ -1,4 +1,4 @@
-﻿<ui:Button x:Class="Marketplace.Controls.UserButton"
+﻿<ui:Button x:Class="Marketplace.Controls.OrdersButton"
            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
            xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
@@ -6,19 +6,8 @@
            Background="Transparent">
     <ui:Button.Content>
         <StackPanel>
-            <ui:SymbolIcon Symbol="Person16"/>
-            <TextBlock>
-                <TextBlock.Style>
-                    <Style TargetType="TextBlock">
-                        <Setter Property="Text" Value="{Binding User.Surname}"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding User}" Value="{x:Null}">
-                                <Setter Property="Text" Value="Гость"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBlock.Style>
-            </TextBlock>
+            <ui:SymbolIcon Symbol="Box20"/>
+			<TextBlock Text="Заказы"/>
             <Border HorizontalAlignment="Stretch"
                         Margin="0 1.25 0 0"
                         CornerRadius="1.25"

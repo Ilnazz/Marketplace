@@ -13,7 +13,7 @@ public partial class UserButton : Button
     }
 
     public static readonly DependencyProperty UserProperty =
-        DependencyProperty.Register("User", typeof(User), typeof(UserButton), new PropertyMetadata(new User { Surname = "Хасанов"}));
+        DependencyProperty.Register("User", typeof(User), typeof(UserButton));
 
     public bool IsActive
     {

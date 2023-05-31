@@ -8,40 +8,34 @@
       mc:Ignorable="d"
       d:DataContext="{d:DesignInstance pagevms:UserPageVm}">
 
-    <ui:UiPage.DataContext>
-        <pagevms:UserPageVm/>
-    </ui:UiPage.DataContext>
-
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
-        <ui:Card Margin="0 0 10 0"
-                 VerticalAlignment="Top">
-            <StackPanel>
-                <Image HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch"
-                        Stretch="UniformToFill"
-                        Width="100"
-                        Height="100"
-                        Margin="0 0 10 20">
-                    <Image.Source>
-                        <Binding Path="Photo">
-                            <Binding.TargetNullValue>
-                                <BitmapImage UriSource="../Resources/Images/UserPhotoPlaceholder.png"/>
-                            </Binding.TargetNullValue>
-                        </Binding>
-                    </Image.Source>
-                </Image>
-                <ui:Button Content="Загрузить фотографию"/>
-            </StackPanel>
-        </ui:Card>
-
         <ui:Card Grid.Column="1"
                  VerticalAlignment="Top">
-            <StackPanel Width="300">
+            <StackPanel>
+                <StackPanel>
+                    <Image HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Stretch="UniformToFill"
+                        Width="50"
+                        Height="50"
+                        Margin="0 0 10 20">
+                        <Image.Source>
+                            <Binding Path="Photo">
+                                <Binding.TargetNullValue>
+                                    <BitmapImage UriSource="../Resources/Images/UserPhotoPlaceholder.png"/>
+                                </Binding.TargetNullValue>
+                            </Binding>
+                        </Image.Source>
+                    </Image>
+                    <TextBlock Text="Хасанов Ильназ"/>
+                    <ui:Button Content="Загрузить фотографию"/>
+                </StackPanel>
+                
                 <TextBlock Text="Фамилия"
                             Margin="0 0 0 5"/>
                 <ui:TextBox Text="{Binding Surname}"
@@ -63,6 +57,12 @@
                 <TextBlock Text="Логин"
                            Margin="0 0 0 5"/>
                 <ui:TextBox Text="{Binding Login}"
+                            MaxLength="50"
+                            Margin="0 0 0 25"/>
+
+                <TextBlock Text="Пароль"
+                           Margin="0 0 0 5"/>
+                <ui:TextBox Text="{Binding Password}"
                             MaxLength="50"
                             Margin="0 0 0 25"/>
             </StackPanel>

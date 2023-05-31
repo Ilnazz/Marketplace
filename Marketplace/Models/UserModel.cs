@@ -1,9 +1,10 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Marketplace.Database.Models;
 
-namespace Marketplace.PageViewModels;
+namespace Marketplace.Models;
 
-public partial class UserPageVm : PageVmBase
+public partial class UserModel : ObservableObject
 {
     #region Properties
     public bool IsAuthorized => App.CurrentUser != null;
@@ -12,7 +13,7 @@ public partial class UserPageVm : PageVmBase
 
     public string Name
     {
-        get => _user?.Name;
+        get => _user.Name;
         set
         {
             _user.Name = value;
@@ -22,17 +23,17 @@ public partial class UserPageVm : PageVmBase
 
     public string Surname
     {
-        get => _user?.Surname;
+        get => _user.Surname;
         set
         {
-                _user.Surname = value;
+            _user.Surname = value;
             OnPropertyChanged();
         }
     }
 
     public string? Patronymic
     {
-        get => _user?.Patronymic;
+        get => _user.Patronymic;
         set
         {
             _user.Patronymic = value;
@@ -44,7 +45,7 @@ public partial class UserPageVm : PageVmBase
 
     public string Login
     {
-        get => _user?.Login;
+        get => _user.Login;
         set
         {
             _user.Login = value;
@@ -54,7 +55,7 @@ public partial class UserPageVm : PageVmBase
 
     public string Password
     {
-        get => _user?.Password;
+        get => _user.Password;
         set
         {
             _user.Password = value;
@@ -71,9 +72,9 @@ public partial class UserPageVm : PageVmBase
     }
     #endregion
 
-    private User? _user;
+    private User _user;
 
-    public UserPageVm()
+    public UserModel()
     {
         _user = App.CurrentUser;
     }
