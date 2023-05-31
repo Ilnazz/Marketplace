@@ -182,5 +182,14 @@ public partial class ProductModel : ObservableObject
     public ProductModel(Product product)
     {
         _product = product;
+
+        App.BasketService.StateChanged += () =>
+        {
+            OnPropertyChanged(nameof(QuantityInBasket));
+            OnPropertyChanged(nameof(IsInBasket));
+            PutToBasketCommand.NotifyCanExecuteChanged();
+            AddOneToBasketCommand.NotifyCanExecuteChanged();
+            RemoveOneFromBasketCommand.NotifyCanExecuteChanged();
+        };
     }
 }

@@ -6,8 +6,7 @@
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d"
-             d:DataContext="{d:DesignInstance viewmodels:BasketMenuItemVm}"
-             Command="{Binding NavigateToBasketPageCommand}">
+             d:DataContext="{d:DesignInstance viewmodels:BasketMenuItemVm}">
 
     <ui:MenuItem.DataContext>
         <viewmodels:BasketMenuItemVm/>
@@ -24,6 +23,10 @@
                        Margin="0 -7.5 0 0"/>
         </Grid>
     </ui:MenuItem.Header>
+	<ui:MenuItem Header="Перейти"
+                 Command="{Binding NavigateToBasketPageCommand}"
+                 SymbolIcon="Cart16"
+                 Cursor="Hand"/>
     <ui:MenuItem Header="Очистить"
                  Command="{Binding ClearBasketCommand}"
                  Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource False}}"

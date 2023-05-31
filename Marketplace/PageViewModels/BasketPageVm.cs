@@ -68,17 +68,12 @@ public partial class BasketPageVm : PageVmBase
     {
         App.BasketService.StateChanged += () =>
         {
-            RefreshProductModels();
             OnPropertyChanged(nameof(IsEmpty));
             OnPropertyChanged(nameof(TotalProductsCount));
             OnPropertyChanged(nameof(TotalProductsCostWithDiscount));
             OnPropertyChanged(nameof(TotalDiscountSum));
         };
-        RefreshProductModels();
-    }
 
-    private void RefreshProductModels()
-    {
         var itemAndCounts = App.BasketService.GetItemAndCounts();
         ProductModels = itemAndCounts.Select(pc => new ProductModel(pc.Key));
     }
