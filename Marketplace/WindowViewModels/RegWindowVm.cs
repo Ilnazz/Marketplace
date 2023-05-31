@@ -28,7 +28,7 @@ public partial class RegWindowVm : WindowVmBase
     [ObservableProperty]
     [NotifyDataErrorInfo]
     [NotifyCanExecuteChangedFor(nameof(RegisterCommand))]
-    [CustomValidation(typeof(RegWindowVm), nameof(ValidatePasswordConfirmation))]
+    //[CustomValidation(typeof(RegWindowVm), nameof(ValidatePasswordConfirmation))]
     public string? _passwordConfirmation;
 
     #endregion
@@ -40,9 +40,9 @@ public partial class RegWindowVm : WindowVmBase
     {
         ValidateAllProperties();
 
-        if (App.AuthRegService.TryRegisterUser(Login!, Password!) == false)
+        if (App.UserService.TryRegisterUser(Login!, Password!) == false)
         {
-            App.AuthRegService.TryAuthorizeUser(Login!, Password!);
+            App.UserService.TryAuthorizeUser(Login!, Password!);
             CloseWindow();
             return;
         }

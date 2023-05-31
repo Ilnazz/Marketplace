@@ -1,0 +1,27 @@
+﻿<ui:MenuItem x:Class="Marketplace.Views.BasketMenuItemView"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:viewmodels="clr-namespace:Marketplace.ViewModels"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance viewmodels:BasketMenuItemVm}"
+             Command="{Binding NavigateToBasketPageCommand}">
+
+    <ui:MenuItem.DataContext>
+        <viewmodels:BasketMenuItemVm/>
+    </ui:MenuItem.DataContext>
+    
+    <ui:MenuItem.Header>
+        <Grid>
+            <StackPanel>
+                <ui:SymbolIcon Symbol="Cart16"/>
+                <TextBlock Text="Корзина"/>
+            </StackPanel>
+            <TextBlock Text="{Binding ItemsCount}"
+                       HorizontalAlignment="Right"
+                       Margin="0 -7.5 0 0"/>
+        </Grid>
+    </ui:MenuItem.Header>
+</ui:MenuItem>

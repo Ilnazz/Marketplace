@@ -15,7 +15,9 @@
         </Grid.ColumnDefinitions>
         
         <ui:VirtualizingItemsControl ItemsSource="{Binding ProductModels, Mode=OneWay}"
-                                     Grid.Column="0">
+                                     Grid.Column="0"
+                                     Visibility="{Binding AreThereProducts,
+                                                          Converter={StaticResource BoolToVisibilityConverter}}">
             <ui:VirtualizingItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <ui:VirtualizingWrapPanel SpacingMode="BetweenItemsOnly"/>
@@ -61,35 +63,16 @@
                                 <TextBlock Text="{Binding Cost, StringFormat=0, Mode=OneWay}"
                                            TextDecorations="Strikethrough"
                                            VerticalAlignment="Bottom"
-                                           Margin="2.5 0 0 0">
-                                    <TextBlock.Style>
-                                        <Style TargetType="TextBlock">
-                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding HasDiscount, Mode=OneWay}" Value="True">
-                                                    <Setter Property="Visibility" Value="Visible"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
-
+                                           Margin="2.5 0 0 0"
+                                           Visibility="{Binding HasDiscount,
+                                                                Converter={StaticResource BoolToVisibilityConverter}}"/>
                                 <TextBlock Text="{Binding DiscountPercent, StringFormat='{}-{0:0}%', Mode=OneWay}"
                                            VerticalAlignment="Bottom"
                                            DockPanel.Dock="Right"
                                            HorizontalAlignment="Right"
-                                           Foreground="Green">
-                                    <TextBlock.Style>
-                                        <Style TargetType="TextBlock">
-                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding HasDiscount}" Value="True">
-                                                    <Setter Property="Visibility" Value="Visible"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
+                                           Foreground="Green"
+                                           Visibility="{Binding HasDiscount,
+                                                                Converter={StaticResource BoolToVisibilityConverter}}"/>
                             </DockPanel>
                             
                             <TextBlock Text="{Binding Name, Mode=OneWay}"
@@ -142,16 +125,6 @@
                     </ui:Card>
                 </DataTemplate>
             </ui:VirtualizingItemsControl.ItemTemplate>
-            <ui:VirtualizingItemsControl.Style>
-                <Style TargetType="{x:Type ui:VirtualizingItemsControl}">
-                    <Setter Property="Visibility" Value="Visible"/>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding AreThereProducts}" Value="False">
-                            <Setter Property="Visibility" Value="Collapsed"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </ui:VirtualizingItemsControl.Style>
         </ui:VirtualizingItemsControl>
 
         <DockPanel Grid.Column="1"
@@ -178,20 +151,13 @@
         <ui:Card HorizontalAlignment="Stretch"
                  HorizontalContentAlignment="Center"
                  VerticalAlignment="Stretch"
-                 VerticalContentAlignment="Center">
+                 VerticalContentAlignment="Center"
+                 Visibility="{Binding AreThereProducts,
+                                      Converter={StaticResource BoolToVisibilityConverter},
+                                      ConverterParameter={StaticResource False}}">
             <TextBlock Text="Нет товаров"
                         FontSize="16"
                         FontWeight="Medium"/>
-            <ui:Card.Style>
-                <Style TargetType="{x:Type ui:Card}" BasedOn="{StaticResource {x:Type ui:Card}}">
-                    <Setter Property="Visibility" Value="Collapsed"/>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding AreThereProducts}" Value="False">
-                            <Setter Property="Visibility" Value="Visible"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </ui:Card.Style>
         </ui:Card>
     </Grid>
 </ui:UiPage>

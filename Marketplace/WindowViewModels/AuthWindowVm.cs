@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Marketplace.Database;
+using Marketplace.Services;
 using Marketplace.WindowViews;
 using Microsoft.EntityFrameworkCore;
 
@@ -33,7 +34,7 @@ public partial class AuthWindowVm : WindowVmBase
         if (HasErrors)
             return;
 
-        if (App.AuthRegService.TryAuthorizeUser(Login!, Password!))
+        if (App.UserService.TryAuthorizeUser(Login!, Password!))
         {
             CloseWindow();
             return;

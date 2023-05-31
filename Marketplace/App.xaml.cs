@@ -5,18 +5,15 @@ using Marketplace.Services;
 using Marketplace.WindowViewModels;
 using Marketplace.WindowViews;
 using Wpf.Ui.Controls.Interfaces;
-using Wpf.Ui.Mvvm.Contracts;
 
 namespace Marketplace;
 
 public partial class App : Application
 {
-    public static User? CurrentUser { get; set; }
-
-    public static AuthRegService AuthRegService { get; set; }
+    public static UserService UserService { get; set; }
 
     public static INavigation NavigationService { get; set; }
-    public static Window NavigationWindow { get; set; }
+    public static NavigationWindowVm NavigationWindowVm { get; set; }
 
     public static IBasketService<Product> BasketService { get; set; }
 
@@ -24,8 +21,12 @@ public partial class App : Application
 
     protected override void OnStartup(StartupEventArgs e)
     {
-        NavigationWindow = new ContainerWindow(new NavigationWindowVm());
-        NavigationWindow.Show();
+        App.UserService = new UserService();
+        App.BasketService = new GuestBasketService<Product>();
+
+        NavigationWindowVm = new NavigationWindowVm();
+        new ContainerWindow(NavigationWindowVm).Show();
+
         App.NavigationService.Navigate(typeof(BookProductsPage));
     }
 }

@@ -2,13 +2,11 @@
 
 namespace Marketplace.WindowViewModels;
 
-public class ProductWindowVm : WindowVmBase
+public class ProductDetailsWindowVm : WindowVmBase
 {
-    #region Properties
     public ProductModel ProductModel { get; init; }
-    #endregion
 
-    public ProductWindowVm(ProductModel product)
+    public ProductDetailsWindowVm(ProductModel product)
     {
         Title = "Информация о товаре";
         ProductModel = product;

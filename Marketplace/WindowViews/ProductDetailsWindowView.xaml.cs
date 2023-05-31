@@ -2,9 +2,9 @@
 
 namespace Marketplace.WindowViews;
 
-public partial class OrderWindowView : UserControl
+public partial class ProductDetailsWindowView : UserControl
 {
-    public OrderWindowView()
+    public ProductDetailsWindowView()
     {
         InitializeComponent();
     }

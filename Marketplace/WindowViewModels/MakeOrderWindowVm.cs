@@ -2,11 +2,11 @@
 
 namespace Marketplace.WindowViewModels;
 
-public class OrderWindowVm : WindowVmBase
+public class MakeOrderWindowVm : WindowVmBase
 {
     private BasketPageVm _basketModel;
 
-    public OrderWindowVm(BasketPageVm basketModel)
+    public MakeOrderWindowVm(BasketPageVm basketModel)
     {
         _basketModel = basketModel;
     }

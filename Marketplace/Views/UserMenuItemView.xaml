@@ -1,0 +1,48 @@
+﻿<ui:MenuItem x:Class="Marketplace.Views.UserMenuItemView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:viewmodels="clr-namespace:Marketplace.ViewModels"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance viewmodels:UserMenuItemVm}">
+
+    <ui:MenuItem.DataContext>
+        <viewmodels:UserMenuItemVm/>
+    </ui:MenuItem.DataContext>
+    
+    <ui:MenuItem.Header>
+        <StackPanel>
+            <ui:SymbolIcon Symbol="Person16"/>
+            <TextBlock>
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Text" Value="{Binding User.Surname}"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding User}" Value="{x:Null}">
+                                <Setter Property="Text" Value="Гость"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+        </StackPanel>
+    </ui:MenuItem.Header>
+    <ui:MenuItem Header="Войти"
+                SymbolIcon="Key16"
+                Command="{Binding AuthorizeCommand}"
+                Visibility="{Binding IsAuthorized,
+                                Converter={StaticResource BoolToVisibilityConverter},
+                                ConverterParameter={StaticResource False}}"/>
+    <ui:MenuItem Header="Выйти"
+                SymbolIcon="Door16"
+                Command="{Binding LogOutCommand}"
+                Visibility="{Binding IsAuthorized,
+                                    Converter={StaticResource BoolToVisibilityConverter}}"/>
+    <ui:MenuItem Header="Профиль"
+                SymbolIcon="List16"
+                Command="{Binding ShowProfileCommand}"
+                Visibility="{Binding IsAuthorized,
+                                    Converter={StaticResource BoolToVisibilityConverter}}"/>
+</ui:MenuItem>

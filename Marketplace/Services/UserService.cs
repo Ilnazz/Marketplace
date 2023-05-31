@@ -1,13 +1,14 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Marketplace.Database;
 using Marketplace.Database.Models;
 
 namespace Marketplace.Services;
 
-public class AuthRegService
+public class UserService
 {
+    public User? CurrentUser { get; private set; }
+
     public bool TryRegisterUser(string login, string password)
     {
         if (TryGetUser(login, password, out var _))
@@ -21,10 +22,12 @@ public class AuthRegService
     public bool TryAuthorizeUser(string login, string password)
     {
         if (TryGetUser(login, password, out var user))
-            App.CurrentUser = user;
+            CurrentUser = user;
 
         return user != null;
     }
+
+    public bool IsUserAuthorized() => CurrentUser != null;
 
     private bool TryGetUser(string login, string password, [NotNullWhen(true)] out User? user)
     {

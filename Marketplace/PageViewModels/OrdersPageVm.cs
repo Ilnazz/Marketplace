@@ -1,5 +1,17 @@
-﻿namespace Marketplace.PageViewModels;
+﻿using CommunityToolkit.Mvvm.Input;
+using Marketplace.WindowViewModels;
+using Marketplace.WindowViews;
 
-public class OrdersPageVm : PageVmBase
+namespace Marketplace.PageViewModels;
+
+public partial class OrdersPageVm : PageVmBase
 {
+    public bool IsUserAuthorized => App.UserService.IsUserAuthorized();
+
+    [RelayCommand]
+    private void Authorize()
+    {
+        new TitledContainerWindow(new AuthWindowVm()).ShowDialog();
+        OnPropertyChanged(nameof(IsUserAuthorized));
+    }
 }

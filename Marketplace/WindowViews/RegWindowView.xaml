@@ -37,7 +37,7 @@
                    FontSize="18"/>
             <TextBox x:Name="LoginBox"
                      Text="{Binding Login, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True, ValidatesOnDataErrors=True}"
-                     Margin="0 0 0 30"
+                     Margin="0 0 0 10"
                      MaxLength="30"/>
 
             <Label Content="Пароль"
@@ -46,7 +46,7 @@
                    FontSize="18"/>
             <TextBox x:Name="PasswordBox"
                      Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
-                     Margin="0 0 0 30"
+                     Margin="0 0 0 10"
                      MaxLength="30"/>
 
             <Label Content="Подтверждение пароля"
@@ -55,7 +55,7 @@
                    FontSize="18"/>
             <TextBox x:Name="PasswordConfirmationBox"
                      Text="{Binding PasswordConfirmation, UpdateSourceTrigger=PropertyChanged}"
-                     Margin="0 0 0 30"
+                     Margin="0 0 0 25"
                      MaxLength="30"/>
         </StackPanel>
 

@@ -6,8 +6,33 @@
       xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
       xmlns:viewmodels="clr-namespace:Marketplace.PageViewModels"
       mc:Ignorable="d" 
-      d:DataContext="{d:DesignInstance viewmodels:OrdersPageVm}"
-      Title="OrdersPage">
+      d:DataContext="{d:DesignInstance viewmodels:OrdersPageVm}">
+
+    <ui:UiPage.DataContext>
+        <viewmodels:OrdersPageVm/>
+    </ui:UiPage.DataContext>
+
     <Grid>
+        <ui:Card HorizontalAlignment="Stretch"
+                 HorizontalContentAlignment="Center"
+                 VerticalAlignment="Stretch"
+                 VerticalContentAlignment="Center"
+                 Grid.ColumnSpan="2"
+                 Visibility="{Binding IsUserAuthorized,
+                                      Converter={StaticResource BoolToVisibilityConverter},
+                                      ConverterParameter={StaticResource False}}">
+            <StackPanel>
+                <TextBlock Text="Необходимо войти в аккаунт"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Bottom"
+                           FontSize="16"
+                           FontWeight="Medium"
+                           Margin="0 0 0 10"/>
+                <ui:Button Content="Войти"
+                           HorizontalAlignment="Stretch"
+                           FontSize="16"
+                           Command="{Binding AuthorizeCommand}"/>
+            </StackPanel>
+        </ui:Card>
     </Grid>
 </ui:UiPage>

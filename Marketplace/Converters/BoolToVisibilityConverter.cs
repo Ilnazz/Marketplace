@@ -1,4 +1,4 @@
-﻿using System;
+﻿    using System;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
@@ -9,10 +9,13 @@ public class BoolToVisibilityConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        if (value is bool isVisible == false)
+        if (value is bool boolValue == false)
             throw new ArgumentException("Expected argument of type bool", nameof(value));
 
-        return isVisible ? Visibility.Visible : Visibility.Collapsed;
+        if (parameter is bool targetBoolValue)
+            boolValue = boolValue == targetBoolValue;
+
+        return boolValue ? Visibility.Visible : Visibility.Collapsed;
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

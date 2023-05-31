@@ -5,8 +5,70 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
              mc:Ignorable="d"
-             d:DataContext="{d:DesignInstance windowvms:AuthWindowVm}">
-    <Grid>
-            
-    </Grid>
+             d:DataContext="{d:DesignInstance windowvms:UserWindowVm}">
+    <ui:Card Grid.Column="1"
+                VerticalAlignment="Top">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <DockPanel Margin="0 0 20 0">
+                <Image HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Stretch="UniformToFill"
+                        Width="100"
+                        Height="200"
+                       DockPanel.Dock="Top">
+                    <Image.Source>
+                        <Binding Path="UserModel.Photo">
+                            <Binding.TargetNullValue>
+                                <BitmapImage UriSource="../Resources/Images/LightGrayPixel.png"/>
+                            </Binding.TargetNullValue>
+                        </Binding>
+                    </Image.Source>
+                </Image>
+                <ui:Button Content="Загрузить фотографию"
+                           DockPanel.Dock="Bottom"/>
+                <TextBlock Text="Хасанов Ильназ"
+                           DockPanel.Dock="Bottom"/>
+            </DockPanel>
+
+            <DockPanel Grid.Column="1">
+                <TextBlock Text="Фамилия"
+                            Margin="0 0 0 5"/>
+                <ui:TextBox Text="{Binding UserModel.Surname}"
+                            MaxLength="50"
+                            Margin="0 0 0 25"/>
+
+                <TextBlock Text="Имя"
+                            Margin="0 0 0 5"/>
+                <ui:TextBox Text="{Binding UserModel.Name}"
+                            MaxLength="50"
+                            Margin="0 0 0 25"/>
+
+                <TextBlock Text="Отчество"
+                            Margin="0 0 0 5"/>
+                <ui:TextBox Text="{Binding UserModel.Patronymic}"
+                            MaxLength="50"
+                            Margin="0 0 0 25"/>
+
+                <TextBlock Text="Логин"
+                            Margin="0 0 0 5"/>
+                <ui:TextBox Text="{Binding UserModel.Login}"
+                            MaxLength="50"
+                            Margin="0 0 0 25"/>
+
+                <TextBlock Text="Пароль"
+                            Margin="0 0 0 5"/>
+                <ui:TextBox Text="{Binding UserModel.Password}"
+                            MaxLength="50"
+                        Margin="0 0 0 25"/>
+
+                <ui:Button Content="Сохранить"
+                           Command="{Binding SaveChangesCommand}"/>
+            </DockPanel>
+        </Grid>
+    </ui:Card>
 </UserControl>

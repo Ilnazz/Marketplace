@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
              xmlns:pages="clr-namespace:Marketplace.Pages"
-             xmlns:controls="clr-namespace:Marketplace.Controls"
+             xmlns:views="clr-namespace:Marketplace.Views"
              mc:Ignorable="d"
              Width="1280"
              Height="720">
@@ -42,8 +42,7 @@
                               Grid.Column="0"
                               MaxWidth="225"
                               Grid.Row="1"
-                              Grid.RowSpan="3"
-                              Margin="5 0 10 0">
+                              Grid.RowSpan="3">
 
             <ui:NavigationCompact.Items>
                 <ui:NavigationHeader Text="Каталог"
@@ -126,36 +125,24 @@
 
         <Grid Grid.Row="1"
               Grid.Column="1"
-              Margin="0 3 10 0">
+              Margin="0 -7.5 0 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
             <ui:AutoSuggestBox x:Name="SearchBox"
                                Grid.Column="0"
-                               Margin="0 0 15 0"
+                               Margin="0 0 10 0"
                                VerticalAlignment="Center"
                                PlaceholderText="Поиск..."/>
             
-            <controls:UserButton x:Name="UserNavButton"
-                                 Tag="{x:Type pages:UserPage}"
-                                 Grid.Column="1"
-                                 Margin="0 0 15 0"
-                                 Click="TopNavButtonClick"/>
-
-            <controls:OrdersButton x:Name="OrdersNavButton"
-                                   Grid.Column="2"
-                                   Tag="{x:Type pages:OrdersPage}"
-                                   Margin="0 0 15 0"
-                                   Click="TopNavButtonClick"/>
-
-            <controls:BasketButton x:Name="BasketNavButton"
-                                   Grid.Column="3"
-                                   Tag="{x:Type pages:BasketPage}"
-                                   Click="TopNavButtonClick"/>
+            <Menu Background="Transparent"
+                  Grid.Column="1">
+                <views:UserMenuItemView/>
+                <views:OrdersMenuItemView/>
+                <views:BasketMenuItemView/>
+            </Menu>
         </Grid>
 
         <Frame x:Name="NavigationFrame"

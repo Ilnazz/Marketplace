@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Marketplace.Database;
 using Marketplace.Pages;
+using Marketplace.Services;
 using Marketplace.WindowViewModels;
 using Marketplace.WindowViews;
 
@@ -28,35 +29,39 @@ public partial class BasketPageVm : PageVmBase
     #endregion
 
     [RelayCommand]
-    private void GoToProductsPage() => App.NavigationService.Navigate(typeof(BookProductsPage));
+    private void GoToProductsPage() =>
+        App.NavigationService.Navigate(typeof(BookProductsPage));
 
     [RelayCommand]
-    private void OpenOrderWindow()
+    private void MakeOrder()
     {
-        if (App.CurrentUser != null)
-            new TitledContainerWindow(new OrderWindowVm(this)).ShowDialog();
-        else
+        if (App.UserService.IsUserAuthorized())
         {
-            var dialogWindow = new Wpf.Ui.Controls.MessageBox
-            {
-                Content = new NeedToLoginWindowView(),
-                SizeToContent = SizeToContent.Height,
-                ResizeMode = ResizeMode.NoResize,
-                Title = "Информация",
-                ButtonLeftName = "Да",
-                ButtonLeftAppearance = Wpf.Ui.Common.ControlAppearance.Primary,
-
-                ButtonRightName = "Нет"
-            };
-            dialogWindow.ButtonLeftClick += (_, _) =>
-            {
-                dialogWindow.Close();
-                new TitledContainerWindow(new AuthWindowVm()).ShowDialog();
-                //App.NavigationWindow.Close();
-            };
-            dialogWindow.ButtonRightClick += (_, _) => dialogWindow.Close();
-            dialogWindow.ShowDialog();
+            new TitledContainerWindow(new MakeOrderWindowVm(this)).ShowDialog();
+            return;
         }
+
+        var dialogWindow = new Wpf.Ui.Controls.MessageBox
+        {
+            Content = new NeedToLoginWindowView(),
+            SizeToContent = SizeToContent.Height,
+            ResizeMode = ResizeMode.NoResize,
+            Title = "Информация",
+            ButtonLeftName = "Да",
+            ButtonLeftAppearance = Wpf.Ui.Common.ControlAppearance.Primary,
+
+            ButtonRightName = "Нет"
+        };
+        dialogWindow.ButtonLeftClick += (_, _) =>
+        {
+            dialogWindow.Close();
+            new TitledContainerWindow(new AuthWindowVm()).ShowDialog();
+
+            if (App.UserService.IsUserAuthorized())
+                new TitledContainerWindow(new MakeOrderWindowVm(this)).ShowDialog();
+        };
+        dialogWindow.ButtonRightClick += (_, _) => dialogWindow.Close();
+        dialogWindow.ShowDialog();
     }
 
     public BasketPageVm()

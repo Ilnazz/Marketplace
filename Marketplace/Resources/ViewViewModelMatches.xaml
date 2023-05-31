@@ -1,7 +1,9 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:windowvms="clr-namespace:Marketplace.WindowViewModels"
-                    xmlns:windowviews="clr-namespace:Marketplace.WindowViews">
+                    xmlns:windowviews="clr-namespace:Marketplace.WindowViews"
+                    xmlns:views="clr-namespace:Marketplace.Views"
+                    xmlns:viewmodels="clr-namespace:Marketplace.ViewModels">
 
     <DataTemplate DataType="{x:Type windowvms:NavigationWindowVm}">
         <windowviews:NavigationWindowView/>
@@ -15,12 +17,16 @@
         <windowviews:RegWindowView/>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type windowvms:OrderWindowVm}">
-        <windowviews:OrderWindowView/>
+    <DataTemplate DataType="{x:Type windowvms:MakeOrderWindowVm}">
+        <windowviews:MakeOrderWindowView/>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type windowvms:ProductWindowVm}">
-        <windowviews:ProductWindowView/>
+    <DataTemplate DataType="{x:Type windowvms:ProductDetailsWindowVm}">
+        <windowviews:ProductDetailsWindowView/>
     </DataTemplate>
-    
+
+    <DataTemplate DataType="{x:Type windowvms:UserWindowVm}">
+        <windowviews:UserWindowView/>
+    </DataTemplate>
+
 </ResourceDictionary>

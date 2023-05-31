@@ -102,7 +102,7 @@ public partial class ProductModel : ObservableObject
     [RelayCommand]
     private void OpenProductModelWindow()
     {
-        var productWindowVm = new ProductWindowVm(this);
+        var productWindowVm = new ProductDetailsWindowVm(this);
         new TitledContainerWindow(productWindowVm).ShowDialog();
     }
 
