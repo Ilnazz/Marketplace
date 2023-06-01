@@ -16,6 +16,8 @@ public class GuestBasketService<T> : IBasketService<T> where T : notnull
     public void AddToBasket(T item, int count)
     {
         ArgumentNullException.ThrowIfNull(item, nameof(item));
+        if (count <= 0)
+            throw new ArgumentException("Should be greater than zero", nameof(count));
 
         if (_itemAndCounts.ContainsKey(item))
             _itemAndCounts[item] += count;
@@ -28,6 +30,8 @@ public class GuestBasketService<T> : IBasketService<T> where T : notnull
     public void RemoveFromBasket(T item, int count)
     {
         ArgumentNullException.ThrowIfNull(item, nameof(item));
+        if (count <= 0)
+            throw new ArgumentException("Should be greater than zero", nameof(count));
 
         if (_itemAndCounts.ContainsKey(item) == false)
             throw new ArgumentException("Item is not in basket to remove it", nameof(item));

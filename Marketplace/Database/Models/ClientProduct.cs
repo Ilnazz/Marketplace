@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Marketplace.Database.Models;
 
-public partial class Basket
+public partial class ClientProduct
 {
     public int ClientId { get; set; }
 

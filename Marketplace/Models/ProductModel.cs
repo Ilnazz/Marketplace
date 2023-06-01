@@ -183,13 +183,25 @@ public partial class ProductModel : ObservableObject
     {
         _product = product;
 
-        App.BasketService.StateChanged += () =>
+        App.BasketService.StateChanged += OnBasketServiceStateChanged;
+        App.BasketServiceProviderChanging += () =>
         {
-            OnPropertyChanged(nameof(QuantityInBasket));
-            OnPropertyChanged(nameof(IsInBasket));
-            PutToBasketCommand.NotifyCanExecuteChanged();
-            AddOneToBasketCommand.NotifyCanExecuteChanged();
-            RemoveOneFromBasketCommand.NotifyCanExecuteChanged();
+            App.BasketService.StateChanged -= OnBasketServiceStateChanged;
         };
+        App.BasketServiceProviderChanged += () =>
+        {
+            App.BasketService.StateChanged += OnBasketServiceStateChanged;
+        };
+    }
+
+    private void OnBasketServiceStateChanged()
+    {
+        OnPropertyChanged(nameof(QuantityInBasket));
+        OnPropertyChanged(nameof(IsInBasket));
+        OnPropertyChanged(nameof(TotalCost));
+        OnPropertyChanged(nameof(TotalCostWithDiscount));
+        PutToBasketCommand.NotifyCanExecuteChanged();
+        AddOneToBasketCommand.NotifyCanExecuteChanged();
+        RemoveOneFromBasketCommand.NotifyCanExecuteChanged();
     }
 }

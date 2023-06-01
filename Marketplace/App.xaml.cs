@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using Marketplace.Database.Models;
 using Marketplace.Pages;
 using Marketplace.Services;
@@ -15,7 +16,20 @@ public partial class App : Application
     public static INavigation NavigationService { get; set; }
     public static NavigationWindowVm NavigationWindowVm { get; set; }
 
-    public static IBasketService<Product> BasketService { get; set; }
+
+    public static event Action? BasketServiceProviderChanging,
+                                BasketServiceProviderChanged;
+    private static IBasketService<Product> _basketService = null!;
+    public static IBasketService<Product> BasketService
+    {
+        get => _basketService;
+        set
+        {
+            BasketServiceProviderChanging?.Invoke();
+            _basketService = value;
+            BasketServiceProviderChanged?.Invoke();
+        }
+    }
 
     public static SearchService SearchService { get; set; }
 

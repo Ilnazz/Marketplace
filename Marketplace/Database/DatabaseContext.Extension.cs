@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Linq;
+﻿using System.Linq;
 using Marketplace.Database.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +18,11 @@ public partial class DatabaseContext
             entity.Navigation(d => d.ProductPhotos).AutoInclude();
             entity.Navigation(d => d.Salesman).AutoInclude();
             entity.Navigation(d => d.ProductPhotos).AutoInclude();
+        });
+
+        modelBuilder.Entity<Client>(entity =>
+        {
+            entity.Navigation(d => d.Basket);
         });
     }
 

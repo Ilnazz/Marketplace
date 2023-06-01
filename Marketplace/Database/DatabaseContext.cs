@@ -16,11 +16,9 @@ public partial class DatabaseContext : DbContext
     {
     }
 
-    public virtual DbSet<Basket> Baskets { get; set; }
-
-    public virtual DbSet<BasketProduct> BasketProducts { get; set; }
-
     public virtual DbSet<Client> Clients { get; set; }
+
+    public virtual DbSet<ClientProduct> ClientProducts { get; set; }
 
     public virtual DbSet<DeliveryPoint> DeliveryPoints { get; set; }
 
@@ -50,35 +48,6 @@ public partial class DatabaseContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Basket>(entity =>
-        {
-            entity.ToTable("Basket");
-
-            entity.Property(e => e.Id).ValueGeneratedNever();
-
-            entity.HasOne(d => d.Client).WithMany(p => p.Baskets)
-                .HasForeignKey(d => d.ClientId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Basket_Client");
-        });
-
-        modelBuilder.Entity<BasketProduct>(entity =>
-        {
-            entity.HasKey(e => new { e.BasketId, e.ProductId });
-
-            entity.ToTable("Basket_Product");
-
-            entity.HasOne(d => d.Basket).WithMany(p => p.BasketProducts)
-                .HasForeignKey(d => d.BasketId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Basket_Product_Basket");
-
-            entity.HasOne(d => d.Product).WithMany(p => p.BasketProducts)
-                .HasForeignKey(d => d.ProductId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Basket_Product_Product");
-        });
-
         modelBuilder.Entity<Client>(entity =>
         {
             entity.ToTable("Client");
@@ -88,6 +57,23 @@ public partial class DatabaseContext : DbContext
             entity.Property(e => e.Password).HasMaxLength(30);
             entity.Property(e => e.Patronymic).HasMaxLength(50);
             entity.Property(e => e.Surname).HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<ClientProduct>(entity =>
+        {
+            entity.HasKey(e => new { e.ClientId, e.ProductId });
+
+            entity.ToTable("Client_Product");
+
+            entity.HasOne(d => d.Client).WithMany(p => p.Basket)
+                .HasForeignKey(d => d.ClientId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Client_Product_Client");
+
+            entity.HasOne(d => d.Product).WithMany(p => p.ClientProducts)
+                .HasForeignKey(d => d.ProductId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Client_Product_Product");
         });
 
         modelBuilder.Entity<DeliveryPoint>(entity =>

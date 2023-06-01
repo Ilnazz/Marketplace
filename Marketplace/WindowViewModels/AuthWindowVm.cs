@@ -38,6 +38,7 @@ public partial class AuthWindowVm : WindowVmBase
         if (App.UserService.TryAuthorizeUser(Login!, Password!))
         {
             CloseWindow();
+
             return;
         }
 

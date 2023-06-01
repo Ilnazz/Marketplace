@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Marketplace.Pages;
 
@@ -9,7 +10,7 @@ public partial class BasketMenuItemVm : ObservableObject
     [ObservableProperty]
     private int _itemsCount;
 
-    public bool IsEmpty => _itemsCount == 0;
+    public bool IsEmpty => ItemsCount == 0;
 
     [RelayCommand]
     private void NavigateToBasketPage()
@@ -26,15 +27,25 @@ public partial class BasketMenuItemVm : ObservableObject
 
     public BasketMenuItemVm()
     {
-        App.BasketService.StateChanged += () =>
+        App.BasketService.StateChanged += OnBasketServiceStateChanged;
+        App.BasketServiceProviderChanging += () =>
         {
-            ItemsCount = App.BasketService.TotalItemsCount;
-
-            if (App.NavigationWindowVm.CurrentPageTitle.StartsWith("Корзина"))
-                UpdateNavWindowCurrentPageTitle();
-
-            OnPropertyChanged(nameof(IsEmpty));
+            App.BasketService.StateChanged -= OnBasketServiceStateChanged;
         };
+        App.BasketServiceProviderChanged += () =>
+        {
+            App.BasketService.StateChanged += OnBasketServiceStateChanged;
+        };
+    }
+
+    private void OnBasketServiceStateChanged()
+    {
+        ItemsCount = App.BasketService.TotalItemsCount;
+
+        if (App.NavigationWindowVm.CurrentPageTitle.StartsWith("Корзина"))
+            UpdateNavWindowCurrentPageTitle();
+
+        OnPropertyChanged(nameof(IsEmpty));
     }
 
     private void UpdateNavWindowCurrentPageTitle() =>

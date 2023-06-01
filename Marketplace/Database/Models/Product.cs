@@ -25,7 +25,7 @@ public partial class Product
 
     public bool IsRemoved { get; set; }
 
-    public virtual ICollection<BasketProduct> BasketProducts { get; set; } = new List<BasketProduct>();
+    public virtual ICollection<ClientProduct> ClientProducts { get; set; } = new List<ClientProduct>();
 
     public virtual ICollection<OrderProduct> OrderProducts { get; set; } = new List<OrderProduct>();
 

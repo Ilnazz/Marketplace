@@ -67,15 +67,25 @@ public partial class BasketPageVm : PageVmBase
 
     public BasketPageVm()
     {
-        App.BasketService.StateChanged += () =>
+        App.BasketService.StateChanged += OnBasketServiceStateChanged;
+        App.BasketServiceProviderChanging += () =>
         {
-            OnPropertyChanged(nameof(IsEmpty));
-            OnPropertyChanged(nameof(TotalProductsCount));
-            OnPropertyChanged(nameof(TotalProductsCostWithDiscount));
-            OnPropertyChanged(nameof(TotalDiscountSum));
+            App.BasketService.StateChanged -= OnBasketServiceStateChanged;
+        };
+        App.BasketServiceProviderChanged += () =>
+        {
+            App.BasketService.StateChanged += OnBasketServiceStateChanged;
         };
 
         var itemAndCounts = App.BasketService.GetItemAndCounts();
         ProductModels = itemAndCounts.Select(pc => new ProductModel(pc.Key));
+    }
+
+    private void OnBasketServiceStateChanged()
+    {
+        OnPropertyChanged(nameof(IsEmpty));
+        OnPropertyChanged(nameof(TotalProductsCount));
+        OnPropertyChanged(nameof(TotalProductsCostWithDiscount));
+        OnPropertyChanged(nameof(TotalDiscountSum));
     }
 }
