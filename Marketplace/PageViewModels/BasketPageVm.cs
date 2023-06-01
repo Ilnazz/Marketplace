@@ -35,33 +35,34 @@ public partial class BasketPageVm : PageVmBase
     [RelayCommand]
     private void MakeOrder()
     {
-        if (App.UserService.IsUserAuthorized())
+        if (App.UserService.IsUserAuthorized() == false)
         {
-            new TitledContainerWindow(new MakeOrderWindowVm(this)).ShowDialog();
-            return;
-        }
+            var authWindowVm = new AuthWindowVm();
+            var authWindowView = new AuthWindowView() { DataContext = authWindowVm };
 
-        var dialogWindow = new Wpf.Ui.Controls.MessageBox
-        {
-            Content = new NeedToLoginWindowView(),
-            SizeToContent = SizeToContent.Height,
-            ResizeMode = ResizeMode.NoResize,
-            Title = "Информация",
-            ButtonLeftName = "Да",
-            ButtonLeftAppearance = Wpf.Ui.Common.ControlAppearance.Primary,
-
-            ButtonRightName = "Нет"
-        };
-        dialogWindow.ButtonLeftClick += (_, _) =>
-        {
-            dialogWindow.Close();
-            new TitledContainerWindow(new AuthWindowVm()).ShowDialog();
+            var dialogWindow = new Wpf.Ui.Controls.MessageBox
+            {
+                Content = authWindowView,
+                Width = authWindowView.Width + 30,
+                Height = authWindowView.Height,
+                SizeToContent = SizeToContent.Height,
+                ResizeMode = ResizeMode.NoResize,
+                Title = authWindowVm.Title,
+                ShowFooter = false,
+                WindowStartupLocation = WindowStartupLocation.CenterScreen
+            };
+            authWindowVm.CloseWindowMethod += dialogWindow.Close;
+            dialogWindow.ShowDialog();
 
             if (App.UserService.IsUserAuthorized())
                 new TitledContainerWindow(new MakeOrderWindowVm(this)).ShowDialog();
-        };
-        dialogWindow.ButtonRightClick += (_, _) => dialogWindow.Close();
-        dialogWindow.ShowDialog();
+        }
+        else
+            new TitledContainerWindow(new MakeOrderWindowVm(this)).ShowDialog();
+
+        //App.DialogService.Message
+        // TODO: Generalize dialogs...
+        //App.DialogService
     }
 
     public BasketPageVm()

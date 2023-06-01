@@ -83,7 +83,6 @@ public partial class DatabaseContext : DbContext
         {
             entity.ToTable("Client");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Login).HasMaxLength(30);
             entity.Property(e => e.Name).HasMaxLength(50);
             entity.Property(e => e.Password).HasMaxLength(30);
@@ -112,7 +111,6 @@ public partial class DatabaseContext : DbContext
         {
             entity.ToTable("Employee");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Login).HasMaxLength(30);
             entity.Property(e => e.Name).HasMaxLength(50);
             entity.Property(e => e.Password).HasMaxLength(30);
@@ -232,7 +230,6 @@ public partial class DatabaseContext : DbContext
         {
             entity.ToTable("Salesman");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Login).HasMaxLength(30);
             entity.Property(e => e.Name).HasMaxLength(50);
             entity.Property(e => e.Password).HasMaxLength(30);

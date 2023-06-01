@@ -3,12 +3,17 @@ using System.Linq;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Marketplace.DataTypes.Enums;
+using Marketplace.WindowViews;
+using Wpf.Ui.Controls;
 
 namespace Marketplace.WindowViewModels;
 
 public partial class RegWindowVm : WindowVmBase
 {
     #region [ Properties ]
+
+    public UserRole Role { get; set; }
 
     [Required(ErrorMessage = "Обязательное поле.")]
     [MinLength(8, ErrorMessage = "Не менее 8 символов.")]
@@ -28,50 +33,54 @@ public partial class RegWindowVm : WindowVmBase
     [ObservableProperty]
     [NotifyDataErrorInfo]
     [NotifyCanExecuteChangedFor(nameof(RegisterCommand))]
-    //[CustomValidation(typeof(RegWindowVm), nameof(ValidatePasswordConfirmation))]
+    [CustomValidation(typeof(RegWindowVm), nameof(ValidatePasswordConfirmation))]
     public string? _passwordConfirmation;
 
     #endregion
 
     #region [ Commands ]
+    [RelayCommand]
+    private void SelectRole(UserRole role) =>
+        Role = role;
 
     [RelayCommand(CanExecute = nameof(CanRegister))]
-    private void Register()
+    private void Register(Flyout messageFlyout)
     {
         ValidateAllProperties();
 
-        if (App.UserService.TryRegisterUser(Login!, Password!) == false)
+        if (App.UserService.TryRegisterUser(Login!, Password!, Role))
         {
             App.UserService.TryAuthorizeUser(Login!, Password!);
             CloseWindow();
             return;
         }
 
-        var dialogWindow = new Wpf.Ui.Controls.MessageBox
-        {
-            Content = new System.Windows.Controls.TextBlock
-            {
-                Text = "Пользователь с такими данными уже зарегистрирован.",
-                TextWrapping = TextWrapping.Wrap,
-                FontSize = 18,
-                TextAlignment = TextAlignment.Center,
-            },
-            Width = 500,
-            SizeToContent = SizeToContent.Height,
-            ResizeMode = ResizeMode.NoResize,
-            Title = "Ошибка"
-        };
-        var okBtn = new Wpf.Ui.Controls.Button
-        {
-            Content = "Ок",
-            HorizontalAlignment = HorizontalAlignment.Stretch,
-        };
-        okBtn.Click += (_, _) => dialogWindow.Close();
-        dialogWindow.Footer = okBtn;
-        dialogWindow.ShowDialog();
+        messageFlyout.Show();
     }
     private bool CanRegister() => HasErrors == false;
 
+    [RelayCommand]
+    private void ShowAuthWindow()
+    {
+        CloseWindow();
+
+        var authWindowVm = new AuthWindowVm();
+        var authWindowView = new AuthWindowView() { DataContext = authWindowVm };
+
+        var dialogWindow = new Wpf.Ui.Controls.MessageBox
+        {
+            Content = authWindowView,
+            Width = authWindowView.Width + 30,
+            Height = authWindowView.Height,
+            SizeToContent = SizeToContent.Height,
+            ResizeMode = ResizeMode.NoResize,
+            Title = authWindowVm.Title,
+            ShowFooter = false,
+            WindowStartupLocation = WindowStartupLocation.CenterScreen
+        };
+        authWindowVm.CloseWindowMethod += dialogWindow.Close;
+        dialogWindow.ShowDialog();
+    }
     #endregion
 
     #region [ Specific password validation functions ]
@@ -105,4 +114,9 @@ public partial class RegWindowVm : WindowVmBase
     }
 
     #endregion
+
+    public RegWindowVm()
+    {
+        Title = "Регистрация";
+    }
 }

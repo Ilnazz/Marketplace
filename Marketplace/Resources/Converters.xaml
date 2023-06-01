@@ -3,5 +3,7 @@
                     xmlns:converters="clr-namespace:Marketplace.Converters">
 
     <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    <converters:UserRoleToStringConverter x:Key="UserRoleToStringConverter"/>
+    <converters:UserRoleToSymbolIconConverter x:Key="UserRoleToSymbolIconConverter"/>
 
 </ResourceDictionary>

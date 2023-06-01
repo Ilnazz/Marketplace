@@ -6,10 +6,8 @@
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
              ExtendsContentIntoTitleBar="True"
              mc:Ignorable="d"
-             WindowStartupLocation="CenterScreen"
-             WindowBackdropType="Auto"
-             ResizeMode="NoResize"
-             SizeToContent="WidthAndHeight">
+             WindowBackdropType="Mica"
+             ResizeMode="NoResize">
 
     <Grid>
         <Grid.RowDefinitions>

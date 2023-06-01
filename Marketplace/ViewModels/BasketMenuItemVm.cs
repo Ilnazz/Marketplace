@@ -29,7 +29,10 @@ public partial class BasketMenuItemVm : ObservableObject
         App.BasketService.StateChanged += () =>
         {
             ItemsCount = App.BasketService.TotalItemsCount;
-            UpdateNavWindowCurrentPageTitle();
+
+            if (App.NavigationWindowVm.CurrentPageTitle.StartsWith("Корзина"))
+                UpdateNavWindowCurrentPageTitle();
+
             OnPropertyChanged(nameof(IsEmpty));
         };
     }

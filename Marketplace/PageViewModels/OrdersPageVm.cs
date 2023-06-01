@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using System.Windows;
+using CommunityToolkit.Mvvm.Input;
 using Marketplace.WindowViewModels;
 using Marketplace.WindowViews;
 
@@ -11,7 +12,29 @@ public partial class OrdersPageVm : PageVmBase
     [RelayCommand]
     private void Authorize()
     {
-        new TitledContainerWindow(new AuthWindowVm()).ShowDialog();
-        OnPropertyChanged(nameof(IsUserAuthorized));
+        var authWindowVm = new AuthWindowVm();
+        var authWindowView = new AuthWindowView() { DataContext = authWindowVm };
+
+        var dialogWindow = new Wpf.Ui.Controls.MessageBox
+        {
+            Content = authWindowView,
+            Width = authWindowView.Width + 30,
+            Height = authWindowView.Height,
+            SizeToContent = SizeToContent.Height,
+            ResizeMode = ResizeMode.NoResize,
+            Title = authWindowVm.Title,
+            ShowFooter = false,
+            WindowStartupLocation = WindowStartupLocation.CenterScreen
+        };
+        authWindowVm.CloseWindowMethod += dialogWindow.Close;
+        dialogWindow.ShowDialog();
+    }
+
+    public OrdersPageVm()
+    {
+        App.UserService.StateChanged += () =>
+        {
+            OnPropertyChanged(nameof(IsUserAuthorized));
+        };
     }
 }

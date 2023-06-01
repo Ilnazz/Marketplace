@@ -16,55 +16,46 @@ public partial class UserMenuItemVm : ObservableObject
     public bool IsAuthorized => User != null;
 
     [RelayCommand]
-    private void ShowMenu(Flyout menuFlyout)
-    {
+    private void ShowMenu(Flyout menuFlyout) =>
         menuFlyout.Show();
-    }
 
     [RelayCommand]
     private void Authorize()
     {
+        var authWindowVm = new AuthWindowVm();
+        var authWindowView = new AuthWindowView() { DataContext = authWindowVm };
+
         var dialogWindow = new Wpf.Ui.Controls.MessageBox
         {
-            Content = new NeedToLoginWindowView(),
+            Content = authWindowView,
+            Width = authWindowView.Width + 30,
+            Height = authWindowView.Height,
             SizeToContent = SizeToContent.Height,
             ResizeMode = ResizeMode.NoResize,
-            Title = "Информация",
-            ButtonLeftName = "Да",
-            ButtonLeftAppearance = Wpf.Ui.Common.ControlAppearance.Primary,
-
-            ButtonRightName = "Нет"
+            Title = authWindowVm.Title,
+            ShowFooter = false,
+            WindowStartupLocation = WindowStartupLocation.CenterScreen
         };
-        dialogWindow.ButtonLeftClick += (_, _) =>
-        {
-            dialogWindow.Close();
-            new TitledContainerWindow(new AuthWindowVm()).ShowDialog();
-        };
-        dialogWindow.ButtonRightClick += (_, _) => dialogWindow.Close();
+        authWindowVm.CloseWindowMethod += dialogWindow.Close;
         dialogWindow.ShowDialog();
 
-        if (App.UserService.IsUserAuthorized())
-        {
-            OnPropertyChanged(nameof(User));
-            OnPropertyChanged(nameof(IsAuthorized));
-            ShowProfile();
-        }
+        // TODO: Synchronize guest basket with authorized user basket
     }
 
     [RelayCommand]
-    private void LogOut()
-    {
-
-    }
-
-    [RelayCommand]
-    private void ShowProfile()
-    {
+    private void ShowProfile() =>
         new TitledContainerWindow(new UserWindowVm(User!)).Show();
-    }
+
+    [RelayCommand]
+    private void LogOut() =>
+        App.UserService.LogOutUser();
 
     public UserMenuItemVm()
     {
-
+        App.UserService.StateChanged += () =>
+        {
+            OnPropertyChanged(nameof(User));
+            OnPropertyChanged(nameof(IsAuthorized));
+        };
     }
 }

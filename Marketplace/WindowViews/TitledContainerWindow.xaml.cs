@@ -13,5 +13,11 @@ public partial class TitledContainerWindow : UiWindow
 
         windowVm.CloseWindowMethod = this.Close;
         this.Closing += (_, e) => e.Cancel = windowVm.OnClosing() == false;
+
+        Loaded += (_, _) =>
+        {
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+            SizeToContent = System.Windows.SizeToContent.WidthAndHeight;
+        };
     }
 }

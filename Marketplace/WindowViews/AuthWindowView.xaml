@@ -7,67 +7,48 @@
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance windowvms:AuthWindowVm}"
-             Width="300">
+             Width="275">
 
     <UserControl.Resources>
-        <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
-            <Setter Property="Margin" Value="10 10 10 22.5"/>
-            <Setter Property="Validation.ErrorTemplate">
-                <Setter.Value>
-                    <ControlTemplate>
-                        <StackPanel>
-                            <AdornedElementPlaceholder x:Name="Placeholder"/>
-                            <Border Background="White"
-                                    BorderThickness="1 0 1 1"
-                                    BorderBrush="Black"
-                                    Padding="7.5"
-                                    Margin="0 -2.25 0 0"
-                                    CornerRadius="0 0 3 3"
-                                    Visibility="{Binding ElementName=Placeholder,
-                                                         Path=AdornedElement.IsFocused,
-                                                         Converter={StaticResource BoolToVisibilityConverter}}">
-                                <TextBlock Text="{Binding ElementName=Placeholder,
-                                                          Path=AdornedElement.(Validation.Errors)/ErrorContent}"
-                                           Margin="0 2.5 0 0"
-                                           FontSize="14"
-                                           FontWeight="Medium"
-                                           Foreground="Red"/>
-                            </Border>
-                        </StackPanel>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+        <Style TargetType="{x:Type ui:TextBox}"
+               BasedOn="{StaticResource TextBoxInErrorStyle}"/>
     </UserControl.Resources>
     
     <StackPanel>
         <StackPanel>
             <Label Content="Логин"
                    Target="{Binding ElementName=LoginBox}"
-                   FontWeight="Bold"
-                   FontSize="18"/>
-            <TextBox x:Name="LoginBox"
+                   FontSize="16"/>
+            <ui:TextBox x:Name="LoginBox"
                      Text="{Binding Login, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True, ValidatesOnDataErrors=True}"
-                     Margin="0 0 0 20"
+                     Margin="0 0 0 10"
                      MaxLength="30"/>
 
             <Label Content="Пароль"
                    Target="{Binding ElementName=PasswordBox}"
-                   FontWeight="Bold"
-                   FontSize="18"/>
-            <TextBox x:Name="PasswordBox"
+                   FontSize="16"/>
+            <ui:TextBox x:Name="PasswordBox"
                      Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
-                     Margin="0 0 0 25"
+                     Margin="0 0 0 10"
                      MaxLength="30"/>
         </StackPanel>
 
         <StackPanel>
-            <ui:Button Content="Войти"
-                       FontWeight="Medium"
-                       Appearance="Light"
-                       HorizontalAlignment="Stretch"
-                       Command="{Binding AuthorizeCommand}"
-                       Margin="0 0 0 10"/>
+            <Grid>
+                <ui:Button Content="Войти"
+                           FontWeight="Medium"
+                           Appearance="Light"
+                           HorizontalAlignment="Stretch"
+                           Command="{Binding AuthorizeCommand}"
+                           CommandParameter="{Binding ElementName=MessageFlyout}"
+                           Margin="0 0 0 10"/>
+                <Canvas>
+                    <ui:Flyout x:Name="MessageFlyout"
+                               Content="Пользователь с такими данными не зарегистрирован"
+                               Foreground="Red"
+                               Margin="0 75 0 0"/>
+                </Canvas>
+            </Grid>
             <DockPanel>
                 <TextBlock Text="Нет аккаунта?"
                            Margin="0 0 10 0"
@@ -75,7 +56,7 @@
                 <ui:Button Content="Зарегистрироваться"
                            FontWeight="Medium"
                            HorizontalAlignment="Stretch"
-                           Command="{Binding OpenRegWindowCommand}"/>
+                           Command="{Binding ShowRegWindowCommand}"/>
             </DockPanel>
         </StackPanel>
     </StackPanel>

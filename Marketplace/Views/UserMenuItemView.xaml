@@ -18,7 +18,7 @@
             <TextBlock>
                 <TextBlock.Style>
                     <Style TargetType="TextBlock">
-                        <Setter Property="Text" Value="{Binding User.Surname}"/>
+                        <Setter Property="Text" Value="{Binding User.Name}"/>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding User}" Value="{x:Null}">
                                 <Setter Property="Text" Value="Гость"/>
@@ -36,16 +36,16 @@
                 Visibility="{Binding IsAuthorized,
                                 Converter={StaticResource BoolToVisibilityConverter},
                                 ConverterParameter={StaticResource False}}"/>
-    <ui:MenuItem Header="Выйти"
-                SymbolIcon="Door16"
-                 Cursor="Hand"
-                Command="{Binding LogOutCommand}"
-                Visibility="{Binding IsAuthorized,
-                                    Converter={StaticResource BoolToVisibilityConverter}}"/>
     <ui:MenuItem Header="Профиль"
                 SymbolIcon="List16"
                  Cursor="Hand"
                 Command="{Binding ShowProfileCommand}"
+                Visibility="{Binding IsAuthorized,
+                                    Converter={StaticResource BoolToVisibilityConverter}}"/>
+    <ui:MenuItem Header="Выйти"
+                SymbolIcon="Door16"
+                 Cursor="Hand"
+                Command="{Binding LogOutCommand}"
                 Visibility="{Binding IsAuthorized,
                                     Converter={StaticResource BoolToVisibilityConverter}}"/>
 </ui:MenuItem>

@@ -2,21 +2,35 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml">
 
-    <Style x:Key="NavButtonStyle"
-           TargetType="{x:Type ui:Button}"
-           BasedOn="{StaticResource {x:Type ui:Button}}">
-        <Setter Property="Padding" Value="0"/>
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="Cursor" Value="Hand"/>
+    <Style x:Key="TextBoxInErrorStyle"
+           TargetType="{x:Type ui:TextBox}"
+           BasedOn="{StaticResource {x:Type ui:TextBox}}">
+        <Setter Property="Margin" Value="10 10 10 22.5"/>
+        <Setter Property="Validation.ErrorTemplate">
+            <Setter.Value>
+                <ControlTemplate>
+                    <StackPanel>
+                        <AdornedElementPlaceholder x:Name="Placeholder"/>
+                        <Border Background="Red"
+                                    BorderThickness="1 0 1 1"
+                                    BorderBrush="LightGray"
+                                    Padding="7.5"
+                                    Margin="0 -1.5 0 0"
+                                    CornerRadius="0 0 3 3"
+                                    Visibility="{Binding ElementName=Placeholder,
+                                                         Path=AdornedElement.IsFocused,
+                                                         Converter={StaticResource BoolToVisibilityConverter}}">
+                            <TextBlock Text="{Binding ElementName=Placeholder,
+                                                          Path=AdornedElement.(Validation.Errors)/ErrorContent}"
+                                           Margin="0 2.5 0 0"
+                                           FontSize="14"
+                                           FontWeight="Medium"
+                                           Foreground="White"/>
+                        </Border>
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
-    <!--<Style x:Key="NavItemStyle"
-           TargetType="{x:Type ui:NavigationItem}">
-        <Style.Triggers>
-            <Trigger Property="IsActive" Value="True">
-                <Setter Property="FontWeight" Value="Medium"/>
-            </Trigger>
-        </Style.Triggers>
-    </Style>-->
-    
 </ResourceDictionary>

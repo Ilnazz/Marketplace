@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Linq;
 using Marketplace.Database.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,5 +20,58 @@ public partial class DatabaseContext
             entity.Navigation(d => d.Salesman).AutoInclude();
             entity.Navigation(d => d.ProductPhotos).AutoInclude();
         });
+    }
+
+    public void CancelChanges()
+    {
+        foreach (var entry in Entities.ChangeTracker.Entries())
+        {
+            switch (entry.State)
+            {
+                case EntityState.Modified:
+                    entry.CurrentValues.SetValues(entry.OriginalValues);
+                    entry.State = EntityState.Unchanged;
+                    break;
+                case EntityState.Added:
+                    entry.State = EntityState.Detached;
+                    break;
+                case EntityState.Deleted:
+                    entry.State = EntityState.Unchanged;
+                    break;
+            }
+        }
+    }
+
+    public void CancelChanges<TEntity>(TEntity entity) where TEntity : class
+    {
+        var entry = Entities.Entry(entity);
+
+        switch (entry.State)
+        {
+            case EntityState.Modified:
+                entry.CurrentValues.SetValues(entry.OriginalValues);
+                entry.State = EntityState.Unchanged;
+                break;
+            case EntityState.Added:
+                entry.State = EntityState.Detached;
+                break;
+            case EntityState.Deleted:
+                entry.State = EntityState.Unchanged;
+                break;
+        }
+    }
+
+    public void SaveChanges<TEntity>(TEntity entity) where TEntity : class
+    {
+        var entry = Entities.Entry(entity);
+        entry.OriginalValues.SetValues(entry.CurrentValues);
+    }
+
+    public bool HasChanges() => Entities.ChangeTracker.HasChanges();
+
+    public bool HasChanges<TEntity>(TEntity entity) where TEntity : class
+    {
+        var entry = Entities.Entry(entity);
+        return new[] { EntityState.Modified, EntityState.Deleted, EntityState.Added }.Contains(entry.State);
     }
 }

@@ -7,6 +7,7 @@ using Marketplace.Database;
 using Marketplace.Services;
 using Marketplace.WindowViews;
 using Microsoft.EntityFrameworkCore;
+using Wpf.Ui.Controls;
 
 namespace Marketplace.WindowViewModels;
 
@@ -28,7 +29,7 @@ public partial class AuthWindowVm : WindowVmBase
 
     #region [ Commands ]
     [RelayCommand(CanExecute = nameof(CanAuthorize))]
-    private void Authorize()
+    private void Authorize(Flyout errorMessageFlyout)
     {
         ValidateAllProperties();
         if (HasErrors)
@@ -40,36 +41,31 @@ public partial class AuthWindowVm : WindowVmBase
             return;
         }
 
-        var dialogWindow = new Wpf.Ui.Controls.MessageBox
-        {
-            Content = new TextBlock
-            {
-                Text = "Пользователь с такими данными не зарегистрирован.",
-                TextWrapping = TextWrapping.Wrap,
-                FontSize = 18,
-                TextAlignment = TextAlignment.Center,
-            },
-            Width = 500,
-            SizeToContent = SizeToContent.Height,
-            ResizeMode = ResizeMode.NoResize,
-            Title = "Ошибка"
-        };
-        var okBtn = new Wpf.Ui.Controls.Button
-        {
-            Content = "Ок",
-            HorizontalAlignment = HorizontalAlignment.Stretch,
-        };
-        okBtn.Click += (_, _) => dialogWindow.Close();
-        dialogWindow.Footer = okBtn;
-        dialogWindow.ShowDialog();
+        errorMessageFlyout.Show();
     }
     private bool CanAuthorize() => HasErrors == false;
 
     [RelayCommand]
-    private void OpenRegWindow()
+    private void ShowRegWindow()
     {
         CloseWindow();
-        new TitledContainerWindow(new RegWindowVm()).ShowDialog();
+
+        var regWindowVm = new RegWindowVm();
+        var regWindowView = new RegWindowView() { DataContext = regWindowVm };
+
+        var dialogWindow = new Wpf.Ui.Controls.MessageBox
+        {
+            Content = regWindowView,
+            Width = regWindowView.Width + 30,
+            Height = regWindowView.Height,
+            SizeToContent = SizeToContent.Height,
+            ResizeMode = ResizeMode.NoResize,
+            Title = regWindowVm.Title,
+            ShowFooter = false,
+            WindowStartupLocation = WindowStartupLocation.CenterScreen
+        };
+        regWindowVm.CloseWindowMethod += dialogWindow.Close;
+        dialogWindow.ShowDialog();
     }
     #endregion
 

@@ -1,21 +1,58 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Marketplace.Database;
 using Marketplace.Database.Models;
+using Marketplace.DataTypes.Enums;
 
 namespace Marketplace.Services;
 
 public class UserService
 {
-    public User? CurrentUser { get; private set; }
+    private const string DefaultUserName = "Новый пользователь";
 
-    public bool TryRegisterUser(string login, string password)
+    private User? _currentUser;
+    public User? CurrentUser
+    {
+        get => _currentUser;
+        set
+        {
+            _currentUser = value;
+            StateChanged?.Invoke();
+        }
+    }
+
+    public event Action? StateChanged;
+
+    public bool TryRegisterUser(string login, string password, UserRole role)
     {
         if (TryGetUser(login, password, out var _))
             return false;
 
-        // Register here
+        if (role == UserRole.Client)
+        {
+            var client = new Client
+            {
+                Surname = string.Empty,
+                Name = DefaultUserName,
+                Login = login,
+                Password = password,
+            };
+            DatabaseContext.Entities.Clients.Local.Add(client);
+        }
+        else if (role == UserRole.Salesman)
+        {
+            var salesman = new Salesman
+            {
+                Surname = string.Empty,
+                Name = DefaultUserName,
+                Login = login,
+                Password = password
+            };
+            DatabaseContext.Entities.Salesmen.Local.Add(salesman);
+        }
 
+        DatabaseContext.Entities.SaveChanges();
         return true;
     }
 
@@ -25,6 +62,12 @@ public class UserService
             CurrentUser = user;
 
         return user != null;
+    }
+
+    public void LogOutUser()
+    {
+        if (CurrentUser != null)
+            CurrentUser = null;
     }
 
     public bool IsUserAuthorized() => CurrentUser != null;

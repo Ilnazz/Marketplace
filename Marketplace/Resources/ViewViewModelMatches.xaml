@@ -9,14 +9,6 @@
         <windowviews:NavigationWindowView/>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type windowvms:AuthWindowVm}">
-        <windowviews:AuthWindowView/>
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type windowvms:RegWindowVm}">
-        <windowviews:RegWindowView/>
-    </DataTemplate>
-
     <DataTemplate DataType="{x:Type windowvms:MakeOrderWindowVm}">
         <windowviews:MakeOrderWindowView/>
     </DataTemplate>

@@ -1,4 +1,6 @@
-﻿namespace Marketplace.Database.Models;
+﻿using Marketplace.DataTypes.Enums;
+
+namespace Marketplace.Database.Models;
 
 public class User
 {
@@ -17,6 +19,19 @@ public class User
     public byte[]? Photo { get; set; } = null!;
 
     #region Extensions
+    public UserRole Role
+    {
+        get
+        {
+            if (this is Client)
+                return UserRole.Client;
+            else if (this is Salesman)
+                return UserRole.Salesman;
+
+            return UserRole.Employee;
+        }
+    }
+
     public string FullName => $"{Surname} {Name} {Patronymic}";
     #endregion
 }

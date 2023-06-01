@@ -1,13 +1,21 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Windows.Controls;
+using System.Windows;
+using CommunityToolkit.Mvvm.Input;
+using Marketplace.Database;
 using Marketplace.Database.Models;
+using Marketplace.DataTypes.Enums;
+using Microsoft.Win32;
+using System.IO;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Marketplace.WindowViewModels;
 
 public partial class UserWindowVm : WindowVmBase
 {
     #region Properties
-    public byte[]? Photo => _user?.Photo;
-
+    [RegularExpression(@"[a-zA-Zа-яА-Я]+", ErrorMessage = "Может содержать только буквы")]
+    [Required(ErrorMessage = "Обязательное поле")]
     public string Name
     {
         get => _user.Name;
@@ -15,9 +23,13 @@ public partial class UserWindowVm : WindowVmBase
         {
             _user.Name = value;
             OnPropertyChanged();
+            ValidateProperty(value);
+            SaveChangesCommand.NotifyCanExecuteChanged();
         }
     }
 
+    [RegularExpression(@"[a-zA-Zа-яА-Я]+", ErrorMessage = "Может содержать только буквы")]
+    [Required(ErrorMessage = "Обязательное поле")]
     public string Surname
     {
         get => _user.Surname;
@@ -25,9 +37,12 @@ public partial class UserWindowVm : WindowVmBase
         {
             _user.Surname = value;
             OnPropertyChanged();
+            ValidateProperty(value);
+            SaveChangesCommand.NotifyCanExecuteChanged();
         }
     }
 
+    [RegularExpression(@"[a-zA-Zа-яА-Я]+", ErrorMessage = "Может содержать только буквы")]
     public string? Patronymic
     {
         get => _user.Patronymic;
@@ -35,11 +50,12 @@ public partial class UserWindowVm : WindowVmBase
         {
             _user.Patronymic = value;
             OnPropertyChanged();
+            ValidateProperty(value);
+            SaveChangesCommand.NotifyCanExecuteChanged();
         }
     }
 
-    public string FullName => _user.FullName;
-
+    [Required(ErrorMessage = "Обязательное поле")]
     public string Login
     {
         get => _user.Login;
@@ -47,26 +63,63 @@ public partial class UserWindowVm : WindowVmBase
         {
             _user.Login = value;
             OnPropertyChanged();
+            ValidateProperty(value);
+            SaveChangesCommand.NotifyCanExecuteChanged();
         }
     }
 
+    [Required(ErrorMessage = "Обязательное поле")]
     public string Password
     {
         get => _user.Password;
         set
         {
             _user.Password = value;
+            ValidateProperty(value);
             OnPropertyChanged();
+            SaveChangesCommand.NotifyCanExecuteChanged();
         }
     }
+
+    [ObservableProperty]
+    private byte[]? _photo;
+
+    public UserRole Role => _user.Role;
     #endregion
 
     #region Commands
     [RelayCommand]
-    private void SaveChangesCommand()
+    private void UploadPhoto()
     {
+        var openFileDialog = new OpenFileDialog
+        {
+            Filter = "Изображение (png, jpg, jpeg)|*.png;*.jpg;*.jpeg",
+            CheckFileExists = true
+        };
 
+        if (openFileDialog.ShowDialog() != true)
+            return;
+
+        var photoFilePath = openFileDialog.FileName;
+        var photoFileBytes = File.ReadAllBytes(photoFilePath);
+
+        Photo = photoFileBytes;
     }
+
+    [RelayCommand(CanExecute = nameof(CanSaveChanges))]
+    private void SaveChanges()
+    {
+        SaveChangesCommand.NotifyCanExecuteChanged();
+
+        ValidateAllProperties();
+        if (HasErrors || DatabaseContext.Entities.HasChanges() == false)
+            return;
+
+        DatabaseContext.Entities.SaveChanges();
+        SaveChangesCommand.NotifyCanExecuteChanged();
+    }
+    private bool CanSaveChanges() =>
+        HasErrors == false && DatabaseContext.Entities.HasChanges();
 
     #endregion
 
@@ -76,5 +129,36 @@ public partial class UserWindowVm : WindowVmBase
     {
         Title = "Профиль";
         _user = user;
+    }
+
+    public override bool OnClosing()
+    {
+        if (HasErrors)
+        {
+            DatabaseContext.Entities.CancelChanges();
+            return true;
+        }
+        else if (DatabaseContext.Entities.HasChanges() == false)
+            return true;
+
+        var dialogWindow = new Wpf.Ui.Controls.MessageBox
+        {
+            Content = "Сохранить изменения?",
+            SizeToContent = SizeToContent.Height,
+            ResizeMode = ResizeMode.NoResize,
+            Title = "Подтверждение",
+            ButtonLeftName = "Да",
+            ButtonLeftAppearance = Wpf.Ui.Common.ControlAppearance.Primary,
+            ButtonRightName = "Нет"
+        };
+        dialogWindow.ButtonLeftClick += (_, _) =>
+        {
+            DatabaseContext.Entities.SaveChanges();
+            dialogWindow.Close();
+        };
+        dialogWindow.ButtonRightClick += (_, _) => dialogWindow.Close();
+        dialogWindow.ShowDialog();
+
+        return true;
     }
 }

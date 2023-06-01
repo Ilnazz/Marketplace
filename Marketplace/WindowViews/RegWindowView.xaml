@@ -1,68 +1,89 @@
 ﻿<UserControl x:Class="Marketplace.WindowViews.RegWindowView"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-      xmlns:windowvms="clr-namespace:Marketplace.WindowViewModels"
-      mc:Ignorable="d"
-      d:DataContext="{d:DesignInstance windowvms:RegWindowVm}"
+          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+          xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+          xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+          xmlns:windowvms="clr-namespace:Marketplace.WindowViewModels"
+             xmlns:enums="clr-namespace:Marketplace.DataTypes.Enums"
+          mc:Ignorable="d"
+          d:DataContext="{d:DesignInstance windowvms:RegWindowVm}"
              Width="300">
 
     <UserControl.Resources>
-        <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
-            <Setter Property="Margin" Value="10 10 10 22.5"/>
-            <Setter Property="Validation.ErrorTemplate">
-                <Setter.Value>
-                    <ControlTemplate>
-                        <StackPanel>
-                            <AdornedElementPlaceholder x:Name="Placeholder"/>
-                            <TextBlock Text="{Binding ElementName=Placeholder,
-                                                      Path=AdornedElement.(Validation.Errors)/ErrorContent}"
-                                       Margin="0 2.5 0 0"
-                                       FontSize="14"
-                                       Foreground="Red"/>
-                        </StackPanel>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+        <Style TargetType="{x:Type ui:TextBox}"
+               BasedOn="{StaticResource TextBoxInErrorStyle}"/>
     </UserControl.Resources>
 
-    <StackPanel Margin="10">
+    <StackPanel>
         <StackPanel>
+            <GroupBox Header="Роль"
+                      FontSize="16"
+                      Padding="10"
+                      Margin="0 0 0 10">
+                <StackPanel>
+                    <RadioButton Content="{Binding Source={x:Static enums:UserRole.Client},
+                                                   Converter={StaticResource UserRoleToStringConverter}}"
+                                 Command="{Binding SelectRoleCommand}"
+                                 CommandParameter="{x:Static enums:UserRole.Client}"
+                                 IsChecked="True"/>
+                    <RadioButton Content="{Binding Source={x:Static enums:UserRole.Salesman},
+                                                   Converter={StaticResource UserRoleToStringConverter}}"
+                                 Command="{Binding SelectRoleCommand}"
+                                 CommandParameter="{x:Static enums:UserRole.Salesman}"/>
+                </StackPanel>
+            </GroupBox>
+            
             <Label Content="Логин"
                    Target="{Binding ElementName=LoginBox}"
-                   FontWeight="Bold"
-                   FontSize="18"/>
-            <TextBox x:Name="LoginBox"
+                   FontSize="16"/>
+            <ui:TextBox x:Name="LoginBox"
                      Text="{Binding Login, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True, ValidatesOnDataErrors=True}"
                      Margin="0 0 0 10"
                      MaxLength="30"/>
 
             <Label Content="Пароль"
                    Target="{Binding ElementName=PasswordBox}"
-                   FontWeight="Bold"
-                   FontSize="18"/>
-            <TextBox x:Name="PasswordBox"
+                   FontSize="16"/>
+            <ui:TextBox x:Name="PasswordBox"
                      Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
                      Margin="0 0 0 10"
                      MaxLength="30"/>
 
             <Label Content="Подтверждение пароля"
                    Target="{Binding ElementName=PasswordConfirmationBox}"
-                   FontWeight="Bold"
-                   FontSize="18"/>
-            <TextBox x:Name="PasswordConfirmationBox"
+                   FontSize="16"/>
+            <ui:TextBox x:Name="PasswordConfirmationBox"
                      Text="{Binding PasswordConfirmation, UpdateSourceTrigger=PropertyChanged}"
-                     Margin="0 0 0 25"
+                     Margin="0 0 0 10"
                      MaxLength="30"/>
         </StackPanel>
 
-        <ui:Button Content="Зарегистрироваться"
-                    FontWeight="Medium"
-                    Appearance="Light"
-                    HorizontalAlignment="Stretch"
-                    Command="{Binding RegisterCommand}"/>
+        <StackPanel>
+            <Grid>
+                <ui:Button Content="Зарегистрироваться"
+                        FontWeight="Medium"
+                        Appearance="Light"
+                        HorizontalAlignment="Stretch"
+                        Command="{Binding RegisterCommand}"
+                        CommandParameter="{Binding ElementName=MessageFlyout}"
+                        Margin="0 0 0 10"/>
+                <Canvas>
+                    <ui:Flyout x:Name="MessageFlyout"
+                            Content="Пользователь с такими данными уже зарегистрирован"
+                            Foreground="Red"
+                            Margin="0 75 0 0"/>
+                </Canvas>
+            </Grid>
+            <DockPanel>
+                <TextBlock Text="Есть аккаунт?"
+                        Margin="0 0 10 0"
+                        VerticalAlignment="Center"/>
+                <ui:Button Content="Войти"
+                        FontWeight="Medium"
+                        HorizontalAlignment="Stretch"
+                        Command="{Binding ShowAuthWindowCommand}"/>
+            </DockPanel>
+        </StackPanel>
     </StackPanel>
 </UserControl>
