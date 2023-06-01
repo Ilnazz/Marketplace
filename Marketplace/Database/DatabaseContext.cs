@@ -65,7 +65,7 @@ public partial class DatabaseContext : DbContext
 
             entity.ToTable("Client_Product");
 
-            entity.HasOne(d => d.Client).WithMany(p => p.ClientProducts)
+            entity.HasOne(d => d.Client).WithMany(p => p.Basket)
                 .HasForeignKey(d => d.ClientId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Client_Product_Client");
