@@ -1,159 +1,204 @@
-﻿<ui:UiPage x:Class="Marketplace.Pages.BasketPage"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-      xmlns:viewmodels="clr-namespace:Marketplace.PageViewModels"
-      mc:Ignorable="d"
-      d:DataContext="{d:DesignInstance viewmodels:BasketPageVm}">
+﻿<ui:UiPage
+    x:Class="Marketplace.Pages.BasketPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:viewmodels="clr-namespace:Marketplace.PageViewModels"
+    d:DataContext="{d:DesignInstance viewmodels:BasketPageVm}"
+    mc:Ignorable="d">
 
     <ui:UiPage.DataContext>
-        <viewmodels:BasketPageVm/>
+        <viewmodels:BasketPageVm />
     </ui:UiPage.DataContext>
-    
+
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="3*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <ui:VirtualizingItemsControl ItemsSource="{Binding ProductModels}"
-                                     ScrollViewer.CanContentScroll="True">
+        <ui:VirtualizingItemsControl
+            ItemsSource="{Binding ProductModels}"
+            ScrollViewer.CanContentScroll="True"
+            Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource False}}">
             <ui:VirtualizingItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <StackPanel/>
+                    <StackPanel />
                 </ItemsPanelTemplate>
             </ui:VirtualizingItemsControl.ItemsPanel>
             <ui:VirtualizingItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <ui:Card Margin="0 0 0 10"
-                             Height="250">
+                    <ui:Card Height="250" Margin="0,0,0,10">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="175"/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="175" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
 
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
 
-                            <Image HorizontalAlignment="Stretch"
-                                   VerticalAlignment="Stretch"
-                                   Stretch="UniformToFill"
-                                   Grid.RowSpan="2"
-                                   Margin="0 0 10 0">
+                            <Image
+                                Grid.RowSpan="2"
+                                Margin="0,0,10,0"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                Stretch="UniformToFill">
                                 <Image.Source>
                                     <Binding Path="CurrentPhoto">
                                         <Binding.TargetNullValue>
-                                            <BitmapImage UriSource="../Resources/Images/LightGrayPixel.png"/>
+                                            <BitmapImage UriSource="../Resources/Images/LightGrayPixel.png" />
                                         </Binding.TargetNullValue>
                                     </Binding>
                                 </Image.Source>
                             </Image>
 
                             <StackPanel Grid.Column="1">
-                                <TextBlock Text="{Binding Name, Mode=OneWay}"
-                                           FontSize="18"
-                                           Margin="0 0 0 10"/>
-                                
-                                <StackPanel Orientation="Horizontal"
-                                            Margin="0 0 0 5">
-                                    <TextBlock Text="Категория:"
-                                               FontSize="15"
-                                               FontWeight="Thin"
-                                               Margin="0 0 5 0"/>
-                                    <TextBlock Text="{Binding Category.Name}"
-                                               VerticalAlignment="Bottom"
-                                               FontSize="15"/>
+                                <TextBlock
+                                    Margin="0,0,0,10"
+                                    FontSize="18"
+                                    Text="{Binding Name, Mode=OneWay}" />
+
+                                <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
+                                    <TextBlock
+                                        Margin="0,0,5,0"
+                                        FontSize="15"
+                                        FontWeight="Thin"
+                                        Text="Категория:" />
+                                    <TextBlock
+                                        VerticalAlignment="Bottom"
+                                        FontSize="15"
+                                        Text="{Binding Category.Name}" />
                                 </StackPanel>
 
-                                <StackPanel Orientation="Horizontal"
-                                            Margin="0 0 0 5">
-                                    <TextBlock Text="Производитель:"
-                                               FontSize="15"
-                                               FontWeight="Thin"
-                                               Margin="0 0 5 0"/>
-                                    <TextBlock Text="{Binding Manufacturer.Name, Mode=OneWay}"
-                                               VerticalAlignment="Bottom"
-                                               FontSize="15"/>
+                                <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
+                                    <TextBlock
+                                        Margin="0,0,5,0"
+                                        FontSize="15"
+                                        FontWeight="Thin"
+                                        Text="Производитель:" />
+                                    <TextBlock
+                                        VerticalAlignment="Bottom"
+                                        FontSize="15"
+                                        Text="{Binding Manufacturer.Name, Mode=OneWay}" />
                                 </StackPanel>
 
-                                <StackPanel Orientation="Horizontal"
-                                            Margin="0 0 0 5">
-                                    <TextBlock Text="Продавец:"
-                                               FontSize="15"
-                                               FontWeight="Thin"
-                                               Margin="0 0 5 0"/>
-                                    <TextBlock Text="{Binding Salesman.FullName, Mode=OneWay}"
-                                               VerticalAlignment="Bottom"
-                                               FontSize="15"/>
+                                <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
+                                    <TextBlock
+                                        Margin="0,0,5,0"
+                                        FontSize="15"
+                                        FontWeight="Thin"
+                                        Text="Продавец:" />
+                                    <TextBlock
+                                        VerticalAlignment="Bottom"
+                                        FontSize="15"
+                                        Text="{Binding Salesman.FullName, Mode=OneWay}" />
                                 </StackPanel>
 
-                                <StackPanel Orientation="Horizontal"
-                                            Grid.Row="5"
-                                            Margin="0 0 0 10">
-                                    <TextBlock Text="Цена:"
-                                               FontSize="15"
-                                               FontWeight="Thin"
-                                               Margin="0 0 5 0"/>
-                                    <TextBlock Margin="0 0 2.5 0"
-                                               FontWeight="Medium"
-                                               Text="{Binding CostWithDiscount, StringFormat='{}{0:# ###} ₽', Mode=OneWay}"/>
-                                    <TextBlock Text="{Binding Cost, StringFormat=0, Mode=OneWay}"
-                                                TextDecorations="Strikethrough"
-                                                FontSize="14"
-                                                Margin="2.5 0 0 0"
-                                               Visibility="{Binding HasDiscount,
-                                                                    Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                <StackPanel
+                                    Grid.Row="5"
+                                    Margin="0,0,0,10"
+                                    Orientation="Horizontal">
+                                    <TextBlock
+                                        Margin="0,0,5,0"
+                                        FontSize="15"
+                                        FontWeight="Thin"
+                                        Text="Цена:" />
+                                    <TextBlock
+                                        Margin="0,0,2.5,0"
+                                        FontWeight="Medium"
+                                        Text="{Binding CostWithDiscount, StringFormat='{}{0:# ###} ₽', Mode=OneWay}" />
+                                    <TextBlock
+                                        Margin="2.5,0,0,0"
+                                        FontSize="14"
+                                        Text="{Binding Cost, StringFormat=0, Mode=OneWay}"
+                                        TextDecorations="Strikethrough"
+                                        Visibility="{Binding HasDiscount, Converter={StaticResource BoolToVisibilityConverter}}" />
                                 </StackPanel>
                             </StackPanel>
 
-                            <ui:Button Content="Подробнее"
-                                       Command="{Binding OpenProductModelWindowCommand}"
-                                       Grid.Column="1"
-                                       Grid.Row="1"/>
+                            <ui:Button
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Command="{Binding OpenProductModelWindowCommand}"
+                                Content="Подробнее" />
 
-                            <StackPanel Grid.Column="2"
-                                        VerticalAlignment="Top"
-                                        HorizontalAlignment="Center"
-                                        Orientation="Horizontal"
-                                        Visibility="{Binding IsInBasket, Mode=OneWay,
-                                                             Converter={StaticResource BoolToVisibilityConverter}}"
-                                        Margin="10 0 0 0">
-                                <ui:Button Content="-"
-                                            Command="{Binding RemoveOneFromBasketCommand}"/>
-                                <TextBlock Text="{Binding QuantityInBasket}"
-                                            Margin="10 0"
-                                            VerticalAlignment="Center"/>
-                                <ui:Button Content="+"
-                                            Command="{Binding AddOneToBasketCommand}"
-                                            CommandParameter="{Binding ElementName=MessageFlyout}"/>
-                                <ui:Flyout x:Name="MessageFlyout"
-                                           Margin="5 0 0 0"
-                                           Content="Больше нет 😞"
-                                           Foreground="Red"/>
+                            <StackPanel
+                                Grid.Column="2"
+                                Margin="10,0,0,0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Top"
+                                Orientation="Horizontal"
+                                Visibility="{Binding IsInBasket, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <ui:Button Command="{Binding RemoveOneFromBasketCommand}" Content="-" />
+                                <TextBlock
+                                    Margin="10,0"
+                                    VerticalAlignment="Center"
+                                    Text="{Binding QuantityInBasket}" />
+                                <ui:Button
+                                    Command="{Binding AddOneToBasketCommand}"
+                                    CommandParameter="{Binding ElementName=MessageFlyout}"
+                                    Content="+" />
+                                <ui:Flyout
+                                    x:Name="MessageFlyout"
+                                    Margin="5,0,0,0"
+                                    Content="Больше нет 😞"
+                                    Foreground="Red" />
                             </StackPanel>
 
                             <StackPanel Grid.Column="3">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding TotalCostWithDiscount, StringFormat=# ###, Mode=OneWay}"
-                                               FontSize="16"
-                                               FontWeight="Black"/>
-                                    <TextBlock Text="₽"
-                                               Margin="2.5 0 0 0"
-                                               FontSize="16"
-                                               FontWeight="Medium"/>
+                                    <TextBlock
+                                        FontSize="16"
+                                        FontWeight="Black"
+                                        Text="{Binding TotalCostWithDiscount, StringFormat=# ###, Mode=OneWay}" />
+                                    <TextBlock
+                                        Margin="2.5,0,0,0"
+                                        FontSize="16"
+                                        FontWeight="Medium"
+                                        Text="₽" />
                                 </StackPanel>
 
-                                <TextBlock Text="{Binding TotalCost, StringFormat=# ###, Mode=OneWay}"
-                                           TextDecorations="Strikethrough"
-                                           Visibility="{Binding HasDiscount,
-                                                                Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                <TextBlock
+                                    Text="{Binding TotalCost, StringFormat=# ###, Mode=OneWay}"
+                                    TextDecorations="Strikethrough"
+                                    Visibility="{Binding HasDiscount, Converter={StaticResource BoolToVisibilityConverter}}" />
+                            </StackPanel>
+
+                            <StackPanel
+                                Grid.Row="1"
+                                Grid.Column="3"
+                                Orientation="Horizontal">
+                                <TextBlock Margin="0,0,10,0">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding AvailableInStock}" Value="False">
+                                                    <Setter Property="Text" Value="Закончился" />
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding IsRemoved}" Value="True">
+                                                    <Setter Property="Text" Value="Снят с продажи" />
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                                <ui:Button
+                                    Command="{Binding RemoveFromBasketCommand}"
+                                    CommandParameter="{Binding}"
+                                    FontSize="16"
+                                    Icon="BinFull20"
+                                    IconForeground="Red"
+                                    ToolTipService.ToolTip="Удалить товар из корзины" />
                             </StackPanel>
                         </Grid>
                     </ui:Card>
@@ -161,60 +206,64 @@
             </ui:VirtualizingItemsControl.ItemTemplate>
         </ui:VirtualizingItemsControl>
 
-        <ui:Card Grid.Column="1"
-                 VerticalAlignment="Top"
-                 Margin="10 0 0 0"
-                 Visibility="{Binding IsEmpty,
-                                    Converter={StaticResource BoolToVisibilityConverter},
-                                    ConverterParameter={StaticResource False}}">
+        <ui:Card
+            Grid.Column="1"
+            Margin="10,0,0,0"
+            VerticalAlignment="Top"
+            Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource False}}">
             <StackPanel>
-                <TextBlock Text="Итого"
-                           FontSize="18"
-                           FontWeight="Bold"
-                           Margin="0 0 0 10"/>
+                <TextBlock
+                    Margin="0,0,0,10"
+                    FontSize="18"
+                    FontWeight="Bold"
+                    Text="Итого" />
                 <DockPanel>
-                    <TextBlock Text="{Binding TotalProductsCount, StringFormat='{}Товары ({0})'}"/>
-                    <TextBlock Text="{Binding TotalProductsCostWithDiscount, StringFormat='{}{0:# ###} ₽'}"
-                               HorizontalAlignment="Right"
-                               FontWeight="Medium"
-                               DockPanel.Dock="Right"
-                               Margin="0 0 0 5"/>
+                    <TextBlock Text="{Binding TotalProductsCount, StringFormat='{}Товары ({0})'}" />
+                    <TextBlock
+                        Margin="0,0,0,5"
+                        HorizontalAlignment="Right"
+                        DockPanel.Dock="Right"
+                        FontWeight="Medium"
+                        Text="{Binding TotalProductsCostWithDiscount, StringFormat='{}{0:# ###} ₽'}" />
                 </DockPanel>
-                <DockPanel Visibility="{Binding IsThereDiscount,
-                                                Converter={StaticResource BoolToVisibilityConverter}}">
-                    <TextBlock Text="Скидка"/>
-                    <TextBlock Text="{Binding TotalDiscountSum, StringFormat='{}-{0:# ###} ₽'}"
-                               HorizontalAlignment="Right"
-                               Foreground="Red"
-                               FontWeight="Medium"
-                               DockPanel.Dock="Right"/>
+                <DockPanel Visibility="{Binding IsThereDiscount, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <TextBlock Text="Скидка" />
+                    <TextBlock
+                        HorizontalAlignment="Right"
+                        DockPanel.Dock="Right"
+                        FontWeight="Medium"
+                        Foreground="Red"
+                        Text="{Binding TotalDiscountSum, StringFormat='{}-{0:# ###} ₽'}" />
                 </DockPanel>
-                <ui:Button Content="Перейти к оформлению"
-                           Command="{Binding MakeOrderCommand}"
-                           Appearance="Primary"
-                           Margin="0 10 0 0"
-                           HorizontalAlignment="Stretch"/>
+                <ui:Button
+                    Margin="0,10,0,0"
+                    HorizontalAlignment="Stretch"
+                    Appearance="Primary"
+                    Command="{Binding MakeOrderCommand}"
+                    Content="Перейти к оформлению" />
             </StackPanel>
         </ui:Card>
 
-        <ui:Card HorizontalAlignment="Stretch"
-                 HorizontalContentAlignment="Center"
-                 VerticalAlignment="Stretch"
-                 VerticalContentAlignment="Center"
-                 Grid.ColumnSpan="2"
-                 Visibility="{Binding IsEmpty,
-                                    Converter={StaticResource BoolToVisibilityConverter}}">
+        <ui:Card
+            Grid.ColumnSpan="2"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            HorizontalContentAlignment="Center"
+            VerticalContentAlignment="Center"
+            Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVisibilityConverter}}">
             <StackPanel>
-                <TextBlock Text="В корзине нет товаров"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Bottom"
-                           FontSize="16"
-                           FontWeight="Medium"
-                           Margin="0 0 0 10"/>
-                <ui:Button Content="Перейти в каталог"
-                           HorizontalAlignment="Stretch"
-                           FontSize="16"
-                           Command="{Binding GoToProductsPageCommand}"/>
+                <TextBlock
+                    Margin="0,0,0,10"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Bottom"
+                    FontSize="16"
+                    FontWeight="Medium"
+                    Text="В корзине нет товаров" />
+                <ui:Button
+                    HorizontalAlignment="Stretch"
+                    Command="{Binding GoToProductsPageCommand}"
+                    Content="Перейти в каталог"
+                    FontSize="16" />
             </StackPanel>
         </ui:Card>
     </Grid>

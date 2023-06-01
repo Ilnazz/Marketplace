@@ -6,6 +6,7 @@ using System.Windows.Documents;
 using Marketplace.Database;
 using Marketplace.Database.Models;
 using Marketplace.DataTypes.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace Marketplace.Services;
 
@@ -68,11 +69,18 @@ public class UserService
         if (CurrentUser.Role != UserRole.Client)
             return true;
 
-        // This is not good, but ...
+        // This is not good in this service, but ...
         var client = (Client)CurrentUser;
         var clientBasket = client.Basket;
 
-        // Here : it is going to create BasketProductModel to notify that product in basket is out of stock or removed
+        // TODO: If you will have extra time, implement: show in client basket, that product was removed or out of stock (disable prod in basket, not count it)
+        // Remove products that out of stock or removed from client basket
+        var prodsAndCountsToRemoveFromClientBasket = new List<ClientProduct>();
+        foreach (var prodAndCount in clientBasket)
+            if (prodAndCount.Product.QuantityInStock == 0 || prodAndCount.Product.IsRemoved)
+                prodsAndCountsToRemoveFromClientBasket.Add(prodAndCount);
+        foreach (var prodAndCount in prodsAndCountsToRemoveFromClientBasket)
+            clientBasket.Remove(prodAndCount);
 
         var guestBasket = App.BasketService.GetItemAndCounts();
         foreach ((Product prod, int count) in guestBasket)
@@ -103,6 +111,8 @@ public class UserService
     {
         if (CurrentUser != null)
             CurrentUser = null;
+
+        App.BasketService = new GuestBasketService<Product>();
     }
 
     public bool IsUserAuthorized() => CurrentUser != null;
@@ -116,5 +126,12 @@ public class UserService
             .FirstOrDefault();
 
         return user != null;
+    }
+
+    public UserService()
+    {
+        DatabaseContext.Entities.Clients.Load();
+        DatabaseContext.Entities.Salesmen.Load();
+        DatabaseContext.Entities.Employees.Load();
     }
 }

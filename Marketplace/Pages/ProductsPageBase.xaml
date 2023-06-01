@@ -83,18 +83,29 @@
                             <DockPanel Margin="0 0 0 10"
                                        Grid.Row="3"
                                        VerticalAlignment="Bottom">
-                                <ui:Button Command="{Binding PutToBasketCommand}">
-                                    <ui:Button.Style>
-                                        <Style TargetType="{x:Type ui:Button}" BasedOn="{StaticResource {x:Type ui:Button}}">
-                                            <Setter Property="Content" Value="В корзину"/>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding AvailableInStock}" Value="False">
-                                                    <Setter Property="Content" Value="Нет в наличии"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </ui:Button.Style>
-                                </ui:Button>
+
+								<ui:Button Command="{Binding PutToBasketCommand}"
+									       Visibility="{Binding IsInBasket,
+										                        Converter={StaticResource BoolToVisibilityConverter},
+														        ConverterParameter={StaticResource False}}">
+									<ui:Button.Style>
+										<Style TargetType="{x:Type ui:Button}" BasedOn="{StaticResource {x:Type ui:Button}}">
+											<Setter Property="Content" Value="В корзину"/>
+											<Style.Triggers>
+												<DataTrigger Binding="{Binding AvailableInStock}" Value="False">
+													<Setter Property="Content" Value="Нет в наличии"/>
+												</DataTrigger>
+											</Style.Triggers>
+										</Style>
+									</ui:Button.Style>
+								</ui:Button>
+
+								<ui:Button Command="{Binding NavigateToBasketCommand}"
+										   Icon="Cart16"
+										   Content="Перейти"
+										   Appearance="Success"
+										   Visibility="{Binding IsInBasket,
+										                        Converter={StaticResource BoolToVisibilityConverter}}"/>
 
                                 <StackPanel Orientation="Horizontal"
                                             HorizontalAlignment="Right"

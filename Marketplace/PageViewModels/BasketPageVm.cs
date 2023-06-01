@@ -5,7 +5,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Marketplace.Database;
 using Marketplace.Pages;
-using Marketplace.Services;
 using Marketplace.WindowViewModels;
 using Marketplace.WindowViews;
 
@@ -17,7 +16,7 @@ public partial class BasketPageVm : PageVmBase
     [ObservableProperty]
     private IEnumerable<ProductModel> _productModels;
 
-    public bool IsEmpty => _productModels.Any() == false;
+    public bool IsEmpty => TotalProductsCount == 0;
 
     public int TotalProductsCount => ProductModels.Sum(pm => pm.QuantityInBasket);
 
@@ -55,14 +54,10 @@ public partial class BasketPageVm : PageVmBase
             dialogWindow.ShowDialog();
 
             if (App.UserService.IsUserAuthorized())
-                new TitledContainerWindow(new MakeOrderWindowVm(this)).ShowDialog();
+                new TitledContainerWindow(new MakeOrderWindowVm()).ShowDialog();
         }
         else
-            new TitledContainerWindow(new MakeOrderWindowVm(this)).ShowDialog();
-
-        //App.DialogService.Message
-        // TODO: Generalize dialogs...
-        //App.DialogService
+            new TitledContainerWindow(new MakeOrderWindowVm()).ShowDialog();
     }
 
     public BasketPageVm()
@@ -75,10 +70,12 @@ public partial class BasketPageVm : PageVmBase
         App.BasketServiceProviderChanged += () =>
         {
             App.BasketService.StateChanged += OnBasketServiceStateChanged;
+            OnBasketServiceStateChanged();
         };
 
-        var itemAndCounts = App.BasketService.GetItemAndCounts();
-        ProductModels = itemAndCounts.Select(pc => new ProductModel(pc.Key));
+        var prodAndCounts = App.BasketService.GetItemAndCounts();
+        ProductModels = prodAndCounts.Where(pac => pac.Key.IsRemoved == false && pac.Key.QuantityInStock > 0)
+                                     .Select(pc => new ProductModel(pc.Key));
     }
 
     private void OnBasketServiceStateChanged()

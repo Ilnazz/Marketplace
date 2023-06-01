@@ -3,6 +3,7 @@ using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Marketplace.Database.Models;
+using Marketplace.Pages;
 using Marketplace.WindowViewModels;
 using Marketplace.WindowViews;
 using Wpf.Ui.Controls;
@@ -97,6 +98,8 @@ public partial class ProductModel : ObservableObject
         }
     }
     public bool AvailableInStock => QuantityInStock > 0;
+
+    public bool IsRemoved => _product.IsRemoved;
     #endregion
 
     [RelayCommand]
@@ -108,7 +111,7 @@ public partial class ProductModel : ObservableObject
 
     #region Basket
     public int QuantityInBasket => App.BasketService.GetCount(_product);
-    public bool IsInBasket => App.BasketService.GetCount(_product) > 0;
+    public bool IsInBasket => QuantityInBasket > 0;
 
 
     [RelayCommand(CanExecute = nameof(CanPutToBasket))]
@@ -121,6 +124,13 @@ public partial class ProductModel : ObservableObject
 
 
     [RelayCommand]
+    private void NavigateToBasket()
+    {
+        App.NavigationService.Navigate(typeof(BasketPage));
+        App.NavigationWindowVm.CurrentPageTitle = $"Корзина ({App.BasketService.TotalItemsCount})";
+    }
+
+    [RelayCommand(CanExecute = nameof(CanAddOneToBasket))]
     private void AddOneToBasket(Flyout messageFlyout)
     {
         if (QuantityInBasket >= QuantityInStock)
@@ -129,9 +139,8 @@ public partial class ProductModel : ObservableObject
             App.BasketService.AddToBasket(_product, 1);
 
         RemoveOneFromBasketCommand.NotifyCanExecuteChanged();
-        OnPropertyChanged(nameof(QuantityInBasket));
-        OnPropertyChanged(nameof(IsInBasket));
     }
+    private bool CanAddOneToBasket() => AvailableInStock || IsRemoved == false;
 
 
     [RelayCommand(CanExecute = nameof(CanRemoveOneFromBasket))]
@@ -139,10 +148,12 @@ public partial class ProductModel : ObservableObject
     {
         App.BasketService.RemoveFromBasket(_product, 1);
         PutToBasketCommand.NotifyCanExecuteChanged();
-        OnPropertyChanged(nameof(QuantityInBasket));
-        OnPropertyChanged(nameof(IsInBasket));
     }
-    private bool CanRemoveOneFromBasket() => QuantityInBasket > 0;
+    private bool CanRemoveOneFromBasket() => QuantityInBasket > 0 && AvailableInStock && (IsRemoved == false);
+
+    [RelayCommand]
+    private void RemoveFromBasket() =>
+        App.BasketService.RemoveFromBasket(_product, QuantityInBasket);
     #endregion
 
     #region Photo
@@ -191,6 +202,7 @@ public partial class ProductModel : ObservableObject
         App.BasketServiceProviderChanged += () =>
         {
             App.BasketService.StateChanged += OnBasketServiceStateChanged;
+            OnBasketServiceStateChanged();
         };
     }
 

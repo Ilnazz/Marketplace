@@ -73,9 +73,5 @@ public partial class AuthWindowVm : WindowVmBase
     public AuthWindowVm()
     {
         Title = "Вход в аккаунт";
-
-        DatabaseContext.Entities.Clients.Load();
-        DatabaseContext.Entities.Salesmen.Load();
-        DatabaseContext.Entities.Employees.Load();
     }
 }

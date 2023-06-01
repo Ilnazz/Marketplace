@@ -15,7 +15,7 @@ public partial class Order
 
     public int DeliveryTypeId { get; set; }
 
-    public string Address { get; set; } = null!;
+    public string? Address { get; set; }
 
     public int DeliveryPointId { get; set; }
 

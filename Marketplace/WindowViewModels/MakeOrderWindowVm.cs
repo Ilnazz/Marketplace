@@ -1,13 +1,15 @@
-﻿using Marketplace.PageViewModels;
+﻿using System.Collections.Generic;
+using Marketplace.Database.Models;
+using Marketplace.PageViewModels;
 
 namespace Marketplace.WindowViewModels;
 
-public class MakeOrderWindowVm : WindowVmBase
+public partial class MakeOrderWindowVm : WindowVmBase
 {
-    private BasketPageVm _basketModel;
+    public IEnumerable<Product> Products { get; set; }
 
-    public MakeOrderWindowVm(BasketPageVm basketModel)
+    public MakeOrderWindowVm()
     {
-        _basketModel = basketModel;
+
     }
 }

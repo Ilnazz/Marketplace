@@ -22,7 +22,8 @@ public partial class DatabaseContext
 
         modelBuilder.Entity<Client>(entity =>
         {
-            entity.Navigation(d => d.Basket);
+            entity.Navigation(d => d.Basket).AutoInclude();
+            entity.Navigation(d => d.Orders).AutoInclude();
         });
     }
 

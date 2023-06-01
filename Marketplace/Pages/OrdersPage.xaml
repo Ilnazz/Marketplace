@@ -1,37 +1,47 @@
-﻿<ui:UiPage x:Class="Marketplace.Pages.OrdersPage"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-      xmlns:viewmodels="clr-namespace:Marketplace.PageViewModels"
-      mc:Ignorable="d" 
-      d:DataContext="{d:DesignInstance viewmodels:OrdersPageVm}">
+﻿<ui:UiPage
+    x:Class="Marketplace.Pages.OrdersPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:viewmodels="clr-namespace:Marketplace.PageViewModels"
+    d:DataContext="{d:DesignInstance viewmodels:OrdersPageVm}"
+    mc:Ignorable="d">
 
     <ui:UiPage.DataContext>
-        <viewmodels:OrdersPageVm/>
+        <viewmodels:OrdersPageVm />
     </ui:UiPage.DataContext>
 
     <Grid>
-        <ui:Card HorizontalAlignment="Stretch"
-                 HorizontalContentAlignment="Center"
-                 VerticalAlignment="Stretch"
-                 VerticalContentAlignment="Center"
-                 Grid.ColumnSpan="2"
-                 Visibility="{Binding IsUserAuthorized,
-                                      Converter={StaticResource BoolToVisibilityConverter},
-                                      ConverterParameter={StaticResource False}}">
+        <ui:Card
+            Grid.ColumnSpan="2"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            HorizontalContentAlignment="Center"
+            VerticalContentAlignment="Center"
+            Visibility="{Binding IsUserAuthorized, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource False}}">
             <StackPanel>
-                <TextBlock Text="Необходимо войти в аккаунт"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Bottom"
-                           FontSize="16"
-                           FontWeight="Medium"
-                           Margin="0 0 0 10"/>
-                <ui:Button Content="Войти"
-                           HorizontalAlignment="Stretch"
-                           FontSize="16"
-                           Command="{Binding AuthorizeCommand}"/>
+                <TextBlock
+                    Margin="0,0,0,10"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Bottom"
+                    FontSize="16"
+                    FontWeight="Medium"
+                    Text="Необходимо войти в аккаунт">
+                    <!--<TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding AreThereOrders}" Value="False" >
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>-->
+                </TextBlock>
+                <ui:Button
+                    HorizontalAlignment="Stretch"
+                    Command="{Binding AuthorizeCommand}"
+                    Content="Войти"
+                    FontSize="16" />
             </StackPanel>
         </ui:Card>
     </Grid>

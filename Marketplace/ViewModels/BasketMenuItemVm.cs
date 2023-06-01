@@ -35,6 +35,7 @@ public partial class BasketMenuItemVm : ObservableObject
         App.BasketServiceProviderChanged += () =>
         {
             App.BasketService.StateChanged += OnBasketServiceStateChanged;
+            OnBasketServiceStateChanged();
         };
     }
 
@@ -49,5 +50,5 @@ public partial class BasketMenuItemVm : ObservableObject
     }
 
     private void UpdateNavWindowCurrentPageTitle() =>
-            App.NavigationWindowVm.CurrentPageTitle = $"Корзина ({ItemsCount})";
+        App.NavigationWindowVm.CurrentPageTitle = $"Корзина ({ItemsCount})";
 }

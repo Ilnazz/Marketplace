@@ -65,7 +65,7 @@ public partial class DatabaseContext : DbContext
 
             entity.ToTable("Client_Product");
 
-            entity.HasOne(d => d.Client).WithMany(p => p.Basket)
+            entity.HasOne(d => d.Client).WithMany(p => p.ClientProducts)
                 .HasForeignKey(d => d.ClientId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Client_Product_Client");
@@ -108,7 +108,6 @@ public partial class DatabaseContext : DbContext
         {
             entity.ToTable("Order");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Address).HasMaxLength(300);
             entity.Property(e => e.DateTime).HasColumnType("smalldatetime");
 
@@ -164,7 +163,6 @@ public partial class DatabaseContext : DbContext
         {
             entity.ToTable("Product");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Cost).HasColumnType("money");
             entity.Property(e => e.Name).HasMaxLength(150);
 
@@ -203,8 +201,6 @@ public partial class DatabaseContext : DbContext
         modelBuilder.Entity<ProductPhoto>(entity =>
         {
             entity.ToTable("ProductPhoto");
-
-            entity.Property(e => e.Id).ValueGeneratedNever();
 
             entity.HasOne(d => d.Product).WithMany(p => p.ProductPhotos)
                 .HasForeignKey(d => d.ProductId)
