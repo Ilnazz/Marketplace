@@ -143,20 +143,31 @@ public partial class UserProfileWindowVm : WindowVmBase
 
         var dialogWindow = new Wpf.Ui.Controls.MessageBox
         {
-            Content = "Сохранить изменения?",
-            SizeToContent = SizeToContent.Height,
+            Content = new TextBlock
+            {
+                Text = "Сохранить изменения?",
+                TextAlignment = TextAlignment.Center,
+                FontSize = 18,
+                FontWeight = FontWeights.Medium
+            },
             ResizeMode = ResizeMode.NoResize,
             Title = "Подтверждение",
             ButtonLeftName = "Да",
             ButtonLeftAppearance = Wpf.Ui.Common.ControlAppearance.Primary,
             ButtonRightName = "Нет"
         };
+        dialogWindow.Loaded += (_, _) =>
+            dialogWindow.SizeToContent = SizeToContent.WidthAndHeight;
         dialogWindow.ButtonLeftClick += (_, _) =>
         {
             DatabaseContext.Entities.SaveChanges();
             dialogWindow.Close();
         };
-        dialogWindow.ButtonRightClick += (_, _) => dialogWindow.Close();
+        dialogWindow.ButtonRightClick += (_, _) =>
+        {
+            DatabaseContext.Entities.CancelChanges();
+            dialogWindow.Close();
+        };
         dialogWindow.ShowDialog();
 
         return true;

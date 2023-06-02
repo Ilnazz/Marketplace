@@ -18,14 +18,12 @@ public partial class BasketMenuItemVm : ObservableObject
     [RelayCommand]
     private void NavigateToBasketPage()
     {
-        App.NavigationService.Navigate(typeof(BasketPage));
-        UpdateNavWindowCurrentPageTitle();
+        if (App.NavigationWindowVm.CurrentPageTitle?.StartsWith("Корзина") == false)
+        {
+            App.NavigationService.Navigate(typeof(BasketPage));
+            UpdateNavWindowCurrentPageTitle();
+        }
     }
-
-
-    [RelayCommand]
-    private void ClearBasket() =>
-        App.BasketService.ClearBasket();
     #endregion
 
     public BasketMenuItemVm()

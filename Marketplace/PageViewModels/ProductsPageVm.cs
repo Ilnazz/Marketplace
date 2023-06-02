@@ -22,7 +22,7 @@ public partial class ProductsPageVm : PageVmBase
         new Sorting<ProductModel>("Название ↑", pms => pms.OrderBy(pm => pm.Name) ),
         new Sorting<ProductModel>("Название ↓", pms => pms.OrderByDescending(pm => pm.Name) ),
 
-        new Sorting<ProductModel>("Цена ↑", pms => pms.OrderBy(pm => pm.Cost) ),
+        new Sorting<ProductModel>("Цена ↑", pms => pms.OrderBy(pm => pm.CostWithDiscount) ),
         new Sorting<ProductModel>("Цена ↓", pms => pms.OrderByDescending(pm => pm.Cost) )
     };
 

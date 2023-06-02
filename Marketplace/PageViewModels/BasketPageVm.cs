@@ -27,12 +27,14 @@ public partial class BasketPageVm : PageVmBase
     public decimal TotalDiscountSum => TotalProductsCost - TotalProductsCostWithDiscount;
     #endregion
 
+    #region Commands
     [RelayCommand]
     private void NavigateToProductsPage() =>
         App.NavigationService.Navigate(typeof(BookProductsPage));
 
+
     [RelayCommand]
-    private void MakeOrder()
+    private void ShowMakeOrderWindow()
     {
         if (App.UserService.IsUserAuthorized() == false)
         {
@@ -59,6 +61,12 @@ public partial class BasketPageVm : PageVmBase
         else
             new TitledContainerWindow(new MakeOrderWindowVm()).ShowDialog();
     }
+
+
+    [RelayCommand]
+    private void ClearBasket() =>
+        App.BasketService.ClearBasket();
+    #endregion
 
     public BasketPageVm()
     {

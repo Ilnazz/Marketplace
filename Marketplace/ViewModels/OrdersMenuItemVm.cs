@@ -11,8 +11,11 @@ public partial class OrdersMenuItemVm : ObservableObject
     [RelayCommand]
     private void NavigateToOrdersPage()
     {
-        App.NavigationService.Navigate(typeof(OrdersPage));
-        UpdateNavWindowCurrentPageTitle();
+        if (App.NavigationWindowVm.CurrentPageTitle?.Equals("Заказы") == false)
+        {
+            App.NavigationService.Navigate(typeof(OrdersPage));
+            UpdateNavWindowCurrentPageTitle();
+        }
     }
     private void UpdateNavWindowCurrentPageTitle() =>
         App.NavigationWindowVm.CurrentPageTitle = $"Заказы";
