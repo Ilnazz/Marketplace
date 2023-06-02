@@ -51,7 +51,7 @@
                                 VerticalAlignment="Stretch"
                                 Stretch="UniformToFill">
                                 <Image.Source>
-                                    <Binding Path="CurrentPhoto">
+                                    <Binding Path="MainPhoto">
                                         <Binding.TargetNullValue>
                                             <BitmapImage UriSource="../Resources/Images/LightGrayPixel.png" />
                                         </Binding.TargetNullValue>
@@ -194,7 +194,6 @@
                                 </TextBlock>
                                 <ui:Button
                                     Command="{Binding RemoveFromBasketCommand}"
-                                    CommandParameter="{Binding}"
                                     FontSize="16"
                                     Icon="BinFull20"
                                     IconForeground="Red"

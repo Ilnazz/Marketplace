@@ -1,5 +1,6 @@
 ﻿using Marketplace.Database;
 using Marketplace.Database.Models;
+using Marketplace.PageModels;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,22 +11,23 @@ namespace Marketplace.PageViewModels;
 public partial class ProductsPageVm : PageVmBase
 {
     #region Properties
-    public IEnumerable<ProductModel> ProductModels =>
-        GetFilteredAndSortedProducts().Select(p => new ProductModel(p));
+    public IEnumerable<ProductsPageProductModel> ProductModels => GetFilteredAndSortedProducts();
 
-    public IEnumerable<Sorting<Product>> Sortings { get; init; } = new[]
+    public bool AreThereProducts => ProductModels.Count() > 0;
+
+    public IEnumerable<Sorting<ProductsPageProductModel>> Sortings { get; init; } = new[]
     {
-        new Sorting<Product>(DefaultSortingName, null! ),
+        new Sorting<ProductsPageProductModel>(DefaultSortingName, null! ),
 
-        new Sorting<Product>("Название ↑", ps => ps.OrderBy(p => p.Name) ),
-        new Sorting<Product>("Название ↓", ps => ps.OrderByDescending(p => p.Name) ),
+        new Sorting<ProductsPageProductModel>("Название ↑", pms => pms.OrderBy(pm => pm.Name) ),
+        new Sorting<ProductsPageProductModel>("Название ↓", pms => pms.OrderByDescending(pm => pm.Name) ),
 
-        new Sorting<Product>("Цена ↑", ps => ps.OrderBy(p => p.Cost) ),
-        new Sorting<Product>("Цена ↓", ps => ps.OrderByDescending(p => p.Cost) )
+        new Sorting<ProductsPageProductModel>("Цена ↑", pms => pms.OrderBy(pm => pm.Cost) ),
+        new Sorting<ProductsPageProductModel>("Цена ↓", pms => pms.OrderByDescending(pm => pm.Cost) )
     };
 
-    private Sorting<Product> _slectedSorting;
-    public Sorting<Product> SelectedSorting
+    private Sorting<ProductsPageProductModel> _slectedSorting = null!;
+    public Sorting<ProductsPageProductModel> SelectedSorting
     {
         get => _slectedSorting;
         set
@@ -53,15 +55,13 @@ public partial class ProductsPageVm : PageVmBase
             OnPropertyChanged(nameof(AreThereProducts));
         }
     }
-
-    public bool AreThereProducts => ProductModels.Count() > 0;
     #endregion
 
     #region Fields
     private const string DefaultFilterName = "Любой";
     private const string DefaultSortingName = "По умолчнию";
 
-    private IEnumerable<Product> _allProducts = null!;
+    private readonly IEnumerable<ProductsPageProductModel> _allProductModels = null!;
 
     private string _searchText = string.Empty;
     #endregion
@@ -70,14 +70,16 @@ public partial class ProductsPageVm : PageVmBase
     {
         DatabaseContext.Entities.Products.Load();
 
-        _allProducts = DatabaseContext.Entities.Products.Local.Where(p => p.ProductCategoryId == (int)category);
+        _allProductModels = DatabaseContext.Entities.Products.Local
+            .Where(p => p.ProductCategoryId == (int)category)
+            .Select(p => new ProductsPageProductModel(p));
 
         Manufacturers = DatabaseContext.Entities.ProductManufacturers
             .ToList()
             .Prepend(new ProductManufacturer { Name = DefaultFilterName });
 
-        SelectedManufacturer = Manufacturers.First();
         SelectedSorting = Sortings.First();
+        SelectedManufacturer = Manufacturers.First();
 
         App.SearchService.SearchTextChanged += newSearchText =>
         {
@@ -88,25 +90,25 @@ public partial class ProductsPageVm : PageVmBase
     }
 
     #region Private methods
-    private IEnumerable<Product> GetFilteredAndSortedProducts()
+    private IEnumerable<ProductsPageProductModel> GetFilteredAndSortedProducts()
     {
-        var filtered = _allProducts.Where(ProductFilter);
+        var filtered = _allProductModels.Where(ProductModelFilter);
         var sorted = SortProducts(filtered);
         return sorted;
     }
 
-    private IEnumerable<Product> SortProducts(IEnumerable<Product> products)
-        => SelectedSorting.Sorter != null ? SelectedSorting.Sorter(products) : products;
+    private IEnumerable<ProductsPageProductModel> SortProducts(IEnumerable<ProductsPageProductModel> productModels)
+        => SelectedSorting.Sorter != null ? SelectedSorting.Sorter(productModels) : productModels;
 
-    private bool ProductFilter(Product product)
-        => SearchFilter(product) &&
-           ManufacturerFilter(product);
+    private bool ProductModelFilter(ProductsPageProductModel pm)
+        => SearchFilter(pm) &&
+           ManufacturerFilter(pm);
 
-    private bool SearchFilter(Product product)
-        =>  product.Name.ToLower().Contains(_searchText.Trim().ToLower());
+    private bool SearchFilter(ProductsPageProductModel pm)
+        =>  pm.Name.ToLower().Contains(_searchText.Trim().ToLower());
 
-    private bool ManufacturerFilter(Product product)
-        => SelectedManufacturer.Name == DefaultFilterName || product.ProductManufacturer == SelectedManufacturer;
+    private bool ManufacturerFilter(ProductsPageProductModel pm)
+        => SelectedManufacturer.Name == DefaultFilterName || pm.Manufacturer == SelectedManufacturer;
     #endregion
 }
 

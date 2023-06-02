@@ -1,14 +1,15 @@
 ﻿using Marketplace.Database;
+using Marketplace.WindowModels;
 
 namespace Marketplace.WindowViewModels;
 
 public class ProductDetailsWindowVm : WindowVmBase
 {
-    public ProductModel ProductModel { get; init; }
+    public ProductDetailsWindowProductModel ProductModel { get; init; }
 
-    public ProductDetailsWindowVm(ProductModel product)
+    public ProductDetailsWindowVm(ProductDetailsWindowProductModel productModel)
     {
         Title = "Информация о товаре";
-        ProductModel = product;
+        ProductModel = productModel;
     }
 }
