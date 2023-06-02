@@ -30,7 +30,10 @@
             </ui:VirtualizingItemsControl.ItemsPanel>
             <ui:VirtualizingItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <ui:Card Height="250" Margin="0,0,0,10">
+                    <ui:Card
+                        Height="250"
+                        Margin="0,0,0,10"
+                        Visibility="{Binding IsInBasket, Converter={StaticResource BoolToVisibilityConverter}}">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="175" />
@@ -126,7 +129,7 @@
                             <ui:Button
                                 Grid.Row="1"
                                 Grid.Column="1"
-                                Command="{Binding OpenProductModelWindowCommand}"
+                                Command="{Binding ShowProductDetailsWindowCommand}"
                                 Content="Подробнее" />
 
                             <StackPanel
@@ -134,8 +137,7 @@
                                 Margin="10,0,0,0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Top"
-                                Orientation="Horizontal"
-                                Visibility="{Binding IsInBasket, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                                Orientation="Horizontal">
                                 <ui:Button Command="{Binding RemoveOneFromBasketCommand}" Content="-" />
                                 <TextBlock
                                     Margin="10,0"
@@ -143,10 +145,10 @@
                                     Text="{Binding QuantityInBasket}" />
                                 <ui:Button
                                     Command="{Binding AddOneToBasketCommand}"
-                                    CommandParameter="{Binding ElementName=MessageFlyout}"
+                                    CommandParameter="{Binding ElementName=ErrorMessageFlyout}"
                                     Content="+" />
                                 <ui:Flyout
-                                    x:Name="MessageFlyout"
+                                    x:Name="ErrorMessageFlyout"
                                     Margin="5,0,0,0"
                                     Content="Больше нет 😞"
                                     Foreground="Red" />
@@ -174,24 +176,8 @@
                             <StackPanel
                                 Grid.Row="1"
                                 Grid.Column="3"
+                                HorizontalAlignment="Right"
                                 Orientation="Horizontal">
-                                <TextBlock Margin="0,0,10,0">
-                                    <TextBlock.Style>
-                                        <Style TargetType="TextBlock">
-                                            <Setter Property="Visibility" Value="Collapsed" />
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding AvailableInStock}" Value="False">
-                                                    <Setter Property="Text" Value="Закончился" />
-                                                    <Setter Property="Visibility" Value="Visible" />
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding IsRemoved}" Value="True">
-                                                    <Setter Property="Text" Value="Снят с продажи" />
-                                                    <Setter Property="Visibility" Value="Visible" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
                                 <ui:Button
                                     Command="{Binding RemoveFromBasketCommand}"
                                     FontSize="16"
@@ -260,7 +246,7 @@
                     Text="В корзине нет товаров" />
                 <ui:Button
                     HorizontalAlignment="Stretch"
-                    Command="{Binding GoToProductsPageCommand}"
+                    Command="{Binding NavigateToProductsPageCommand}"
                     Content="Перейти в каталог"
                     FontSize="16" />
             </StackPanel>

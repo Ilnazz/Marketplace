@@ -4,7 +4,7 @@ using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Marketplace.Database;
-using Marketplace.PageModels;
+using Marketplace.Models;
 using Marketplace.Pages;
 using Marketplace.WindowViewModels;
 using Marketplace.WindowViews;
@@ -15,7 +15,7 @@ public partial class BasketPageVm : PageVmBase
 {
     #region Properties
     [ObservableProperty]
-    private IEnumerable<BasketPageProductModel> _productModels;
+    private IEnumerable<ProductModel> _productModels;
 
     public int TotalProductsCount => ProductModels.Sum(pm => pm.QuantityInBasket);
     public bool IsEmpty => TotalProductsCount == 0;
@@ -28,7 +28,7 @@ public partial class BasketPageVm : PageVmBase
     #endregion
 
     [RelayCommand]
-    private void GoToProductsPage() =>
+    private void NavigateToProductsPage() =>
         App.NavigationService.Navigate(typeof(BookProductsPage));
 
     [RelayCommand]
@@ -73,9 +73,10 @@ public partial class BasketPageVm : PageVmBase
             OnBasketServiceStateChanged();
         };
 
+        App.UserService.StateChanged += OnBasketServiceStateChanged;
+
         var prodAndCounts = App.BasketService.GetItemAndCounts();
-        ProductModels = prodAndCounts.Where(pac => pac.Key.IsRemoved == false && pac.Key.QuantityInStock > 0)
-                                     .Select(pac => new BasketPageProductModel(pac.Key));
+        ProductModels = prodAndCounts.Select(pac => new ProductModel(pac.Key));
     }
 
     private void OnBasketServiceStateChanged()

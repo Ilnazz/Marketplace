@@ -10,7 +10,8 @@
     Height="400"
     d:DataContext="{d:DesignInstance windowvms:ProductDetailsWindowVm}"
     mc:Ignorable="d">
-    <Grid Margin="10">
+
+    <Grid Margin="10" DataContext="{Binding ProductModel}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
@@ -32,7 +33,7 @@
                     VerticalAlignment="Stretch"
                     Stretch="UniformToFill">
                     <Image.Source>
-                        <Binding Path="ProductModel.CurrentPhoto">
+                        <Binding Path="CurrentPhoto">
                             <Binding.TargetNullValue>
                                 <BitmapImage UriSource="../Resources/Images/LightGrayPixel.png" />
                             </Binding.TargetNullValue>
@@ -49,7 +50,7 @@
 
                     <ui:Button
                         Grid.Column="0"
-                        Command="{Binding ProductModel.ShowPrevPhotoCommand}"
+                        Command="{Binding ShowPrevPhotoCommand}"
                         Content="←" />
 
                     <TextBlock
@@ -62,13 +63,13 @@
                                 <Setter Property="Text">
                                     <Setter.Value>
                                         <MultiBinding StringFormat="{}{0} из {1}">
-                                            <Binding Path="ProductModel.CurrentPhotoNumber" />
-                                            <Binding Path="ProductModel.TotalPhotosNumber" />
+                                            <Binding Path="CurrentPhotoNumber" />
+                                            <Binding Path="TotalPhotosNumber" />
                                         </MultiBinding>
                                     </Setter.Value>
                                 </Setter>
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding ProductModel.CurrentPhoto}" Value="{x:Null}">
+                                    <DataTrigger Binding="{Binding CurrentPhoto}" Value="{x:Null}">
                                         <Setter Property="Text" Value="Нет фото" />
                                     </DataTrigger>
                                 </Style.Triggers>
@@ -77,7 +78,7 @@
                     </TextBlock>
                     <ui:Button
                         Grid.Column="2"
-                        Command="{Binding ProductModel.ShowNextPhotoCommand}"
+                        Command="{Binding ShowNextPhotoCommand}"
                         Content="→" />
                 </Grid>
             </Grid>
@@ -100,13 +101,13 @@
                 Margin="0,0,0,5"
                 FontSize="20"
                 FontWeight="Medium"
-                Text="{Binding ProductModel.Name}"
+                Text="{Binding Name}"
                 TextWrapping="Wrap" />
 
             <TextBlock
                 Grid.Row="1"
                 VerticalAlignment="Stretch"
-                Text="{Binding ProductModel.Description}"
+                Text="{Binding Description}"
                 TextWrapping="Wrap" />
 
             <Separator
@@ -122,7 +123,7 @@
                     Margin="0,0,5,0"
                     FontWeight="Medium"
                     Text="Категория:" />
-                <TextBlock Text="{Binding ProductModel.Category.Name}" />
+                <TextBlock Text="{Binding Category.Name}" />
             </StackPanel>
 
             <StackPanel
@@ -133,7 +134,7 @@
                     Margin="0,0,5,0"
                     FontWeight="Medium"
                     Text="Производитель:" />
-                <TextBlock Text="{Binding ProductModel.Manufacturer.Name}" />
+                <TextBlock Text="{Binding Manufacturer.Name}" />
             </StackPanel>
 
             <StackPanel
@@ -144,7 +145,7 @@
                     Margin="0,0,5,0"
                     FontWeight="Medium"
                     Text="Продавец:" />
-                <TextBlock Text="{Binding ProductModel.Salesman.FullName}" />
+                <TextBlock Text="{Binding Salesman.FullName}" />
             </StackPanel>
 
             <StackPanel
@@ -155,29 +156,29 @@
                     Margin="0,0,5,0"
                     FontWeight="Medium"
                     Text="Цена:" />
-                <TextBlock Margin="0,0,2.5,0" Text="{Binding ProductModel.CostWithDiscount, StringFormat='{}{0:# ###} ₽', Mode=OneWay}" />
+                <TextBlock Margin="0,0,2.5,0" Text="{Binding CostWithDiscount, StringFormat='{}{0:# ###} ₽', Mode=OneWay}" />
                 <TextBlock
                     Margin="2.5,0,0,0"
                     VerticalAlignment="Bottom"
-                    Text="{Binding ProductModel.Cost, StringFormat=0, Mode=OneWay}"
+                    Text="{Binding Cost, StringFormat=0, Mode=OneWay}"
                     TextDecorations="Strikethrough"
-                    Visibility="{Binding ProductModel.HasDiscount, Converter={StaticResource BoolToVisibilityConverter}}" />
+                    Visibility="{Binding HasDiscount, Converter={StaticResource BoolToVisibilityConverter}}" />
             </StackPanel>
 
             <StackPanel
                 Grid.Row="7"
                 HorizontalAlignment="Right"
                 Orientation="Horizontal">
-                <ui:Button
-                    Command="{Binding ProductModel.PutToBasketCommand}"
-                    CommandParameter="{Binding ElementName=MessageFlyout}"
-                    Visibility="{Binding ProductModel.IsInBasket, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource False}}">
+                <ui:Button Command="{Binding PutToBasketCommand}" Visibility="{Binding IsInBasket, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource False}}">
                     <ui:Button.Style>
                         <Style BasedOn="{StaticResource {x:Type ui:Button}}" TargetType="{x:Type ui:Button}">
                             <Setter Property="Content" Value="В корзину" />
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ProductModel.AvailableInStock}" Value="False">
+                                <DataTrigger Binding="{Binding IsAvailable}" Value="False">
                                     <Setter Property="Content" Value="Нет в наличии" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsRemoved}" Value="True">
+                                    <Setter Property="Content" Value="Снят с продажи" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -189,18 +190,18 @@
                     HorizontalAlignment="Right"
                     DockPanel.Dock="Right"
                     Orientation="Horizontal"
-                    Visibility="{Binding ProductModel.IsInBasket, Converter={StaticResource BoolToVisibilityConverter}}">
-                    <ui:Button Command="{Binding ProductModel.RemoveOneFromBasketCommand}" Content="-" />
+                    Visibility="{Binding IsInBasket, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <ui:Button Command="{Binding RemoveOneFromBasketCommand}" Content="-" />
                     <TextBlock
                         Margin="10,0"
                         VerticalAlignment="Center"
-                        Text="{Binding ProductModel.QuantityInBasket}" />
+                        Text="{Binding QuantityInBasket}" />
                     <ui:Button
-                        Command="{Binding ProductModel.AddOneToBasketCommand}"
-                        CommandParameter="{Binding ElementName=MessageFlyout}"
+                        Command="{Binding AddOneToBasketCommand}"
+                        CommandParameter="{Binding ElementName=ErrorMessageFlyout}"
                         Content="+" />
                     <ui:Flyout
-                        x:Name="MessageFlyout"
+                        x:Name="ErrorMessageFlyout"
                         Margin="5,0,0,0"
                         Content="Больше нет 😞"
                         Foreground="Red" />

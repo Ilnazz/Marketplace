@@ -1,6 +1,7 @@
 ﻿using Marketplace.Database;
 using Marketplace.Database.Models;
-using Marketplace.PageModels;
+using Marketplace.DataTypes.Records;
+using Marketplace.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,23 +12,22 @@ namespace Marketplace.PageViewModels;
 public partial class ProductsPageVm : PageVmBase
 {
     #region Properties
-    public IEnumerable<ProductsPageProductModel> ProductModels => GetFilteredAndSortedProducts();
+    public IEnumerable<ProductModel> ProductModels => GetFilteredAndSortedProducts();
+    public bool AreThereProducts => ProductModels.Any();
 
-    public bool AreThereProducts => ProductModels.Count() > 0;
-
-    public IEnumerable<Sorting<ProductsPageProductModel>> Sortings { get; init; } = new[]
+    public IEnumerable<Sorting<ProductModel>> Sortings { get; init; } = new[]
     {
-        new Sorting<ProductsPageProductModel>(DefaultSortingName, null! ),
+        new Sorting<ProductModel>(DefaultSortingName, null! ),
 
-        new Sorting<ProductsPageProductModel>("Название ↑", pms => pms.OrderBy(pm => pm.Name) ),
-        new Sorting<ProductsPageProductModel>("Название ↓", pms => pms.OrderByDescending(pm => pm.Name) ),
+        new Sorting<ProductModel>("Название ↑", pms => pms.OrderBy(pm => pm.Name) ),
+        new Sorting<ProductModel>("Название ↓", pms => pms.OrderByDescending(pm => pm.Name) ),
 
-        new Sorting<ProductsPageProductModel>("Цена ↑", pms => pms.OrderBy(pm => pm.Cost) ),
-        new Sorting<ProductsPageProductModel>("Цена ↓", pms => pms.OrderByDescending(pm => pm.Cost) )
+        new Sorting<ProductModel>("Цена ↑", pms => pms.OrderBy(pm => pm.Cost) ),
+        new Sorting<ProductModel>("Цена ↓", pms => pms.OrderByDescending(pm => pm.Cost) )
     };
 
-    private Sorting<ProductsPageProductModel> _slectedSorting = null!;
-    public Sorting<ProductsPageProductModel> SelectedSorting
+    private Sorting<ProductModel> _slectedSorting = null!;
+    public Sorting<ProductModel> SelectedSorting
     {
         get => _slectedSorting;
         set
@@ -61,7 +61,7 @@ public partial class ProductsPageVm : PageVmBase
     private const string DefaultFilterName = "Любой";
     private const string DefaultSortingName = "По умолчнию";
 
-    private readonly IEnumerable<ProductsPageProductModel> _allProductModels = null!;
+    private readonly IEnumerable<ProductModel> _allProductModels = null!;
 
     private string _searchText = string.Empty;
     #endregion
@@ -72,7 +72,7 @@ public partial class ProductsPageVm : PageVmBase
 
         _allProductModels = DatabaseContext.Entities.Products.Local
             .Where(p => p.ProductCategoryId == (int)category)
-            .Select(p => new ProductsPageProductModel(p));
+            .Select(p => new ProductModel(p));
 
         Manufacturers = DatabaseContext.Entities.ProductManufacturers
             .ToList()
@@ -90,26 +90,24 @@ public partial class ProductsPageVm : PageVmBase
     }
 
     #region Private methods
-    private IEnumerable<ProductsPageProductModel> GetFilteredAndSortedProducts()
+    private IEnumerable<ProductModel> GetFilteredAndSortedProducts()
     {
         var filtered = _allProductModels.Where(ProductModelFilter);
         var sorted = SortProducts(filtered);
         return sorted;
     }
 
-    private IEnumerable<ProductsPageProductModel> SortProducts(IEnumerable<ProductsPageProductModel> productModels)
+    private IEnumerable<ProductModel> SortProducts(IEnumerable<ProductModel> productModels)
         => SelectedSorting.Sorter != null ? SelectedSorting.Sorter(productModels) : productModels;
 
-    private bool ProductModelFilter(ProductsPageProductModel pm)
+    private bool ProductModelFilter(ProductModel pm)
         => SearchFilter(pm) &&
            ManufacturerFilter(pm);
 
-    private bool SearchFilter(ProductsPageProductModel pm)
+    private bool SearchFilter(ProductModel pm)
         =>  pm.Name.ToLower().Contains(_searchText.Trim().ToLower());
 
-    private bool ManufacturerFilter(ProductsPageProductModel pm)
+    private bool ManufacturerFilter(ProductModel pm)
         => SelectedManufacturer.Name == DefaultFilterName || pm.Manufacturer == SelectedManufacturer;
     #endregion
 }
-
-public record Sorting<T>(string Name, Func<IEnumerable<T>, IEnumerable<T>> Sorter);

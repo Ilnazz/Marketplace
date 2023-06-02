@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using Marketplace.WindowModels;
+using Marketplace.Models;
 
 namespace Marketplace.WindowViewModels;
 
 public partial class MakeOrderWindowVm : WindowVmBase
 {
-    public IEnumerable<MakeOrderWindowProductModel> ProductModels { get; set; }
+    public IEnumerable<ProductModel> ProductModels { get; set; }
 
     public MakeOrderWindowVm()
     {

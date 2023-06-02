@@ -11,7 +11,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Marketplace.WindowViewModels;
 
-public partial class UserWindowVm : WindowVmBase
+public partial class UserProfileWindowVm : WindowVmBase
 {
     #region Properties
     [RegularExpression(@"[a-zA-Zа-яА-Я]+", ErrorMessage = "Может содержать только буквы")]
@@ -125,7 +125,7 @@ public partial class UserWindowVm : WindowVmBase
 
     private User _user;
 
-    public UserWindowVm(User user)
+    public UserProfileWindowVm(User user)
     {
         Title = "Профиль";
         _user = user;

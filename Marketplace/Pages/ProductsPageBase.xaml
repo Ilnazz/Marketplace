@@ -95,7 +95,7 @@
                                         <Style BasedOn="{StaticResource {x:Type ui:Button}}" TargetType="{x:Type ui:Button}">
                                             <Setter Property="Content" Value="В корзину" />
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding AvailableInStock}" Value="False">
+                                                <DataTrigger Binding="{Binding IsAvailable}" Value="False">
                                                     <Setter Property="Content" Value="Нет в наличии" />
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding IsRemoved}" Value="True">
@@ -126,10 +126,10 @@
                                         Text="{Binding QuantityInBasket}" />
                                     <ui:Button
                                         Command="{Binding AddOneToBasketCommand}"
-                                        CommandParameter="{Binding ElementName=MessageFlyout}"
+                                        CommandParameter="{Binding ElementName=ErrorMessageFlyout}"
                                         Content="+" />
                                     <ui:Flyout
-                                        x:Name="MessageFlyout"
+                                        x:Name="ErrorMessageFlyout"
                                         Margin="5,0,0,0"
                                         Content="Больше нет 😞"
                                         Foreground="Red" />
@@ -139,7 +139,7 @@
                             <ui:Button
                                 Grid.Row="4"
                                 HorizontalAlignment="Stretch"
-                                Command="{Binding OpenProductModelWindowCommand}"
+                                Command="{Binding ShowProductDetailsWindowCommand}"
                                 Content="Подробнее" />
                         </Grid>
                     </ui:Card>
@@ -174,7 +174,7 @@
             <TextBlock
                 FontSize="16"
                 FontWeight="Medium"
-                Text="Нет товаров" />
+                Text="Товаров не найдено" />
         </ui:Card>
     </Grid>
 </ui:UiPage>

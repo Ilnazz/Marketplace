@@ -75,11 +75,13 @@ public class UserService
 
         // TODO: If you will have extra time, implement: show in client basket, that product was removed or out of stock (disable prod in basket, not count it)
         // Remove products that out of stock or removed from client basket
-        var prodsAndCountsToRemoveFromClientBasket = new List<ClientProduct>();
+        var prodAndCountsToRemoveFromClientBasket = new List<ClientProduct>();
         foreach (var prodAndCount in clientBasket)
+        {
             if (prodAndCount.Product.QuantityInStock == 0 || prodAndCount.Product.IsRemoved)
-                prodsAndCountsToRemoveFromClientBasket.Add(prodAndCount);
-        foreach (var prodAndCount in prodsAndCountsToRemoveFromClientBasket)
+                prodAndCountsToRemoveFromClientBasket.Add(prodAndCount);
+        }
+        foreach (var prodAndCount in prodAndCountsToRemoveFromClientBasket)
             clientBasket.Remove(prodAndCount);
 
         var guestBasket = App.BasketService.GetItemAndCounts();
@@ -89,8 +91,7 @@ public class UserService
                 .FirstOrDefault(pac => pac.Product == prod);
             if (prodAndCountInClientBasket != null)
             {
-                var newCount = prodAndCountInClientBasket.Quantity + count;
-                prodAndCountInClientBasket.Quantity = newCount > prod.QuantityInStock ? prod.QuantityInStock : newCount;
+                prodAndCountInClientBasket.Quantity += count;
             }
             else
                 clientBasket.Add(new ClientProduct

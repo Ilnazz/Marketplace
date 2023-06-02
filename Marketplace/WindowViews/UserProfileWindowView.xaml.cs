@@ -18,9 +18,9 @@ namespace Marketplace.WindowViews
     /// <summary>
     /// Логика взаимодействия для UserWindowView.xaml
     /// </summary>
-    public partial class UserWindowView : UserControl
+    public partial class UserProfileWindowView : UserControl
     {
-        public UserWindowView()
+        public UserProfileWindowView()
         {
             InitializeComponent();
         }

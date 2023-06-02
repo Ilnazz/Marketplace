@@ -7,11 +7,14 @@ namespace Marketplace.ViewModels;
 
 public partial class BasketMenuItemVm : ObservableObject
 {
+    #region Properties
     [ObservableProperty]
     private int _itemsCount;
 
     public bool IsEmpty => ItemsCount == 0;
+    #endregion
 
+    #region Commands
     [RelayCommand]
     private void NavigateToBasketPage()
     {
@@ -19,11 +22,11 @@ public partial class BasketMenuItemVm : ObservableObject
         UpdateNavWindowCurrentPageTitle();
     }
 
+
     [RelayCommand]
-    private void ClearBasket()
-    {
+    private void ClearBasket() =>
         App.BasketService.ClearBasket();
-    }
+    #endregion
 
     public BasketMenuItemVm()
     {

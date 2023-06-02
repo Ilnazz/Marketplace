@@ -11,14 +11,14 @@ namespace Marketplace.ViewModels;
 
 public partial class UserMenuItemVm : ObservableObject
 {
+    #region Properties
     public User? User => App.UserService.CurrentUser;
 
     public bool IsAuthorized => User != null;
 
-    [RelayCommand]
-    private void ShowMenu(Flyout menuFlyout) =>
-        menuFlyout.Show();
+    #endregion
 
+    #region Commands
     [RelayCommand]
     private void Authorize()
     {
@@ -38,17 +38,18 @@ public partial class UserMenuItemVm : ObservableObject
         };
         authWindowVm.CloseWindowMethod += dialogWindow.Close;
         dialogWindow.ShowDialog();
-
-        // TODO: Synchronize guest basket with authorized user basket
     }
 
+    
     [RelayCommand]
-    private void ShowProfile() =>
-        new TitledContainerWindow(new UserWindowVm(User!)).Show();
+    private void ShowProfileWindow() =>
+        new TitledContainerWindow(new UserProfileWindowVm(User!)).Show();
+
 
     [RelayCommand]
     private void LogOut() =>
         App.UserService.LogOutUser();
+    #endregion
 
     public UserMenuItemVm()
     {

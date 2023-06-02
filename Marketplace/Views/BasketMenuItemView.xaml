@@ -1,35 +1,29 @@
-﻿<ui:MenuItem x:Class="Marketplace.Views.BasketMenuItemView"
-           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:viewmodels="clr-namespace:Marketplace.ViewModels"
-             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             mc:Ignorable="d"
-             d:DataContext="{d:DesignInstance viewmodels:BasketMenuItemVm}">
+﻿<ui:MenuItem
+    x:Class="Marketplace.Views.BasketMenuItemView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:viewmodels="clr-namespace:Marketplace.ViewModels"
+    d:DataContext="{d:DesignInstance viewmodels:BasketMenuItemVm}"
+    Command="{Binding NavigateToBasketPageCommand}"
+    mc:Ignorable="d">
 
     <ui:MenuItem.DataContext>
-        <viewmodels:BasketMenuItemVm/>
+        <viewmodels:BasketMenuItemVm />
     </ui:MenuItem.DataContext>
-    
+
     <ui:MenuItem.Header>
         <Grid>
             <StackPanel>
-                <ui:SymbolIcon Symbol="Cart16"/>
-                <TextBlock Text="Корзина"/>
+                <ui:SymbolIcon Symbol="Cart16" />
+                <TextBlock Text="Корзина" />
             </StackPanel>
-            <TextBlock Text="{Binding ItemsCount}"
-                       HorizontalAlignment="Right"
-                       Margin="0 -7.5 0 0"/>
+            <TextBlock
+                Margin="0,-7.5,0,0"
+                HorizontalAlignment="Right"
+                Text="{Binding ItemsCount}" />
         </Grid>
     </ui:MenuItem.Header>
-	<ui:MenuItem Header="Перейти"
-                 Command="{Binding NavigateToBasketPageCommand}"
-                 SymbolIcon="Cart16"
-                 Cursor="Hand"/>
-    <ui:MenuItem Header="Очистить"
-                 Command="{Binding ClearBasketCommand}"
-                 Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource False}}"
-                 SymbolIcon="Broom16"
-                 Cursor="Hand"/>
 </ui:MenuItem>

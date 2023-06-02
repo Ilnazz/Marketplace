@@ -6,6 +6,8 @@ namespace Marketplace.ViewModels;
 
 public partial class OrdersMenuItemVm : ObservableObject
 {
+    public bool IsUserAuthorized => App.UserService.IsUserAuthorized();
+
     [RelayCommand]
     private void NavigateToOrdersPage()
     {
@@ -13,5 +15,10 @@ public partial class OrdersMenuItemVm : ObservableObject
         UpdateNavWindowCurrentPageTitle();
     }
     private void UpdateNavWindowCurrentPageTitle() =>
-            App.NavigationWindowVm.CurrentPageTitle = $"Заказы";
+        App.NavigationWindowVm.CurrentPageTitle = $"Заказы";
+
+    public OrdersMenuItemVm()
+    {
+        App.UserService.StateChanged += () => OnPropertyChanged(nameof(IsUserAuthorized));
+    }
 }
