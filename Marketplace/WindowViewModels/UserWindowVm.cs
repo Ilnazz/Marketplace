@@ -81,6 +81,16 @@ public partial class UserProfileWindowVm : WindowVmBase
         }
     }
 
+    public BankCard? BankCard
+    {
+        get => _user.Client.BankCard;
+        set
+        {
+            _user.Client.BankCard = value;
+            OnPropertyChanged();
+        }
+    }
+
     [ObservableProperty]
     private byte[]? _photo;
 

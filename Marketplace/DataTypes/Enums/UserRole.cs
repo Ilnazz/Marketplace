@@ -2,6 +2,7 @@
 
 public enum UserRole
 {
+    Guest,
     Client,
     Salesman,
     Employee

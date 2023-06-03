@@ -15,17 +15,23 @@ public partial class Order
 
     public int DeliveryTypeId { get; set; }
 
+    public DateTime DeliveryDate { get; set; }
+
+    public int PaymentMethodId { get; set; }
+
     public string? Address { get; set; }
 
-    public int DeliveryPointId { get; set; }
+    public int? DeliveryPointId { get; set; }
 
     public virtual Client Client { get; set; } = null!;
 
-    public virtual DeliveryPoint DeliveryPoint { get; set; } = null!;
+    public virtual DeliveryPoint? DeliveryPoint { get; set; }
 
     public virtual DeliveryType DeliveryType { get; set; } = null!;
 
+    public virtual PaymentMethod PaymentMethod { get; set; } = null!;
+
     public virtual ICollection<OrderProduct> OrderProducts { get; set; } = new List<OrderProduct>();
 
-    public virtual OrderStatus OrderStatus { get; set; } = null!;
+    public virtual OrderStatus Status { get; set; } = null!;
 }

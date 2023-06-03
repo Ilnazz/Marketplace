@@ -13,8 +13,6 @@ public partial class DatabaseContext
     {
         modelBuilder.Entity<Product>(entity =>
         {
-            entity.Navigation(d => d.ProductCategory).AutoInclude();
-            entity.Navigation(d => d.ProductManufacturer).AutoInclude();
             entity.Navigation(d => d.ProductPhotos).AutoInclude();
             entity.Navigation(d => d.Salesman).AutoInclude();
             entity.Navigation(d => d.ProductPhotos).AutoInclude();
@@ -24,6 +22,11 @@ public partial class DatabaseContext
         {
             entity.Navigation(d => d.Basket).AutoInclude();
             entity.Navigation(d => d.Orders).AutoInclude();
+        });
+
+        modelBuilder.Entity<Order>(entity =>
+        {
+            entity.Navigation(d => d.OrderProducts).AutoInclude();
         });
     }
 

@@ -20,4 +20,8 @@
         <windowviews:UserProfileWindowView />
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type windowvms:BankCardWindowVm}">
+        <windowviews:BankCardWindowView />
+    </DataTemplate>
+
 </ResourceDictionary>

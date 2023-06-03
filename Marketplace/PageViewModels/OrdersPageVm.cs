@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using Marketplace.Database;
 using Marketplace.Database.Models;
 using Marketplace.Pages;
+using Microsoft.EntityFrameworkCore;
 
 namespace Marketplace.PageViewModels;
 
@@ -14,5 +16,6 @@ public partial class OrdersPageVm : PageVmBase
 
     public OrdersPageVm()
     {
+        DatabaseContext.Entities.Orders.Load();
     }
 }

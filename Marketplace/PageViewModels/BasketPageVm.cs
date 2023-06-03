@@ -56,10 +56,10 @@ public partial class BasketPageVm : PageVmBase
             dialogWindow.ShowDialog();
 
             if (App.UserService.IsUserAuthorized())
-                new TitledContainerWindow(new MakeOrderWindowVm()).ShowDialog();
+                new TitledContainerWindow(new MakeOrderWindowVm(ProductModels)).ShowDialog();
         }
         else
-            new TitledContainerWindow(new MakeOrderWindowVm()).ShowDialog();
+            new TitledContainerWindow(new MakeOrderWindowVm(ProductModels)).ShowDialog();
     }
 
 
@@ -83,15 +83,21 @@ public partial class BasketPageVm : PageVmBase
 
         App.UserService.StateChanged += OnBasketServiceStateChanged;
 
-        var prodAndCounts = App.BasketService.GetItemAndCounts();
-        ProductModels = prodAndCounts.Select(pac => new ProductModel(pac.Key));
+        RefreshProductModels();
     }
 
     private void OnBasketServiceStateChanged()
     {
+        RefreshProductModels();
         OnPropertyChanged(nameof(IsEmpty));
         OnPropertyChanged(nameof(TotalProductsCount));
         OnPropertyChanged(nameof(TotalProductsCostWithDiscount));
         OnPropertyChanged(nameof(TotalDiscountSum));
+    }
+
+    private void RefreshProductModels()
+    {
+        var prodAndCounts = App.BasketService.GetItemAndCounts();
+        ProductModels = prodAndCounts.Select(pac => new ProductModel(pac.Key));
     }
 }

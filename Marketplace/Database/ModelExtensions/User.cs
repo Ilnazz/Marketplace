@@ -1,4 +1,7 @@
-﻿using Marketplace.DataTypes.Enums;
+﻿using System.Collections;
+using System.Collections.Generic;
+using Marketplace.DataTypes;
+using Marketplace.DataTypes.Enums;
 
 namespace Marketplace.Database.Models;
 
@@ -31,6 +34,13 @@ public class User
             return UserRole.Employee;
         }
     }
+
+    private IEnumerable<Permission> _permissions = null!;
+    public IEnumerable<Permission> Permissions => _permissions ??= RolePermissions.All[Role];
+
+    public Client Client => (Client)this;
+    public Salesman Salesman => (Salesman)this;
+    public Employee Employee => (Employee)this;
 
     public string FullName => $"{Surname} {Name} {Patronymic}";
     #endregion

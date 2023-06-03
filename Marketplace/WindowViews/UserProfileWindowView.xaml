@@ -84,7 +84,7 @@
                 Margin="0,0,20,10"
                 VerticalAlignment="Center"
                 FontSize="15"
-                Text="Фамилия" />
+                Text="Фамилия *" />
 
             <ui:TextBox
                 Grid.Row="1"
@@ -99,7 +99,7 @@
                 Margin="0,0,0,10"
                 VerticalAlignment="Center"
                 FontSize="15"
-                Text="Имя" />
+                Text="Имя *" />
 
             <ui:TextBox
                 Grid.Row="2"
@@ -129,13 +129,13 @@
                 Margin="0,0,0,10"
                 VerticalAlignment="Center"
                 FontSize="15"
-                Text="Логин" />
+                Text="Логин *" />
 
             <ui:TextBox
                 Grid.Row="4"
                 Grid.Column="1"
                 Margin="0,0,0,10"
-                MaxLength="50"
+                MaxLength="30"
                 Text="{Binding Login, UpdateSourceTrigger=PropertyChanged}" />
 
             <TextBlock
@@ -144,13 +144,13 @@
                 Margin="0,0,0,10"
                 VerticalAlignment="Center"
                 FontSize="15"
-                Text="Пароль" />
+                Text="Пароль *" />
 
             <ui:TextBox
                 Grid.Row="5"
                 Grid.Column="1"
                 Margin="0,0,0,10"
-                MaxLength="50"
+                MaxLength="30"
                 Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}" />
 
             <ui:Button

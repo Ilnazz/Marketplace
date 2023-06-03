@@ -16,6 +16,8 @@ public partial class DatabaseContext : DbContext
     {
     }
 
+    public virtual DbSet<BankCard> BankCards { get; set; }
+
     public virtual DbSet<Client> Clients { get; set; }
 
     public virtual DbSet<ClientProduct> ClientProducts { get; set; }
@@ -32,6 +34,8 @@ public partial class DatabaseContext : DbContext
 
     public virtual DbSet<OrderStatus> OrderStatuses { get; set; }
 
+    public virtual DbSet<PaymentMethod> PaymentMethods { get; set; }
+
     public virtual DbSet<Product> Products { get; set; }
 
     public virtual DbSet<ProductCategory> ProductCategories { get; set; }
@@ -44,10 +48,21 @@ public partial class DatabaseContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=Marketplace;Trusted_Connection=True;");
+        => optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=Marketplace2;Trusted_Connection=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<BankCard>(entity =>
+        {
+            entity.ToTable("BankCard");
+
+            entity.Property(e => e.ExpirationDate).HasColumnType("date");
+            entity.Property(e => e.Name).HasMaxLength(50);
+            entity.Property(e => e.Number)
+                .HasMaxLength(19)
+                .IsFixedLength();
+        });
+
         modelBuilder.Entity<Client>(entity =>
         {
             entity.ToTable("Client");
@@ -57,6 +72,10 @@ public partial class DatabaseContext : DbContext
             entity.Property(e => e.Password).HasMaxLength(30);
             entity.Property(e => e.Patronymic).HasMaxLength(50);
             entity.Property(e => e.Surname).HasMaxLength(50);
+
+            entity.HasOne(d => d.BankCard).WithMany(p => p.Clients)
+                .HasForeignKey(d => d.BankCardId)
+                .HasConstraintName("FK_Client_BankCard");
         });
 
         modelBuilder.Entity<ClientProduct>(entity =>
@@ -108,8 +127,10 @@ public partial class DatabaseContext : DbContext
         {
             entity.ToTable("Order");
 
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
             entity.Property(e => e.Address).HasMaxLength(300);
             entity.Property(e => e.DateTime).HasColumnType("smalldatetime");
+            entity.Property(e => e.DeliveryDate).HasColumnType("date");
 
             entity.HasOne(d => d.Client).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.ClientId)
@@ -118,7 +139,6 @@ public partial class DatabaseContext : DbContext
 
             entity.HasOne(d => d.DeliveryPoint).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.DeliveryPointId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Order_DeliveryPoint");
 
             entity.HasOne(d => d.DeliveryType).WithMany(p => p.Orders)
@@ -126,7 +146,12 @@ public partial class DatabaseContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Order_DeliveryType");
 
-            entity.HasOne(d => d.OrderStatus).WithMany(p => p.Orders)
+            entity.HasOne(d => d.PaymentMethod).WithOne(p => p.Order)
+                .HasForeignKey<Order>(d => d.Id)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Order_PaymentMethod");
+
+            entity.HasOne(d => d.Status).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.OrderStatusId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Order_OrderStatus");
@@ -157,6 +182,14 @@ public partial class DatabaseContext : DbContext
 
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Name).HasMaxLength(150);
+        });
+
+        modelBuilder.Entity<PaymentMethod>(entity =>
+        {
+            entity.ToTable("PaymentMethod");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.Name).HasMaxLength(50);
         });
 
         modelBuilder.Entity<Product>(entity =>
