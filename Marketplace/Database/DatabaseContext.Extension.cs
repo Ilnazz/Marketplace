@@ -13,6 +13,9 @@ public partial class DatabaseContext
     {
         modelBuilder.Entity<Product>(entity =>
         {
+            entity.Property(d => d.Status).HasConversion<int>();
+            entity.Property(d => d.Category).HasConversion<int>();
+
             entity.Navigation(d => d.ProductPhotos).AutoInclude();
             entity.Navigation(d => d.Salesman).AutoInclude();
             entity.Navigation(d => d.ProductPhotos).AutoInclude();
@@ -26,6 +29,10 @@ public partial class DatabaseContext
 
         modelBuilder.Entity<Order>(entity =>
         {
+            entity.Property(d => d.Status).HasConversion<int>();
+            entity.Property(d => d.DeliveryType).HasConversion<int>();
+            entity.Property(d => d.PaymentMethod).HasConversion<int>();
+
             entity.Navigation(d => d.OrderProducts).AutoInclude();
         });
     }

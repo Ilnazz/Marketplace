@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Marketplace.Database.Models;
 using Microsoft.EntityFrameworkCore;
+using Marketplace.Database.Models;
 
 namespace Marketplace.Database;
 
@@ -24,27 +24,21 @@ public partial class DatabaseContext : DbContext
 
     public virtual DbSet<DeliveryPoint> DeliveryPoints { get; set; }
 
-    public virtual DbSet<DeliveryType> DeliveryTypes { get; set; }
-
     public virtual DbSet<Employee> Employees { get; set; }
 
     public virtual DbSet<Order> Orders { get; set; }
 
     public virtual DbSet<OrderProduct> OrderProducts { get; set; }
 
-    public virtual DbSet<OrderStatus> OrderStatuses { get; set; }
-
-    public virtual DbSet<PaymentMethod> PaymentMethods { get; set; }
-
     public virtual DbSet<Product> Products { get; set; }
-
-    public virtual DbSet<ProductCategory> ProductCategories { get; set; }
 
     public virtual DbSet<ProductManufacturer> ProductManufacturers { get; set; }
 
     public virtual DbSet<ProductPhoto> ProductPhotos { get; set; }
 
     public virtual DbSet<Salesman> Salesmen { get; set; }
+
+    public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
@@ -67,15 +61,14 @@ public partial class DatabaseContext : DbContext
         {
             entity.ToTable("Client");
 
-            entity.Property(e => e.Login).HasMaxLength(30);
-            entity.Property(e => e.Name).HasMaxLength(50);
-            entity.Property(e => e.Password).HasMaxLength(30);
-            entity.Property(e => e.Patronymic).HasMaxLength(50);
-            entity.Property(e => e.Surname).HasMaxLength(50);
-
             entity.HasOne(d => d.BankCard).WithMany(p => p.Clients)
                 .HasForeignKey(d => d.BankCardId)
                 .HasConstraintName("FK_Client_BankCard");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Clients)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Client_User");
         });
 
         modelBuilder.Entity<ClientProduct>(entity =>
@@ -104,31 +97,21 @@ public partial class DatabaseContext : DbContext
             entity.Property(e => e.Name).HasMaxLength(150);
         });
 
-        modelBuilder.Entity<DeliveryType>(entity =>
-        {
-            entity.ToTable("DeliveryType");
-
-            entity.Property(e => e.Id).ValueGeneratedNever();
-            entity.Property(e => e.Name).HasMaxLength(50);
-        });
-
         modelBuilder.Entity<Employee>(entity =>
         {
             entity.ToTable("Employee");
 
-            entity.Property(e => e.Login).HasMaxLength(30);
-            entity.Property(e => e.Name).HasMaxLength(50);
-            entity.Property(e => e.Password).HasMaxLength(30);
-            entity.Property(e => e.Patronymic).HasMaxLength(50);
-            entity.Property(e => e.Surname).HasMaxLength(50);
+            entity.HasOne(d => d.User).WithMany(p => p.Employees)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Employee_User");
         });
 
         modelBuilder.Entity<Order>(entity =>
         {
             entity.ToTable("Order");
 
-            entity.Property(e => e.Id).ValueGeneratedOnAdd();
-            entity.Property(e => e.Address).HasMaxLength(300);
+            entity.Property(e => e.Address).HasMaxLength(150);
             entity.Property(e => e.DateTime).HasColumnType("smalldatetime");
             entity.Property(e => e.DeliveryDate).HasColumnType("date");
 
@@ -140,21 +123,6 @@ public partial class DatabaseContext : DbContext
             entity.HasOne(d => d.DeliveryPoint).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.DeliveryPointId)
                 .HasConstraintName("FK_Order_DeliveryPoint");
-
-            entity.HasOne(d => d.DeliveryType).WithMany(p => p.Orders)
-                .HasForeignKey(d => d.DeliveryTypeId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Order_DeliveryType");
-
-            entity.HasOne(d => d.PaymentMethod).WithOne(p => p.Order)
-                .HasForeignKey<Order>(d => d.Id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Order_PaymentMethod");
-
-            entity.HasOne(d => d.Status).WithMany(p => p.Orders)
-                .HasForeignKey(d => d.OrderStatusId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Order_OrderStatus");
         });
 
         modelBuilder.Entity<OrderProduct>(entity =>
@@ -176,22 +144,6 @@ public partial class DatabaseContext : DbContext
                 .HasConstraintName("FK_Order_Product_Product");
         });
 
-        modelBuilder.Entity<OrderStatus>(entity =>
-        {
-            entity.ToTable("OrderStatus");
-
-            entity.Property(e => e.Id).ValueGeneratedNever();
-            entity.Property(e => e.Name).HasMaxLength(150);
-        });
-
-        modelBuilder.Entity<PaymentMethod>(entity =>
-        {
-            entity.ToTable("PaymentMethod");
-
-            entity.Property(e => e.Id).ValueGeneratedNever();
-            entity.Property(e => e.Name).HasMaxLength(50);
-        });
-
         modelBuilder.Entity<Product>(entity =>
         {
             entity.ToTable("Product");
@@ -199,13 +151,8 @@ public partial class DatabaseContext : DbContext
             entity.Property(e => e.Cost).HasColumnType("money");
             entity.Property(e => e.Name).HasMaxLength(150);
 
-            entity.HasOne(d => d.ProductCategory).WithMany(p => p.Products)
-                .HasForeignKey(d => d.ProductCategoryId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Product_ProductCategory");
-
-            entity.HasOne(d => d.ProductManufacturer).WithMany(p => p.Products)
-                .HasForeignKey(d => d.ProductManufacturerId)
+            entity.HasOne(d => d.Manufacturer).WithMany(p => p.Products)
+                .HasForeignKey(d => d.ManufacturerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Product_ProductManufacturer");
 
@@ -213,14 +160,6 @@ public partial class DatabaseContext : DbContext
                 .HasForeignKey(d => d.SalesmanId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Product_Salesman");
-        });
-
-        modelBuilder.Entity<ProductCategory>(entity =>
-        {
-            entity.ToTable("ProductCategory");
-
-            entity.Property(e => e.Id).ValueGeneratedNever();
-            entity.Property(e => e.Name).HasMaxLength(50);
         });
 
         modelBuilder.Entity<ProductManufacturer>(entity =>
@@ -244,6 +183,16 @@ public partial class DatabaseContext : DbContext
         modelBuilder.Entity<Salesman>(entity =>
         {
             entity.ToTable("Salesman");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Salesmen)
+                .HasForeignKey(d => d.Userid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Salesman_User");
+        });
+
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.ToTable("User");
 
             entity.Property(e => e.Login).HasMaxLength(30);
             entity.Property(e => e.Name).HasMaxLength(50);

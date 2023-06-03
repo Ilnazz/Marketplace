@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using Marketplace.DataTypes.Enums;
 
 namespace Marketplace.Database.Models;
 
@@ -11,13 +13,16 @@ public partial class Order
 
     public int ClientId { get; set; }
 
-    public int OrderStatusId { get; set; }
+    [Column(TypeName = "int")]
+    public OrderStatus Status { get; set; }
 
-    public int DeliveryTypeId { get; set; }
+    [Column(TypeName = "int")]
+    public DeliveryType DeliveryType { get; set; }
 
     public DateTime DeliveryDate { get; set; }
 
-    public int PaymentMethodId { get; set; }
+    [Column(TypeName = "int")]
+    public PaymentMethod PaymentMethod { get; set; }
 
     public string? Address { get; set; }
 
@@ -27,11 +32,5 @@ public partial class Order
 
     public virtual DeliveryPoint? DeliveryPoint { get; set; }
 
-    public virtual DeliveryType DeliveryType { get; set; } = null!;
-
-    public virtual PaymentMethod PaymentMethod { get; set; } = null!;
-
     public virtual ICollection<OrderProduct> OrderProducts { get; set; } = new List<OrderProduct>();
-
-    public virtual OrderStatus Status { get; set; } = null!;
 }

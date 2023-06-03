@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using Marketplace.DataTypes.Enums;
 
 namespace Marketplace.Database.Models;
 
@@ -15,23 +17,23 @@ public partial class Product
 
     public int SalesmanId { get; set; }
 
-    public int ProductCategoryId { get; set; }
+    [Column(TypeName = "int")]
+    public ProductCategory Category { get; set; }
 
-    public int ProductManufacturerId { get; set; }
+    public int ManufacturerId { get; set; }
 
     public int DiscountPercent { get; set; }
 
     public int QuantityInStock { get; set; }
 
-    public bool IsRemoved { get; set; }
+    [Column(TypeName = "int")]
+    public ProductStatus Status { get; set; }
 
     public virtual ICollection<ClientProduct> ClientProducts { get; set; } = new List<ClientProduct>();
 
+    public virtual ProductManufacturer Manufacturer { get; set; } = null!;
+
     public virtual ICollection<OrderProduct> OrderProducts { get; set; } = new List<OrderProduct>();
-
-    public virtual ProductCategory ProductCategory { get; set; } = null!;
-
-    public virtual ProductManufacturer ProductManufacturer { get; set; } = null!;
 
     public virtual ICollection<ProductPhoto> ProductPhotos { get; set; } = new List<ProductPhoto>();
 
