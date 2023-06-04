@@ -156,13 +156,43 @@
                 MaxLength="30"
                 Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}" />
 
-            <ui:Button
+            <StackPanel
                 Grid.Row="6"
                 Grid.ColumnSpan="2"
                 HorizontalAlignment="Stretch"
-                VerticalAlignment="Bottom"
-                Command="{Binding SaveChangesCommand}"
-                Content="Сохранить" />
+                VerticalAlignment="Bottom">
+                <StackPanel
+                    Margin="0,0,0,10"
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal">
+                    <ui:Button
+                        Margin="0,0,5,0"
+                        Command="{Binding ShowBankCardWindowCommand}"
+                        Icon="WalletCreditCard16"
+                        Visibility="{Binding CanAttachBankCard, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <ui:Button.Style>
+                            <Style BasedOn="{StaticResource {x:Type ui:Button}}" TargetType="{x:Type ui:Button}">
+                                <Setter Property="Content" Value="{Binding BankCard.Name, StringFormat='{}Банковская карта {0}'}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsBankCardAttached}" Value="False">
+                                        <Setter Property="Content" Value="Прикрепить банковскую карту" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ui:Button.Style>
+                    </ui:Button>
+                    <ui:Button
+                        Command="{Binding RemoveBankCardCommand}"
+                        Content="X"
+                        ToolTip="Удалить"
+                        Visibility="{Binding IsBankCardAttached, Converter={StaticResource BoolToVisibilityConverter}}" />
+                </StackPanel>
+
+                <ui:Button
+                    HorizontalAlignment="Stretch"
+                    Command="{Binding SaveChangesCommand}"
+                    Content="Сохранить" />
+            </StackPanel>
         </Grid>
     </Grid>
 </UserControl>

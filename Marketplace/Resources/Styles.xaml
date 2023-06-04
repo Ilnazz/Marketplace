@@ -1,31 +1,32 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml">
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml">
 
-    <Style x:Key="TextBoxInErrorStyle"
-           TargetType="{x:Type ui:TextBox}"
-           BasedOn="{StaticResource {x:Type ui:TextBox}}">
-        <Setter Property="Margin" Value="10 10 10 22.5"/>
+    <Style
+        x:Key="TextBoxInErrorStyle"
+        BasedOn="{StaticResource {x:Type ui:TextBox}}"
+        TargetType="{x:Type ui:TextBox}">
         <Setter Property="Validation.ErrorTemplate">
             <Setter.Value>
                 <ControlTemplate>
                     <StackPanel>
-                        <AdornedElementPlaceholder x:Name="Placeholder"/>
-                        <Border Background="Red"
-                                    BorderThickness="1 0 1 1"
-                                    BorderBrush="LightGray"
-                                    Padding="7.5"
-                                    Margin="0 -1.5 0 0"
-                                    CornerRadius="0 0 3 3"
-                                    Visibility="{Binding ElementName=Placeholder,
-                                                         Path=AdornedElement.IsFocused,
-                                                         Converter={StaticResource BoolToVisibilityConverter}}">
-                            <TextBlock Text="{Binding ElementName=Placeholder,
-                                                          Path=AdornedElement.(Validation.Errors)/ErrorContent}"
-                                           Margin="0 2.5 0 0"
-                                           FontSize="14"
-                                           FontWeight="Medium"
-                                           Foreground="White"/>
+                        <AdornedElementPlaceholder x:Name="Placeholder" />
+                        <Border
+                            Margin="0,-1.5,0,0"
+                            Padding="7.5"
+                            Background="Red"
+                            BorderBrush="LightGray"
+                            BorderThickness="1,0,1,1"
+                            CornerRadius="0 0 3 3"
+                            Visibility="{Binding ElementName=Placeholder, Path=AdornedElement.IsFocused, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <TextBlock
+                                Margin="0,2.5,0,0"
+                                FontSize="12"
+                                FontWeight="Medium"
+                                Foreground="White"
+                                Text="{Binding ElementName=Placeholder, Path=AdornedElement.(Validation.Errors)/ErrorContent}"
+                                TextWrapping="Wrap" />
                         </Border>
                     </StackPanel>
                 </ControlTemplate>

@@ -8,6 +8,7 @@ using Marketplace.DataTypes.Enums;
 using Microsoft.Win32;
 using System.IO;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Marketplace.WindowViews;
 
 namespace Marketplace.WindowViewModels;
 
@@ -82,13 +83,17 @@ public partial class UserProfileWindowVm : WindowVmBase
 
     public BankCard? BankCard
     {
-        get => _user.Client.BankCard;
+        get => _user.Client!.BankCard;
         set
         {
-            _user.Client.BankCard = value;
+            _user.Client!.BankCard = value;
             OnPropertyChanged();
         }
     }
+
+    public bool CanAttachBankCard => Role == UserRole.Client;
+
+    public bool IsBankCardAttached => BankCard != null;
 
     [ObservableProperty]
     private byte[]? _photo;
@@ -115,21 +120,61 @@ public partial class UserProfileWindowVm : WindowVmBase
         Photo = photoFileBytes;
     }
 
+    [RelayCommand]
+    private void ShowBankCardWindow()
+    {
+        var bankCard = BankCard;
+        if (bankCard == null)
+        {
+            bankCard = new BankCard();
+            bankCard.Clients.Add(_user.Client!);
+        }
+
+        var bankCardWindowVm = new BankCardWindowVm(bankCard);
+        var bankCardWindowView = new BankCardWindowView() { DataContext = bankCardWindowVm };
+
+        var dialogWindow = new Wpf.Ui.Controls.MessageBox
+        {
+            Content = bankCardWindowView,
+            Width = bankCardWindowView.Width + 30,
+            Height = bankCardWindowView.Height,
+            SizeToContent = SizeToContent.Height,
+            ResizeMode = ResizeMode.NoResize,
+            Title = bankCardWindowVm.Title,
+            ShowFooter = false,
+            WindowStartupLocation = WindowStartupLocation.CenterScreen
+        };
+        bankCardWindowVm.CloseWindowMethod += dialogWindow.Close;
+        dialogWindow.ShowDialog();
+
+        OnPropertyChanged(nameof(BankCard));
+        OnPropertyChanged(nameof(IsBankCardAttached));
+        SaveChangesCommand.NotifyCanExecuteChanged();
+    }
+
+    [RelayCommand]
+    private void RemoveBankCard()
+    {
+        BankCard = null;
+        OnPropertyChanged(nameof(IsBankCardAttached));
+        SaveChangesCommand.NotifyCanExecuteChanged();
+    }
+
     [RelayCommand(CanExecute = nameof(CanSaveChanges))]
     private void SaveChanges()
     {
+        ValidateAllProperties();
         SaveChangesCommand.NotifyCanExecuteChanged();
 
-        ValidateAllProperties();
         if (HasErrors || DatabaseContext.Entities.HasChanges() == false)
             return;
 
         DatabaseContext.Entities.SaveChanges();
-        SaveChangesCommand.NotifyCanExecuteChanged();
+
+        CloseWindow();
     }
     private bool CanSaveChanges() =>
         HasErrors == false && DatabaseContext.Entities.HasChanges();
-
     #endregion
 
     private User _user;
@@ -142,43 +187,8 @@ public partial class UserProfileWindowVm : WindowVmBase
 
     public override bool OnClosing()
     {
-        if (HasErrors)
-        {
+        if (DatabaseContext.Entities.HasChanges())
             DatabaseContext.Entities.CancelChanges();
-            return true;
-        }
-        else if (DatabaseContext.Entities.HasChanges() == false)
-            return true;
-
-        var dialogWindow = new Wpf.Ui.Controls.MessageBox
-        {
-            Content = new TextBlock
-            {
-                Text = "Сохранить изменения?",
-                TextAlignment = TextAlignment.Center,
-                FontSize = 18,
-                FontWeight = FontWeights.Medium
-            },
-            ResizeMode = ResizeMode.NoResize,
-            Title = "Подтверждение",
-            ButtonLeftName = "Да",
-            ButtonLeftAppearance = Wpf.Ui.Common.ControlAppearance.Primary,
-            ButtonRightName = "Нет"
-        };
-        dialogWindow.Loaded += (_, _) =>
-            dialogWindow.SizeToContent = SizeToContent.WidthAndHeight;
-        dialogWindow.ButtonLeftClick += (_, _) =>
-        {
-            DatabaseContext.Entities.SaveChanges();
-            dialogWindow.Close();
-        };
-        dialogWindow.ButtonRightClick += (_, _) =>
-        {
-            DatabaseContext.Entities.CancelChanges();
-            dialogWindow.Close();
-        };
-        dialogWindow.ShowDialog();
-
         return true;
     }
 }

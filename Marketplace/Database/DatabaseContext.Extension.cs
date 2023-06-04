@@ -25,6 +25,7 @@ public partial class DatabaseContext
         {
             entity.Navigation(d => d.Basket).AutoInclude();
             entity.Navigation(d => d.Orders).AutoInclude();
+            entity.Navigation(d => d.BankCard).AutoInclude();
         });
 
         modelBuilder.Entity<Order>(entity =>
