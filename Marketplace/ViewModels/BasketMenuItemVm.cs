@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Marketplace.DataTypes.Enums;
 using Marketplace.Pages;
 
 namespace Marketplace.ViewModels;
@@ -8,6 +10,9 @@ namespace Marketplace.ViewModels;
 public partial class BasketMenuItemVm : ObservableObject
 {
     #region Properties
+    public bool UserHasPermission =>
+         App.UserService.CurrentUser.Permissions.Contains(Permission.ViewBasketPage);
+
     [ObservableProperty]
     private int _itemsCount;
 
@@ -38,6 +43,8 @@ public partial class BasketMenuItemVm : ObservableObject
             App.BasketService.StateChanged += OnBasketServiceStateChanged;
             OnBasketServiceStateChanged();
         };
+
+        App.UserService.StateChanged += () => OnPropertyChanged(nameof(UserHasPermission));
     }
 
     private void OnBasketServiceStateChanged()

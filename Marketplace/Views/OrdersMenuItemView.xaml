@@ -8,7 +8,7 @@
     xmlns:viewmodels="clr-namespace:Marketplace.ViewModels"
     d:DataContext="{d:DesignInstance viewmodels:OrdersMenuItemView}"
     Command="{Binding NavigateToOrdersPageCommand}"
-    Visibility="{Binding IsUserAuthorized, Converter={StaticResource BoolToVisibilityConverter}}"
+    Visibility="{Binding UserHasPermission, Converter={StaticResource BoolToVisibilityConverter}}"
     mc:Ignorable="d">
 
     <ui:MenuItem.DataContext>

@@ -1,8 +1,10 @@
-﻿using System.Windows;
+﻿using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Marketplace.Database.Models;
+using Marketplace.DataTypes.Enums;
 using Marketplace.WindowViewModels;
 using Marketplace.WindowViews;
 using Wpf.Ui.Controls;
@@ -11,12 +13,9 @@ namespace Marketplace.ViewModels;
 
 public partial class UserMenuItemVm : ObservableObject
 {
-    #region Properties
-    public User? User => App.UserService.CurrentUser;
+    public User User => App.UserService.CurrentUser;
 
-    public bool IsAuthorized => User != null;
-
-    #endregion
+    public bool IsAuthorized => User.Role != UserRole.Guest;
 
     #region Commands
     [RelayCommand]
@@ -43,7 +42,7 @@ public partial class UserMenuItemVm : ObservableObject
     
     [RelayCommand]
     private void ShowProfileWindow() =>
-        new TitledContainerWindow(new UserProfileWindowVm(User!)).Show();
+        new TitledContainerWindow(new UserProfileWindowVm(User)).Show();
 
 
     [RelayCommand]

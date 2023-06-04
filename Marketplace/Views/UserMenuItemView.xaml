@@ -16,18 +16,7 @@
     <ui:MenuItem.Header>
         <StackPanel>
             <ui:SymbolIcon Symbol="Person16" />
-            <TextBlock>
-                <TextBlock.Style>
-                    <Style TargetType="TextBlock">
-                        <Setter Property="Text" Value="{Binding User.Name}" />
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding User}" Value="{x:Null}">
-                                <Setter Property="Text" Value="Гость" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBlock.Style>
-            </TextBlock>
+            <TextBlock Text="{Binding User.Name}" />
         </StackPanel>
     </ui:MenuItem.Header>
     <ui:MenuItem

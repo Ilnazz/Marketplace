@@ -3,7 +3,6 @@ using System.Linq;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Marketplace.Database;
 using Marketplace.Models;
 using Marketplace.Pages;
 using Marketplace.WindowViewModels;
@@ -80,7 +79,6 @@ public partial class BasketPageVm : PageVmBase
             App.BasketService.StateChanged += OnBasketServiceStateChanged;
             OnBasketServiceStateChanged();
         };
-
         App.UserService.StateChanged += OnBasketServiceStateChanged;
 
         RefreshProductModels();

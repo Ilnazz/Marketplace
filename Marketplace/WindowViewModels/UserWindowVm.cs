@@ -55,7 +55,6 @@ public partial class UserProfileWindowVm : WindowVmBase
         }
     }
 
-    [Required(ErrorMessage = "Обязательное поле")]
     public string Login
     {
         get => _user.Login;

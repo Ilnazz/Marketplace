@@ -8,7 +8,7 @@ namespace Marketplace.PageViewModels;
 
 public partial class OrdersPageVm : PageVmBase
 {
-    public bool AreThereOrders => ((Client)App.UserService.CurrentUser).Orders.Count > 0;
+    //public bool AreThereOrders => App.UserService.CurrentUser).Orders.Count > 0;
 
     [RelayCommand]
     private void NavigateToProductsPage() =>

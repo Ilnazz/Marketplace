@@ -1,5 +1,6 @@
 ﻿using Marketplace.Database;
 using Marketplace.Database.Models;
+using Marketplace.DataTypes.Enums;
 using Marketplace.DataTypes.Records;
 using Marketplace.Models;
 using Microsoft.EntityFrameworkCore;
@@ -66,12 +67,13 @@ public partial class ProductsPageVm : PageVmBase
     private string _searchText = string.Empty;
     #endregion
 
-    public ProductsPageVm(DataTypes.Enums.ProductCategory category)
+    public ProductsPageVm(ProductCategory productCategory)
     {
         DatabaseContext.Entities.Products.Load();
 
         _allProductModels = DatabaseContext.Entities.Products.Local
-            .Where(p => p.ProductCategoryId == (int)category)
+            .Where(p => p.Category == productCategory)
+            .Where(p => p.Status == ProductStatus.Active || p.Status == ProductStatus.RemovedFromSale)
             .Select(p => new ProductModel(p));
 
         Manufacturers = DatabaseContext.Entities.ProductManufacturers
@@ -87,6 +89,8 @@ public partial class ProductsPageVm : PageVmBase
             OnPropertyChanged(nameof(ProductModels));
             OnPropertyChanged(nameof(AreThereProducts));
         };
+
+        App.UserService.StateChanged += () => OnPropertyChanged(nameof(ProductModels));
     }
 
     #region Private methods

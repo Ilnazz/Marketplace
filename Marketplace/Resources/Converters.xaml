@@ -1,9 +1,16 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:converters="clr-namespace:Marketplace.Converters">
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:Marketplace.Converters">
 
-    <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
-    <converters:UserRoleToStringConverter x:Key="UserRoleToStringConverter"/>
-    <converters:UserRoleToSymbolIconConverter x:Key="UserRoleToSymbolIconConverter"/>
+    <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    <converters:PermissionToVisibilityConverter x:Key="PermissionToVisibilityConverter" />
+
+    <converters:UserRoleToSymbolIconConverter x:Key="UserRoleToSymbolIconConverter" />
+
+    <converters:UserRoleToStringConverter x:Key="UserRoleToStringConverter" />
+    <converters:DeliveryTypeToStringConverter x:Key="DeliveryTypeToStringConverter" />
+    <converters:PaymentMethodToStringConverter x:Key="PaymentMethodToStringConverter" />
+    <converters:ProductCategoryToStringConverter x:Key="ProductCategoryToStringConverter" />
 
 </ResourceDictionary>

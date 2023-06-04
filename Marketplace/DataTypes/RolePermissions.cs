@@ -13,23 +13,20 @@ public static class RolePermissions
                 Permission.ViewProductsPage,
                 Permission.ViewProduct,
 
-                Permission.ViewBasket,
-                Permission.AddProductToBasket,
-                Permission.RemoveProductFromBasket
+                Permission.ViewBasketPage,
+                Permission.AddRemoveProductToBasket,
             }
         },
         {
             UserRole.Client,
             new[] {
-                Permission.ViewProfile,
-                Permission.EditProfile,
+                Permission.ViewEditProfile,
 
                 Permission.ViewProductsPage,
                 Permission.ViewProduct,
 
-                Permission.ViewBasket,
-                Permission.AddProductToBasket,
-                Permission.RemoveProductFromBasket,
+                Permission.ViewBasketPage,
+                Permission.AddRemoveProductToBasket,
 
                 Permission.MakeOrder,
                 Permission.PayForOrder,
@@ -42,8 +39,7 @@ public static class RolePermissions
             UserRole.Salesman,
             new[]
             {
-                Permission.ViewProfile,
-                Permission.EditProfile,
+                Permission.ViewEditProfile,
 
                 Permission.ViewProductsPage,
                 Permission.ViewProduct,
@@ -59,8 +55,7 @@ public static class RolePermissions
             UserRole.Employee,
             new[]
             {
-                Permission.ViewProfile,
-                Permission.EditProfile,
+                Permission.ViewEditProfile,
 
                 Permission.ViewProductsPage,
                 Permission.ViewProduct,

@@ -2,60 +2,71 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Windows.Documents;
 using Marketplace.Database;
 using Marketplace.Database.Models;
 using Marketplace.DataTypes.Enums;
+using Marketplace.Pages;
 using Microsoft.EntityFrameworkCore;
 
 namespace Marketplace.Services;
 
 public class UserService
 {
-    private const string DefaultUserName = "Новый пользователь";
-
-    private User? _currentUser;
-    public User? CurrentUser
+    private User _currentUser = null!;
+    public User CurrentUser
     {
         get => _currentUser;
         set
         {
             _currentUser = value;
+
             StateChanged?.Invoke();
+
+            var currentPageTitle = App.NavigationWindowVm?.CurrentPageTitle;
+            if (currentPageTitle == null)
+                return;
+
+            if ((currentPageTitle.StartsWith("Заказы") &&
+                    CurrentUser.Permissions.Contains(Permission.ViewOrdersPage) == false) ||
+                (currentPageTitle.StartsWith("Корзина") &&
+                    CurrentUser.Permissions.Contains(Permission.ViewBasketPage) == false))
+                App.NavigationService.Navigate(typeof(BookProductsPage));
         }
     }
 
     public event Action? StateChanged;
+
+    private const string DefaultNewUserName = "Новый пользователь";
+
+    private static readonly User _guest = new User { Name = "Гость", Role = UserRole.Guest };
 
     public bool TryRegisterUser(string login, string password, UserRole role)
     {
         if (TryGetUser(login, password, out var _))
             return false;
 
-        if (role == UserRole.Client)
+        var user = new User
         {
-            var client = new Client
-            {
-                Surname = string.Empty,
-                Name = DefaultUserName,
-                Login = login,
-                Password = password,
-            };
-            DatabaseContext.Entities.Clients.Local.Add(client);
-        }
-        else if (role == UserRole.Salesman)
-        {
-            var salesman = new Salesman
-            {
-                Surname = string.Empty,
-                Name = DefaultUserName,
-                Login = login,
-                Password = password
-            };
-            DatabaseContext.Entities.Salesmen.Local.Add(salesman);
-        }
+            Surname = string.Empty,
+            Name = DefaultNewUserName,
+            Login = login,
+            Password = password,
+            Role = role
+        };
+        DatabaseContext.Entities.Users.Add(user);
 
+        if (role == UserRole.Client)
+            DatabaseContext.Entities.Clients.Local.Add(new Client
+            {
+                User = user
+            });
+        else if (role == UserRole.Salesman)
+            DatabaseContext.Entities.Salesmen.Local.Add(new Salesman
+            {
+                User = user
+            });
         DatabaseContext.Entities.SaveChanges();
+
         return true;
     }
 
@@ -70,7 +81,7 @@ public class UserService
             return true;
 
         // This is not good in this service, but ...
-        var client = (Client)CurrentUser;
+        var client = user.Client!;
         var clientBasket = client.Basket;
 
         // TODO: If you will have extra time, implement: show in client basket, that product was removed or out of stock (disable prod in basket, not count it)
@@ -78,7 +89,7 @@ public class UserService
         var prodAndCountsToRemoveFromClientBasket = new List<ClientProduct>();
         foreach (var prodAndCount in clientBasket)
         {
-            if (prodAndCount.Product.QuantityInStock == 0 || prodAndCount.Product.IsRemoved)
+            if (prodAndCount.Product.QuantityInStock == 0 || prodAndCount.Product.Status == ProductStatus.RemovedFromSale)
                 prodAndCountsToRemoveFromClientBasket.Add(prodAndCount);
         }
         foreach (var prodAndCount in prodAndCountsToRemoveFromClientBasket)
@@ -110,8 +121,8 @@ public class UserService
 
     public void LogOutUser()
     {
-        if (CurrentUser != null)
-            CurrentUser = null;
+        if (CurrentUser != _guest)
+            CurrentUser = _guest;
 
         App.BasketService = new GuestBasketService<Product>();
     }
@@ -120,17 +131,17 @@ public class UserService
 
     private bool TryGetUser(string login, string password, [NotNullWhen(true)] out User? user)
     {
-        user = DatabaseContext.Entities.Clients.Local.Cast<User>()
-            .Concat(DatabaseContext.Entities.Salesmen.Local.Cast<User>())
-            .Concat(DatabaseContext.Entities.Employees.Local.Cast<User>())
-            .Where(u => u.Login == login && u.Password == password)
-            .FirstOrDefault();
+        user = DatabaseContext.Entities.Users.Local
+            .FirstOrDefault(u => u.Login == login && u.Password == password);
 
         return user != null;
     }
 
     public UserService()
     {
+        CurrentUser = _guest;
+
+        DatabaseContext.Entities.Users.Load();
         DatabaseContext.Entities.Clients.Load();
         DatabaseContext.Entities.Salesmen.Load();
         DatabaseContext.Entities.Employees.Load();

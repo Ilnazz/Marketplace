@@ -2,8 +2,7 @@
 
 public enum Permission
 {
-    ViewProfile,
-    EditProfile,
+    ViewEditProfile,
 
     ViewProductsPage,
     ViewProduct,
@@ -15,9 +14,8 @@ public enum Permission
     AcceptProduct,
     RejectProduct,
 
-    ViewBasket,
-    AddProductToBasket,
-    RemoveProductFromBasket,
+    ViewBasketPage,
+    AddRemoveProductToBasket,
 
     MakeOrder,
     PayForOrder,

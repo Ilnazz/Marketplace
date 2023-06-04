@@ -1,12 +1,16 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Linq;
+using System.Windows;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Marketplace.DataTypes.Enums;
 using Marketplace.Pages;
 
 namespace Marketplace.ViewModels;
 
 public partial class OrdersMenuItemVm : ObservableObject
 {
-    public bool IsUserAuthorized => App.UserService.IsUserAuthorized();
+    public bool UserHasPermission =>
+         App.UserService.CurrentUser.Permissions.Contains(Permission.ViewOrdersPage);
 
     [RelayCommand]
     private void NavigateToOrdersPage()
@@ -22,6 +26,6 @@ public partial class OrdersMenuItemVm : ObservableObject
 
     public OrdersMenuItemVm()
     {
-        App.UserService.StateChanged += () => OnPropertyChanged(nameof(IsUserAuthorized));
+        App.UserService.StateChanged += () => OnPropertyChanged(nameof(UserHasPermission));
     }
 }

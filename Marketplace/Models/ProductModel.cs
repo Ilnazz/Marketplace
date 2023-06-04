@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Marketplace.Database;
 using Marketplace.Database.Models;
+using Marketplace.DataTypes.Enums;
 using Marketplace.Pages;
 using Marketplace.WindowViewModels;
 using Marketplace.WindowViews;
@@ -67,11 +68,11 @@ public partial class ProductModel : ObservableValidator
     [Required]
     public ProductCategory Category
     {
-        get => _product.ProductCategory;
+        get => _product.Category;
         set
         {
             ValidateProperty(value);
-            _product.ProductCategory = value;
+            _product.Category = value;
             OnPropertyChanged();
         }
     }
@@ -79,11 +80,11 @@ public partial class ProductModel : ObservableValidator
     [Required]
     public ProductManufacturer Manufacturer
     {
-        get => _product.ProductManufacturer;
+        get => _product.Manufacturer;
         set
         {
             ValidateProperty(value);
-            _product.ProductManufacturer = value;
+            _product.Manufacturer = value;
             OnPropertyChanged();
         }
     }
@@ -113,16 +114,18 @@ public partial class ProductModel : ObservableValidator
     }
 
     [Required]
-    public bool IsRemoved
+    public ProductStatus Staus
     {
-        get => _product.IsRemoved;
+        get => _product.Status;
         set
         {
             ValidateProperty(value);
-            _product.IsRemoved = value;
+            _product.Status = value;
             OnPropertyChanged();
         }
     }
+
+    public bool IsRemoved => Staus == ProductStatus.RemovedFromSale;
     #endregion
 
     #region Extra properties
@@ -198,7 +201,7 @@ public partial class ProductModel : ObservableValidator
         PutToBasketCommand.NotifyCanExecuteChanged();
     }
     private bool CanPutToBasket() =>
-        IsAvailable && IsRemoved == false && IsInBasket == false;
+        IsAvailable && Staus == ProductStatus.Active && IsInBasket == false;
 
 
     [RelayCommand]
