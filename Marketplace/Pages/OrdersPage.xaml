@@ -14,6 +14,131 @@
     </ui:UiPage.DataContext>
 
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <ui:VirtualizingItemsControl
+            Grid.Column="0"
+            ItemsSource="{Binding Orders, Mode=OneWay}"
+            Visibility="{Binding AreThereOrders, Converter={StaticResource BoolToVisibilityConverter}}">
+            <ui:VirtualizingItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel />
+                </ItemsPanelTemplate>
+            </ui:VirtualizingItemsControl.ItemsPanel>
+            <ui:VirtualizingItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <ui:Card Margin="0,0,0,10">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <DockPanel Grid.ColumnSpan="2">
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    FontSize="18"
+                                    FontWeight="Medium"
+                                    Text="{Binding DateTime, StringFormat='{}Заказ от {0:M}', ConverterCulture='ru-RU'}" />
+                                <TextBlock
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Center"
+                                    DockPanel.Dock="Right"
+                                    FontSize="18"
+                                    FontWeight="Bold"
+                                    Text="{Binding TotalCost, StringFormat='{}{0:0} ₽'}" />
+                            </DockPanel>
+
+                        </Grid>
+                        <ui:Card.Footer>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <DockPanel>
+                                    <TextBlock Text="" />
+                                </DockPanel>
+
+                                <ui:VirtualizingItemsControl
+                                    Grid.Column="1"
+                                    ItemsSource="{Binding Orders, Mode=OneWay}"
+                                    Visibility="{Binding AreThereOrders, Converter={StaticResource BoolToVisibilityConverter}}">
+                                    <ui:VirtualizingItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <VirtualizingStackPanel />
+                                        </ItemsPanelTemplate>
+                                    </ui:VirtualizingItemsControl.ItemsPanel>
+                                    <ui:VirtualizingItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <ui:Card Margin="0,0,0,10" />
+                                        </DataTemplate>
+                                    </ui:VirtualizingItemsControl.ItemTemplate>
+                                </ui:VirtualizingItemsControl>
+                            </Grid>
+                        </ui:Card.Footer>
+                    </ui:Card>
+                </DataTemplate>
+            </ui:VirtualizingItemsControl.ItemTemplate>
+        </ui:VirtualizingItemsControl>
+
+        <DockPanel Grid.Column="1" Margin="10,0,0,0">
+            <StackPanel Margin="0,0,0,10" DockPanel.Dock="Top">
+                <TextBlock Margin="0,0,0,5" Text="Сортировка" />
+                <ComboBox
+                    DisplayMemberPath="Name"
+                    ItemsSource="{Binding Sortings, Mode=OneWay}"
+                    SelectedItem="{Binding SelectedSorting}" />
+            </StackPanel>
+
+            <StackPanel
+                Grid.Column="3"
+                Margin="0,0,0,10"
+                DockPanel.Dock="Top">
+                <TextBlock Margin="0,0,0,5" Text="Статус" />
+                <ComboBox ItemsSource="{Binding Statuses, Mode=OneWay}" SelectedItem="{Binding SelectedStatus}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding ., Converter={StaticResource OrderStatusToStringConverter}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </StackPanel>
+
+            <StackPanel
+                Grid.Column="3"
+                Margin="0,0,0,10"
+                DockPanel.Dock="Top">
+                <TextBlock Margin="0,0,0,5" Text="Тип доставки" />
+                <ComboBox ItemsSource="{Binding DeliveryTypes, Mode=OneWay}" SelectedItem="{Binding SelectedDeliveryType}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding ., Converter={StaticResource DeliveryTypeToStringConverter}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </StackPanel>
+
+            <StackPanel Grid.Column="3" DockPanel.Dock="Top">
+                <TextBlock Margin="0,0,0,5" Text="Способ оплаты" />
+                <ComboBox ItemsSource="{Binding PaymentMethods, Mode=OneWay}" SelectedItem="{Binding SelectedPaymentMethod}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding ., Converter={StaticResource PaymentMethodToStringConverter}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </StackPanel>
+        </DockPanel>
+
         <ui:Card
             Grid.ColumnSpan="2"
             HorizontalAlignment="Stretch"
@@ -28,7 +153,7 @@
                     VerticalAlignment="Bottom"
                     FontSize="16"
                     FontWeight="Medium"
-                    Text="У вас нет заказов" />
+                    Text="Нет заказов" />
                 <ui:Button
                     HorizontalAlignment="Stretch"
                     Command="{Binding NavigateToProductsPageCommand}"

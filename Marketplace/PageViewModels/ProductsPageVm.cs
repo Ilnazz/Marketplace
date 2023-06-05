@@ -18,7 +18,7 @@ public partial class ProductsPageVm : PageVmBase
 
     public IEnumerable<Sorting<ProductModel>> Sortings { get; init; } = new[]
     {
-        new Sorting<ProductModel>(DefaultSortingName, null! ),
+        new Sorting<ProductModel>("По умолчанию", null! ),
 
         new Sorting<ProductModel>("Название ↑", pms => pms.OrderBy(pm => pm.Name) ),
         new Sorting<ProductModel>("Название ↓", pms => pms.OrderByDescending(pm => pm.Name) ),
@@ -60,7 +60,6 @@ public partial class ProductsPageVm : PageVmBase
 
     #region Fields
     private const string DefaultFilterName = "Любой";
-    private const string DefaultSortingName = "По умолчнию";
 
     private readonly IEnumerable<ProductModel> _allProductModels = null!;
 

@@ -2,7 +2,8 @@
 
 public enum DeliveryType
 {
-    Pickup = 1,
+    None,
+    Pickup,
     ToDeliveryPoint,
     ToHome
 }

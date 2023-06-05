@@ -17,6 +17,8 @@ public partial class ProductModel : ObservableValidator
 {
     #region Main properties
 
+    public Product Product => _product;
+
     [Required]
     public string Name
     {

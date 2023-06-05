@@ -2,6 +2,7 @@
 
 public enum PaymentMethod
 {
-    InCash = 1,
+    None,
+    InCash,
     ByBankCard
 }

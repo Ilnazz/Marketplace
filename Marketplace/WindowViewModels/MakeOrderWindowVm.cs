@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using CommunityToolkit.Mvvm.Input;
 using Marketplace.Database;
 using Marketplace.Database.Models;
@@ -99,13 +100,13 @@ public partial class MakeOrderWindowVm : WindowVmBase
     #endregion
 
     #region Validation methods
-    public static ValidationResult ValidateHomeAddress(string? address, ValidationContext context)
+    public static System.ComponentModel.DataAnnotations.ValidationResult ValidateHomeAddress(string? address, ValidationContext context)
     {
         var instance = context.ObjectInstance as MakeOrderWindowVm;
         if (instance!.CanSetHomeAddress && string.IsNullOrWhiteSpace(address))
             return new("Укажите адрес");
 
-        return ValidationResult.Success!;
+        return System.ComponentModel.DataAnnotations.ValidationResult.Success!;
     }
     #endregion
 
@@ -158,7 +159,78 @@ public partial class MakeOrderWindowVm : WindowVmBase
             return;
         }
 
+        if (PaymentMethod == PaymentMethod.ByBankCard)
+        {
+            var dialogWindow = new Wpf.Ui.Controls.MessageBox
+            {
+                Content = new TextBlock
+                {
+                    Text = "Оплата банковской картой",
+                    FontSize = 18
+                },
+                SizeToContent = SizeToContent.Height,
+                ResizeMode = ResizeMode.NoResize,
+                Title = "Оплата",
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
 
+                ButtonLeftName = "Оплатить",
+                ButtonLeftAppearance = Wpf.Ui.Common.ControlAppearance.Success,
+
+                ButtonRightName = "Отмена",
+            };
+            var isRightButtonClicked = false;
+            dialogWindow.ButtonRightClick += (_, _) =>
+            {
+                isRightButtonClicked = true;
+                dialogWindow.Close();
+            };
+            dialogWindow.ButtonLeftClick += (_, _) =>
+            {
+                dialogWindow.Close();
+            };
+            dialogWindow.ShowDialog();
+
+            if (isRightButtonClicked == false)
+                return;
+        }
+
+        foreach (var pm in ProductModels!)
+        {
+            _order.OrderProducts.Add(new OrderProduct
+            {
+                Product = pm.Product,
+                Quantity = pm.QuantityInBasket,
+                Cost = pm.CostWithDiscount
+            });
+            pm.QuantityInStock -= pm.QuantityInBasket;
+        }
+
+        App.BasketService.ClearBasket();
+
+        DatabaseContext.Entities.Orders.Local.Add(_order);
+        DatabaseContext.Entities.SaveChanges();
+
+        var okDialogWindow = new Wpf.Ui.Controls.MessageBox
+        {
+            Content = new TextBlock
+            {
+                Text = "Заказ оплачен",
+                FontSize = 18
+            },
+            SizeToContent = SizeToContent.Height,
+            ResizeMode = ResizeMode.NoResize,
+            Title = "Информация",
+            WindowStartupLocation = WindowStartupLocation.CenterScreen
+        };
+        var okButton = new Wpf.Ui.Controls.Button
+        {
+            Content = "Ок"
+        };
+        okDialogWindow.Footer = okButton;
+        okButton.Click += (_, _) => okDialogWindow.Close();
+        okDialogWindow.ShowDialog();
+
+        CloseWindow();
     }
     #endregion
 

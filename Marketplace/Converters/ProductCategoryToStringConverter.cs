@@ -14,6 +14,7 @@ public class ProductCategoryToStringConverter : IValueConverter
 
         return productCategory switch
         {
+            ProductCategory.None => "Любая",
             ProductCategory.Electronics => "Электроника",
             ProductCategory.ClothesAndShoes => "Одежда и обувь",
             ProductCategory.HouseAndGarden => "Дом и сад",

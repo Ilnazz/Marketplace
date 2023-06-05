@@ -15,6 +15,7 @@ public class PaymentMethodToStringConverter : IValueConverter
 
         return paymentMethod switch
         {
+            PaymentMethod.None => "Любой",
             PaymentMethod.InCash => "Наличными при получении",
             PaymentMethod.ByBankCard => "Банковской картой онлайн"
         };

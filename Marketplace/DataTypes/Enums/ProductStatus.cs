@@ -2,7 +2,8 @@
 
 public enum ProductStatus
 {
-    OnInspection = 1,
+    None,
+    OnInspection,
     Rejected,
     Active,
     RemovedFromSale

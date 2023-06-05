@@ -2,7 +2,8 @@
 
 public enum ProductCategory
 {
-    Electronics = 1,
+    None,
+    Electronics,
     ClothesAndShoes,
     HouseAndGarden,
     Children,

@@ -82,6 +82,8 @@ public partial class BasketPageVm : PageVmBase
         App.UserService.StateChanged += OnBasketServiceStateChanged;
 
         RefreshProductModels();
+
+        App.SearchService.IsEnabled = false;
     }
 
     private void OnBasketServiceStateChanged()

@@ -137,7 +137,7 @@
                     <ui:TextBox
                         ClearButtonEnabled="False"
                         IsReadOnly="True"
-                        Text="{Binding DeliveryDate, StringFormat=D, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
+                        Text="{Binding DeliveryDate, StringFormat=D, ConverterCulture='ru-RU'}" />
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" Margin="0,0,0,10">

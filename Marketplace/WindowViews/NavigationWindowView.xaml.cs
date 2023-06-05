@@ -16,6 +16,9 @@ public partial class NavigationWindowView : UserControl
         App.NavigationService = NavigationSideBar;
         App.NavigationService.PageService = new PageService();
         App.NavigationService.Navigated += (_, _) =>
+        {
             App.NavigationWindowVm.CurrentPageTitle = $"{NavigationSideBar.Current?.Content}";
+            App.SearchService.IsEnabled = true;
+        };
     }
 }

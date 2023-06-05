@@ -6,19 +6,20 @@ using Marketplace.DataTypes.Enums;
 
 namespace Marketplace.Converters;
 
-public class DeliveryTypeToStringConverter : IValueConverter
+public class OrderStatusToStringConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        if (value is DeliveryType deliveryType == false)
+        if (value is OrderStatus orderStatus == false)
             return null;
 
-        return deliveryType switch
+        return orderStatus switch
         {
-            DeliveryType.None => "Любой",
-            DeliveryType.Pickup => "Самовывоз",
-            DeliveryType.ToHome => "На дом",
-            DeliveryType.ToDeliveryPoint => "В пункт выдачи",
+            OrderStatus.None => "Любой",
+            OrderStatus.Created => "Создан",
+            OrderStatus.Processing => "В обработке",
+            OrderStatus.Completed => "Завершён",
+            OrderStatus.Rejected => "Отклонён"
         };
     }
 
