@@ -17,7 +17,8 @@ public class OrderStatusToStringConverter : IValueConverter
         {
             OrderStatus.None => "Любой",
             OrderStatus.Created => "Создан",
-            OrderStatus.Processing => "В обработке",
+            OrderStatus.InProcessing => "В обработке",
+            OrderStatus.RequiresPay => "Требует оплаты",
             OrderStatus.Completed => "Завершён",
             OrderStatus.Rejected => "Отклонён"
         };

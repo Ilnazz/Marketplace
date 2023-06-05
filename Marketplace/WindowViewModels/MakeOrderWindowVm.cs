@@ -161,36 +161,24 @@ public partial class MakeOrderWindowVm : WindowVmBase
 
         if (PaymentMethod == PaymentMethod.ByBankCard)
         {
+            var payForOrderWindowVm = new PayForOrderWindowVm(TotalCost);
+            var payForOrderWindowView = new PayForOrderWindowView() { DataContext = payForOrderWindowVm };
+
             var dialogWindow = new Wpf.Ui.Controls.MessageBox
             {
-                Content = new TextBlock
-                {
-                    Text = "Оплата банковской картой",
-                    FontSize = 18
-                },
+                Content = payForOrderWindowView,
+                Width = payForOrderWindowView.Width + 30,
+                Height = payForOrderWindowView.Height,
                 SizeToContent = SizeToContent.Height,
                 ResizeMode = ResizeMode.NoResize,
-                Title = "Оплата",
-                WindowStartupLocation = WindowStartupLocation.CenterScreen,
-
-                ButtonLeftName = "Оплатить",
-                ButtonLeftAppearance = Wpf.Ui.Common.ControlAppearance.Success,
-
-                ButtonRightName = "Отмена",
+                Title = payForOrderWindowVm.Title,
+                ShowFooter = false,
+                WindowStartupLocation = WindowStartupLocation.CenterScreen
             };
-            var isRightButtonClicked = false;
-            dialogWindow.ButtonRightClick += (_, _) =>
-            {
-                isRightButtonClicked = true;
-                dialogWindow.Close();
-            };
-            dialogWindow.ButtonLeftClick += (_, _) =>
-            {
-                dialogWindow.Close();
-            };
+            payForOrderWindowVm.CloseWindowMethod += dialogWindow.Close;
             dialogWindow.ShowDialog();
 
-            if (isRightButtonClicked == false)
+            if (payForOrderWindowVm.WasPaid == false)
                 return;
         }
 
@@ -210,26 +198,6 @@ public partial class MakeOrderWindowVm : WindowVmBase
         DatabaseContext.Entities.Orders.Local.Add(_order);
         DatabaseContext.Entities.SaveChanges();
 
-        var okDialogWindow = new Wpf.Ui.Controls.MessageBox
-        {
-            Content = new TextBlock
-            {
-                Text = "Заказ оплачен",
-                FontSize = 18
-            },
-            SizeToContent = SizeToContent.Height,
-            ResizeMode = ResizeMode.NoResize,
-            Title = "Информация",
-            WindowStartupLocation = WindowStartupLocation.CenterScreen
-        };
-        var okButton = new Wpf.Ui.Controls.Button
-        {
-            Content = "Ок"
-        };
-        okDialogWindow.Footer = okButton;
-        okButton.Click += (_, _) => okDialogWindow.Close();
-        okDialogWindow.ShowDialog();
-
         CloseWindow();
     }
     #endregion
@@ -241,7 +209,7 @@ public partial class MakeOrderWindowVm : WindowVmBase
         _order = new Order
         {
             Client = App.UserService.CurrentUser.Client!,
-            Status = OrderStatus.Created,
+            Status = OrderStatus.InProcessing,
             DateTime = DateTime.Now,
             DeliveryDate = DateTime.Now.AddDays(1),
         };
@@ -251,10 +219,10 @@ public partial class MakeOrderWindowVm : WindowVmBase
         DeliveryPoints = DatabaseContext.Entities.DeliveryPoints.ToList();
         DeliveryPoint = DeliveryPoints.First();
 
-        DeliveryTypes = Enum.GetValues(typeof(DeliveryType)).Cast<DeliveryType>();
+        DeliveryTypes = Enum.GetValues(typeof(DeliveryType)).Cast<DeliveryType>().Skip(1);
         DeliveryType = DeliveryTypes.First();
 
-        PaymentMethods = Enum.GetValues(typeof(PaymentMethod)).Cast<PaymentMethod>();
+        PaymentMethods = Enum.GetValues(typeof(PaymentMethod)).Cast<PaymentMethod>().Skip(1);
         PaymentMethod = PaymentMethods.First();
     }
 }

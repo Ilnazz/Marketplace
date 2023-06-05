@@ -3,8 +3,7 @@
 public enum OrderStatus
 {
     None,
-    Created,
-    Processing,
+    InProcessing,
     Completed,
     Rejected
 }

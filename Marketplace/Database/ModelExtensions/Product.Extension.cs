@@ -13,4 +13,6 @@ public partial class Product
     public bool HasDiscount => DiscountPercent > 0;
 
     public decimal CostWithDiscount => Cost - Cost * ((decimal)DiscountPercent / 100);
+
+    public byte[]? MainPhoto => ProductPhotos.FirstOrDefault()?.Data;
 }

@@ -129,6 +129,8 @@ public class UserService
 
     public bool IsUserAuthorized() => CurrentUser != null;
 
+    public bool IsGuest() => CurrentUser.Role == UserRole.Guest;
+
     private bool TryGetUser(string login, string password, [NotNullWhen(true)] out User? user)
     {
         user = DatabaseContext.Entities.Users.Local

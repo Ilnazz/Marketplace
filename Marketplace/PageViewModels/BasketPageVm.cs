@@ -35,7 +35,7 @@ public partial class BasketPageVm : PageVmBase
     [RelayCommand]
     private void ShowMakeOrderWindow()
     {
-        if (App.UserService.IsUserAuthorized() == false)
+        if (App.UserService.IsGuest())
         {
             var authWindowVm = new AuthWindowVm();
             var authWindowView = new AuthWindowView() { DataContext = authWindowVm };
@@ -54,7 +54,7 @@ public partial class BasketPageVm : PageVmBase
             authWindowVm.CloseWindowMethod += dialogWindow.Close;
             dialogWindow.ShowDialog();
 
-            if (App.UserService.IsUserAuthorized())
+            if (App.UserService.IsGuest() == false)
                 new TitledContainerWindow(new MakeOrderWindowVm(ProductModels)).ShowDialog();
         }
         else

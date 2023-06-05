@@ -24,4 +24,8 @@
         <windowviews:BankCardWindowView />
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type windowvms:PayForOrderWindowVm}">
+        <windowviews:PayForOrderWindowView />
+    </DataTemplate>
+
 </ResourceDictionary>

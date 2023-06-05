@@ -43,10 +43,38 @@
 
                             <DockPanel Grid.ColumnSpan="2">
                                 <TextBlock
+                                    Margin="0,0,10,0"
                                     VerticalAlignment="Center"
                                     FontSize="18"
                                     FontWeight="Medium"
                                     Text="{Binding DateTime, StringFormat='{}Заказ от {0:M}', ConverterCulture='ru-RU'}" />
+                                <ui:Badge
+                                    Padding="10,5"
+                                    VerticalAlignment="Center"
+                                    Content="{Binding Status, Converter={StaticResource OrderStatusToStringConverter}}"
+                                    FontSize="16">
+                                    <ui:Badge.Style>
+                                        <Style BasedOn="{StaticResource {x:Type ui:Badge}}" TargetType="{x:Type ui:Badge}">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Status}" Value="Created">
+                                                    <Setter Property="Appearance" Value="Secondary" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Status}" Value="InProcessing">
+                                                    <Setter Property="Appearance" Value="Info" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Status}" Value="RequiresPay">
+                                                    <Setter Property="Appearance" Value="Caution" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Status}" Value="Completed">
+                                                    <Setter Property="Appearance" Value="Success" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Status}" Value="Rejected">
+                                                    <Setter Property="Appearance" Value="Danger" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ui:Badge.Style>
+                                </ui:Badge>
                                 <TextBlock
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Center"
@@ -60,26 +88,94 @@
                         <ui:Card.Footer>
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="2*" />
                                 </Grid.ColumnDefinitions>
 
                                 <DockPanel>
-                                    <TextBlock Text="" />
+                                    <StackPanel Margin="0,0,0,5" DockPanel.Dock="Top">
+                                        <TextBlock
+                                            Margin="0,0,5,0"
+                                            FontSize="15"
+                                            FontWeight="Thin"
+                                            Text="Тип доставки:" />
+                                        <TextBlock
+                                            Margin="10,0,0,0"
+                                            FontSize="15"
+                                            FontWeight="Medium"
+                                            Text="{Binding DeliveryType, Converter={StaticResource DeliveryTypeToStringConverter}}" />
+                                    </StackPanel>
+                                    <StackPanel DockPanel.Dock="Top">
+                                        <TextBlock
+                                            Margin="0,0,5,0"
+                                            FontSize="15"
+                                            FontWeight="Thin"
+                                            Text="Способ оплаты:" />
+                                        <TextBlock
+                                            Margin="10,0,0,0"
+                                            FontSize="15"
+                                            FontWeight="Medium"
+                                            Text="{Binding PaymentMethod, Converter={StaticResource PaymentMethodToStringConverter}}" />
+                                    </StackPanel>
+
+                                    <StackPanel
+                                        VerticalAlignment="Bottom"
+                                        DockPanel.Dock="Bottom"
+                                        Orientation="Horizontal">
+                                        <ui:Button
+                                            Margin="0,0,10,0"
+                                            Appearance="Caution"
+                                            Content="Оплатить"
+                                            Icon="Wallet16" />
+                                        <ui:Button
+                                            Margin="0,0,10,0"
+                                            Appearance="Info"
+                                            Content="Получить"
+                                            Icon="Box16" />
+                                    </StackPanel>
                                 </DockPanel>
 
-                                <ui:VirtualizingItemsControl
-                                    Grid.Column="1"
-                                    ItemsSource="{Binding Orders, Mode=OneWay}"
-                                    Visibility="{Binding AreThereOrders, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <ui:VirtualizingItemsControl Grid.Column="1" ItemsSource="{Binding OrderProducts, Mode=OneWay}">
                                     <ui:VirtualizingItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate>
-                                            <VirtualizingStackPanel />
+                                            <ui:VirtualizingWrapPanel HorizontalAlignment="Center" SpacingMode="Uniform" />
                                         </ItemsPanelTemplate>
                                     </ui:VirtualizingItemsControl.ItemsPanel>
                                     <ui:VirtualizingItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                            <ui:Card Margin="0,0,0,10" />
+                                            <ui:Card
+                                                Width="150"
+                                                Margin="0,0,0,10"
+                                                VerticalAlignment="Stretch">
+                                                <DockPanel>
+                                                    <Image
+                                                        Height="150"
+                                                        HorizontalAlignment="Stretch"
+                                                        DockPanel.Dock="Top"
+                                                        Stretch="UniformToFill">
+                                                        <Image.Source>
+                                                            <Binding Path="Product.MainPhoto">
+                                                                <Binding.TargetNullValue>
+                                                                    <BitmapImage UriSource="../Resources/Images/LightGrayPixel.png" />
+                                                                </Binding.TargetNullValue>
+                                                            </Binding>
+                                                        </Image.Source>
+                                                    </Image>
+
+                                                    <TextBlock DockPanel.Dock="Bottom" Text="{Binding Quantity, StringFormat='{}{0} шт.'}" />
+                                                    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
+                                                        <TextBlock Text="Цена" />
+                                                        <TextBlock Text="{Binding Cost, StringFormat='{}{0:0} ₽'}" />
+                                                    </StackPanel>
+                                                    <TextBlock
+                                                        Margin="0,5,0,0"
+                                                        DockPanel.Dock="Bottom"
+                                                        FontSize="14"
+                                                        FontWeight="Medium"
+                                                        Text="{Binding Product.Name}"
+                                                        TextWrapping="Wrap" />
+                                                </DockPanel>
+                                            </ui:Card>
                                         </DataTemplate>
                                     </ui:VirtualizingItemsControl.ItemTemplate>
                                 </ui:VirtualizingItemsControl>
@@ -140,7 +236,6 @@
         </DockPanel>
 
         <ui:Card
-            Grid.ColumnSpan="2"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             HorizontalContentAlignment="Center"
