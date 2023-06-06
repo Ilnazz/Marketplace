@@ -28,6 +28,8 @@ public partial class BasketMenuItemVm : ObservableObject
             App.NavigationService.Navigate(typeof(BasketPage));
             UpdateNavWindowCurrentPageTitle();
         }
+
+        App.SearchService.IsEnabled = false;
     }
     #endregion
 

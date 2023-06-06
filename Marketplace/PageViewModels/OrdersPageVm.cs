@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using CommunityToolkit.Mvvm.Input;
 using Marketplace.Database;
 using Marketplace.Database.Models;
@@ -8,6 +9,8 @@ using Marketplace.DataTypes.Enums;
 using Marketplace.DataTypes.Records;
 using Marketplace.Models;
 using Marketplace.Pages;
+using Marketplace.WindowViewModels;
+using Marketplace.WindowViews;
 using Microsoft.EntityFrameworkCore;
 
 namespace Marketplace.PageViewModels;
@@ -28,6 +31,9 @@ public partial class OrdersPageVm : PageVmBase
 
         new Sorting<Order>("По дате доставке ↑", o => o.OrderBy(o => o.DeliveryDate) ),
         new Sorting<Order>("По дате доставке ↓", o => o.OrderByDescending(o => o.DeliveryDate) ),
+
+        new Sorting<Order>("По цене ↑", o => o.OrderBy(o => o.OrderProducts.Sum(op => op.Cost * op.Quantity)) ),
+        new Sorting<Order>("По цене ↓", o => o.OrderByDescending(o => o.OrderProducts.Sum(op => op.Cost * op.Quantity)) ),
 
         new Sorting<Order>("По количеству продуктов ↑", o => o.OrderBy(o => o.OrderProducts.Sum(op => op.Quantity)) ),
         new Sorting<Order>("По количеству продуктов ↓", o => o.OrderByDescending(o => o.OrderProducts.Sum(op => op.Quantity)) ),
@@ -100,6 +106,47 @@ public partial class OrdersPageVm : PageVmBase
     [RelayCommand]
     private void NavigateToProductsPage() =>
         App.NavigationService.Navigate(typeof(BookProductsPage));
+
+    #region Client
+    [RelayCommand]
+    private void CancelOrder(Order order)
+    {
+
+    }
+
+    [RelayCommand]
+    private void PayForOrder(Order order)
+    {
+
+    }
+
+    [RelayCommand]
+    private void ReceiveOrder(Order order)
+    {
+
+    }
+    #endregion
+
+    [RelayCommand]
+    private void ShowEditOrderStatusWindow(Order order)
+    {
+        var editOrderStatusWindowVm = new EditOrderStatusWindowVm(order);
+        var editOrderStatusWindowView = new EditOrderStatusWindowView() { DataContext = editOrderStatusWindowVm };
+
+        var dialogWindow = new Wpf.Ui.Controls.MessageBox
+        {
+            Content = editOrderStatusWindowView,
+            Width = editOrderStatusWindowView.Width + 30,
+            Height = editOrderStatusWindowView.Height,
+            SizeToContent = SizeToContent.Height,
+            ResizeMode = ResizeMode.NoResize,
+            Title = editOrderStatusWindowVm.Title,
+            ShowFooter = false,
+            WindowStartupLocation = WindowStartupLocation.CenterScreen
+        };
+        editOrderStatusWindowVm.CloseWindowMethod += dialogWindow.Close;
+        dialogWindow.ShowDialog();
+    }
     #endregion
 
     private readonly IEnumerable<Order> _allOrders = null!;
@@ -120,8 +167,6 @@ public partial class OrdersPageVm : PageVmBase
 
         DeliveryTypes = Enum.GetValues(typeof(DeliveryType)).Cast<DeliveryType>();
         SelectedDeliveryType = DeliveryTypes.First();
-
-        App.SearchService.IsEnabled = false;
     }
 
     #region Private methods

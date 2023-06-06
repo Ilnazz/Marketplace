@@ -1,0 +1,36 @@
+﻿<UserControl
+    x:Class="Marketplace.WindowViews.EditOrderStatusWindowView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:windowvms="clr-namespace:Marketplace.WindowViewModels"
+    Width="200"
+    d:DataContext="{d:DesignInstance windowvms:InfoWindowVm}"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <ui:Card
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Stretch"
+        HorizontalContentAlignment="Stretch"
+        VerticalContentAlignment="Stretch">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock
+                Margin="0,0,0,5"
+                FontSize="16"
+                FontWeight="Medium"
+                Text="Новый статус заказа" />
+            <ComboBox
+                Margin="0,0,0,10"
+                ItemsSource="{Binding OrderStatuses}"
+                SelectedItem="{Binding SelectedStatus}" />
+            <ui:Button
+                HorizontalAlignment="Stretch"
+                Command="{Binding OkCommand}"
+                Content="Ок"
+                FontSize="16" />
+        </StackPanel>
+    </ui:Card>
+</UserControl>

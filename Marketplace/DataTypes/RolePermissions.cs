@@ -30,9 +30,9 @@ public static class RolePermissions
 
                 Permission.MakeOrder,
                 Permission.PayForOrder,
+                Permission.ReceiveOrder,
                 Permission.CancelOrder,
                 Permission.ViewOrdersPage,
-                Permission.ViewOrder
             }
         },
         {
@@ -48,7 +48,6 @@ public static class RolePermissions
                 Permission.RemoveProduct,
 
                 Permission.ViewOrdersPage,
-                Permission.ViewOrder
             }
         },
         {
@@ -64,7 +63,7 @@ public static class RolePermissions
                 Permission.RejectProduct,
 
                 Permission.ViewOrdersPage,
-                Permission.ViewOrder
+                Permission.EditOrderStatus
             }
         }
     };

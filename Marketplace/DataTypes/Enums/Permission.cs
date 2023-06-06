@@ -17,9 +17,10 @@ public enum Permission
     ViewBasketPage,
     AddRemoveProductToBasket,
 
+    ViewOrdersPage,
     MakeOrder,
     PayForOrder,
+    ReceiveOrder,
     CancelOrder,
-    ViewOrdersPage,
-    ViewOrder,
+    EditOrderStatus
 }

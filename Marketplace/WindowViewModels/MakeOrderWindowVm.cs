@@ -164,7 +164,7 @@ public partial class MakeOrderWindowVm : WindowVmBase
             var payForOrderWindowVm = new PayForOrderWindowVm(TotalCost);
             var payForOrderWindowView = new PayForOrderWindowView() { DataContext = payForOrderWindowVm };
 
-            var dialogWindow = new Wpf.Ui.Controls.MessageBox
+            var messageBox = new Wpf.Ui.Controls.MessageBox
             {
                 Content = payForOrderWindowView,
                 Width = payForOrderWindowView.Width + 30,
@@ -175,8 +175,8 @@ public partial class MakeOrderWindowVm : WindowVmBase
                 ShowFooter = false,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen
             };
-            payForOrderWindowVm.CloseWindowMethod += dialogWindow.Close;
-            dialogWindow.ShowDialog();
+            payForOrderWindowVm.CloseWindowMethod += messageBox.Close;
+            messageBox.ShowDialog();
 
             if (payForOrderWindowVm.WasPaid == false)
                 return;
@@ -197,6 +197,23 @@ public partial class MakeOrderWindowVm : WindowVmBase
 
         DatabaseContext.Entities.Orders.Local.Add(_order);
         DatabaseContext.Entities.SaveChanges();
+
+        var infoWindowVm = new InfoWindowVm("Заказ оформлен", "Информация");
+        var infoWindowView = new InfoWindowView() { DataContext = infoWindowVm };
+
+        var dialogWindow = new Wpf.Ui.Controls.MessageBox
+        {
+            Content = infoWindowView,
+            Width = infoWindowView.Width + 30,
+            Height = infoWindowView.Height,
+            SizeToContent = SizeToContent.Height,
+            ResizeMode = ResizeMode.NoResize,
+            Title = infoWindowVm.Title,
+            ShowFooter = false,
+            WindowStartupLocation = WindowStartupLocation.CenterScreen
+        };
+        infoWindowVm.CloseWindowMethod += dialogWindow.Close;
+        dialogWindow.ShowDialog();
 
         CloseWindow();
     }

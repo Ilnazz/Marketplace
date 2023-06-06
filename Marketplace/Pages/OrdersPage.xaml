@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:enums="clr-namespace:Marketplace.DataTypes.Enums"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:viewmodels="clr-namespace:Marketplace.PageViewModels"
@@ -30,62 +31,66 @@
             </ui:VirtualizingItemsControl.ItemsPanel>
             <ui:VirtualizingItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <ui:Card Margin="0,0,0,10">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
+                    <ui:CardExpander Margin="0,0,0,10">
+                        <ui:CardExpander.Header>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
 
-                            <DockPanel Grid.ColumnSpan="2">
-                                <TextBlock
-                                    Margin="0,0,10,0"
-                                    VerticalAlignment="Center"
-                                    FontSize="18"
-                                    FontWeight="Medium"
-                                    Text="{Binding DateTime, StringFormat='{}Заказ от {0:M}', ConverterCulture='ru-RU'}" />
-                                <ui:Badge
-                                    Padding="10,5"
-                                    VerticalAlignment="Center"
-                                    Content="{Binding Status, Converter={StaticResource OrderStatusToStringConverter}}"
-                                    FontSize="16">
-                                    <ui:Badge.Style>
-                                        <Style BasedOn="{StaticResource {x:Type ui:Badge}}" TargetType="{x:Type ui:Badge}">
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Status}" Value="Created">
-                                                    <Setter Property="Appearance" Value="Secondary" />
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding Status}" Value="InProcessing">
-                                                    <Setter Property="Appearance" Value="Info" />
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding Status}" Value="RequiresPay">
-                                                    <Setter Property="Appearance" Value="Caution" />
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding Status}" Value="Completed">
-                                                    <Setter Property="Appearance" Value="Success" />
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding Status}" Value="Rejected">
-                                                    <Setter Property="Appearance" Value="Danger" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </ui:Badge.Style>
-                                </ui:Badge>
-                                <TextBlock
-                                    HorizontalAlignment="Right"
-                                    VerticalAlignment="Center"
-                                    DockPanel.Dock="Right"
-                                    FontSize="18"
-                                    FontWeight="Bold"
-                                    Text="{Binding TotalCost, StringFormat='{}{0:0} ₽'}" />
-                            </DockPanel>
-
-                        </Grid>
-                        <ui:Card.Footer>
+                                <DockPanel Grid.ColumnSpan="2">
+                                    <TextBlock
+                                        Width="200"
+                                        Margin="0,0,10,0"
+                                        VerticalAlignment="Center"
+                                        FontSize="16"
+                                        FontWeight="Medium"
+                                        Text="{Binding DateTime, StringFormat='{}Заказ от {0:dd.MM.yyyy HH:mm}', ConverterCulture='ru-RU'}" />
+                                    <ui:Badge Padding="10,5" VerticalAlignment="Center">
+                                        <ui:Badge.Style>
+                                            <Style BasedOn="{StaticResource {x:Type ui:Badge}}" TargetType="{x:Type ui:Badge}">
+                                                <Setter Property="Content" Value="{Binding Status, Converter={StaticResource OrderStatusToStringConverter}}" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Status}" Value="Created">
+                                                        <Setter Property="Appearance" Value="Light" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Status}" Value="InProcessing">
+                                                        <Setter Property="Appearance" Value="Info" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Status}" Value="Rejected">
+                                                        <Setter Property="Appearance" Value="Danger" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Status}" Value="Completed">
+                                                        <Setter Property="Appearance" Value="Success" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Status}" Value="Delivered">
+                                                        <Setter Property="Appearance" Value="Success" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding RequiresPay}" Value="True">
+                                                        <Setter Property="Appearance" Value="Caution" />
+                                                        <Setter Property="Content" Value="Доставлен. Ожидает оплаты" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ui:Badge.Style>
+                                    </ui:Badge>
+                                    <TextBlock
+                                        Margin="0,0,10,0"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Center"
+                                        DockPanel.Dock="Right"
+                                        FontSize="16"
+                                        FontWeight="Bold"
+                                        Text="{Binding TotalCost, StringFormat='{}{0:0} ₽'}" />
+                                </DockPanel>
+                            </Grid>
+                        </ui:CardExpander.Header>
+                        <ui:CardExpander.Content>
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
@@ -104,6 +109,26 @@
                                             FontSize="15"
                                             FontWeight="Medium"
                                             Text="{Binding DeliveryType, Converter={StaticResource DeliveryTypeToStringConverter}}" />
+                                        <StackPanel>
+                                            <TextBlock
+                                                Margin="20,0,0,0"
+                                                FontSize="15"
+                                                Text="{Binding DeliveryPoint.Name}" />
+                                            <TextBlock
+                                                Margin="30,0,0,0"
+                                                FontSize="15"
+                                                Text="{Binding DeliveryPoint.Address}" />
+                                            <StackPanel.Style>
+                                                <Style TargetType="StackPanel">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding DeliveryType}" Value="ToDeliveryPoint">
+                                                            <Setter Property="Visibility" Value="Visible" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </StackPanel.Style>
+                                        </StackPanel>
                                     </StackPanel>
                                     <StackPanel DockPanel.Dock="Top">
                                         <TextBlock
@@ -122,16 +147,82 @@
                                         VerticalAlignment="Bottom"
                                         DockPanel.Dock="Bottom"
                                         Orientation="Horizontal">
+
+                                        <StackPanel Visibility="{Binding Source={x:Static enums:Permission.PayForOrder}, Converter={StaticResource PermissionToVisibilityConverter}}">
+                                            <ui:Button
+                                                Margin="0,0,10,0"
+                                                Appearance="Caution"
+                                                Command="{Binding DataContext.PayForOrderCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                CommandParameter="{Binding .}"
+                                                Content="Оплатить"
+                                                Icon="Wallet16">
+                                                <ui:Button.Style>
+                                                    <Style BasedOn="{StaticResource {x:Type ui:Button}}" TargetType="{x:Type ui:Button}">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding RequiresPay}" Value="True">
+                                                                <Setter Property="Visibility" Value="Visible" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </ui:Button.Style>
+                                            </ui:Button>
+                                        </StackPanel>
+
+                                        <StackPanel Visibility="{Binding Source={x:Static enums:Permission.ReceiveOrder}, Converter={StaticResource PermissionToVisibilityConverter}}">
+                                            <ui:Button
+                                                Margin="0,0,10,0"
+                                                Appearance="Info"
+                                                Command="{Binding DataContext.ReceiveOrderCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                CommandParameter="{Binding .}"
+                                                Content="Получить"
+                                                Icon="Box16">
+                                                <ui:Button.Style>
+                                                    <Style BasedOn="{StaticResource {x:Type ui:Button}}" TargetType="{x:Type ui:Button}">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding RequiresPay}" Value="True">
+                                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Status}" Value="Delivered">
+                                                                <Setter Property="Visibility" Value="Visible" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </ui:Button.Style>
+                                            </ui:Button>
+                                        </StackPanel>
+
+                                        <StackPanel Visibility="{Binding Source={x:Static enums:Permission.CancelOrder}, Converter={StaticResource PermissionToVisibilityConverter}}">
+                                            <ui:Button
+                                                Margin="0,0,10,0"
+                                                Appearance="Danger"
+                                                Command="{Binding DataContext.CancelOrderCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                CommandParameter="{Binding .}"
+                                                Content="Отмена"
+                                                Icon="CalendarCancel16">
+                                                <ui:Button.Style>
+                                                    <Style BasedOn="{StaticResource {x:Type ui:Button}}" TargetType="{x:Type ui:Button}">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Status}" Value="InProcessing">
+                                                                <Setter Property="Visibility" Value="Visible" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </ui:Button.Style>
+                                            </ui:Button>
+                                        </StackPanel>
+
                                         <ui:Button
                                             Margin="0,0,10,0"
-                                            Appearance="Caution"
-                                            Content="Оплатить"
-                                            Icon="Wallet16" />
-                                        <ui:Button
-                                            Margin="0,0,10,0"
-                                            Appearance="Info"
-                                            Content="Получить"
-                                            Icon="Box16" />
+                                            Appearance="Light"
+                                            Command="{Binding DataContext.ShowEditOrderStatusWindowCommand, RelativeSource={RelativeSource AncestorType={x:Type ui:UiPage}}}"
+                                            CommandParameter="{Binding .}"
+                                            Content="Изменить статус заказа"
+                                            Icon="Status16"
+                                            Visibility="{Binding Source={x:Static enums:Permission.EditOrderStatus}, Converter={StaticResource PermissionToVisibilityConverter}}" />
+
                                     </StackPanel>
                                 </DockPanel>
 
@@ -164,8 +255,8 @@
 
                                                     <TextBlock DockPanel.Dock="Bottom" Text="{Binding Quantity, StringFormat='{}{0} шт.'}" />
                                                     <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
-                                                        <TextBlock Text="Цена" />
-                                                        <TextBlock Text="{Binding Cost, StringFormat='{}{0:0} ₽'}" />
+                                                        <TextBlock Text="Цена: " />
+                                                        <TextBlock FontWeight="Bold" Text="{Binding Cost, StringFormat='{}{0:0} ₽'}" />
                                                     </StackPanel>
                                                     <TextBlock
                                                         Margin="0,5,0,0"
@@ -180,8 +271,8 @@
                                     </ui:VirtualizingItemsControl.ItemTemplate>
                                 </ui:VirtualizingItemsControl>
                             </Grid>
-                        </ui:Card.Footer>
-                    </ui:Card>
+                        </ui:CardExpander.Content>
+                    </ui:CardExpander>
                 </DataTemplate>
             </ui:VirtualizingItemsControl.ItemTemplate>
         </ui:VirtualizingItemsControl>

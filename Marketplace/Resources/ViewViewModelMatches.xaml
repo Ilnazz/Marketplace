@@ -28,4 +28,12 @@
         <windowviews:PayForOrderWindowView />
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type windowvms:EditOrderStatusWindowVm}">
+        <windowviews:EditOrderStatusWindowView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type windowvms:InfoWindowVm}">
+        <windowviews:InfoWindowView />
+    </DataTemplate>
+
 </ResourceDictionary>

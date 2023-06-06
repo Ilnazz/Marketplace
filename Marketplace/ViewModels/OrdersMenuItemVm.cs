@@ -20,6 +20,8 @@ public partial class OrdersMenuItemVm : ObservableObject
             App.NavigationService.Navigate(typeof(OrdersPage));
             UpdateNavWindowCurrentPageTitle();
         }
+
+        App.SearchService.IsEnabled = false;
     }
     private void UpdateNavWindowCurrentPageTitle() =>
         App.NavigationWindowVm.CurrentPageTitle = $"Заказы";

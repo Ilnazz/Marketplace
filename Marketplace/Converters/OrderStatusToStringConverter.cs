@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data;
 using System.Globalization;
 using System.Windows.Data;
 using Marketplace.DataTypes.Enums;
@@ -18,9 +17,9 @@ public class OrderStatusToStringConverter : IValueConverter
             OrderStatus.None => "Любой",
             OrderStatus.Created => "Создан",
             OrderStatus.InProcessing => "В обработке",
-            OrderStatus.RequiresPay => "Требует оплаты",
+            OrderStatus.Canceled => "Отменён",
+            OrderStatus.Delivered => "Доставлен",
             OrderStatus.Completed => "Завершён",
-            OrderStatus.Rejected => "Отклонён"
         };
     }
 
