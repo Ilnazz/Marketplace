@@ -3,8 +3,6 @@
 public enum ProductStatus
 {
     None,
-    OnInspection,
-    Rejected,
     Active,
     RemovedFromSale
 }

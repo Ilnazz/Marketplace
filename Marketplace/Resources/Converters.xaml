@@ -13,5 +13,6 @@
     <converters:PaymentMethodToStringConverter x:Key="PaymentMethodToStringConverter" />
     <converters:ProductCategoryToStringConverter x:Key="ProductCategoryToStringConverter" />
     <converters:OrderStatusToStringConverter x:Key="OrderStatusToStringConverter" />
+    <converters:ProductStatusToStringConverter x:Key="ProductStatusToStringConverter" />
 
 </ResourceDictionary>

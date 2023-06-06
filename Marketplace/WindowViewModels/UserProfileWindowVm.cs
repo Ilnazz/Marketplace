@@ -83,10 +83,11 @@ public partial class UserProfileWindowVm : WindowVmBase
 
     public BankCard? BankCard
     {
-        get => _user.Client!.BankCard;
+        get => _user.Client?.BankCard;
         set
         {
-            _user.Client!.BankCard = value;
+            if (_user.Client != null)
+                _user.Client.BankCard = value;
             OnPropertyChanged();
         }
     }
@@ -141,6 +142,7 @@ public partial class UserProfileWindowVm : WindowVmBase
             SizeToContent = SizeToContent.Height,
             ResizeMode = ResizeMode.NoResize,
             Title = bankCardWindowVm.Title,
+            Topmost = false,
             ShowFooter = false,
             WindowStartupLocation = WindowStartupLocation.CenterScreen
         };

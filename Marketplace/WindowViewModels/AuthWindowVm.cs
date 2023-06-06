@@ -62,6 +62,7 @@ public partial class AuthWindowVm : WindowVmBase
             SizeToContent = SizeToContent.Height,
             ResizeMode = ResizeMode.NoResize,
             Title = regWindowVm.Title,
+            Topmost = false,
             ShowFooter = false,
             WindowStartupLocation = WindowStartupLocation.CenterScreen
         };

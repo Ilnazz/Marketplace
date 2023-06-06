@@ -74,6 +74,7 @@ public partial class RegWindowVm : WindowVmBase
             Height = authWindowView.Height,
             SizeToContent = SizeToContent.Height,
             ResizeMode = ResizeMode.NoResize,
+            Topmost = false,
             Title = authWindowVm.Title,
             ShowFooter = false,
             WindowStartupLocation = WindowStartupLocation.CenterScreen

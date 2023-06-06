@@ -32,6 +32,7 @@ public partial class UserMenuItemVm : ObservableObject
             SizeToContent = SizeToContent.Height,
             ResizeMode = ResizeMode.NoResize,
             Title = authWindowVm.Title,
+            Topmost = false,
             ShowFooter = false,
             WindowStartupLocation = WindowStartupLocation.CenterScreen
         };

@@ -18,13 +18,21 @@ public partial class EditOrderStatusWindowVm : WindowVmBase
 
     public IEnumerable<OrderStatus> OrderStatuses { get; init; }
 
-    [ObservableProperty]
-    private OrderStatus _selectedStatus;
+    public OrderStatus SelectedStatus
+    {
+        get => Order.Status;
+        set
+        {
+            Order.Status = value;
+            OnPropertyChanged();
+        }
+    }
 
     [RelayCommand]
-    private void SaveChanges()
+    private void Ok()
     {
         DatabaseContext.Entities.SaveChanges();
+        CloseWindow();
     }
 
     public EditOrderStatusWindowVm(Order order)
@@ -33,14 +41,5 @@ public partial class EditOrderStatusWindowVm : WindowVmBase
         Order = order;
 
         OrderStatuses = Enum.GetValues(typeof(OrderStatus)).Cast<OrderStatus>().Skip(1);
-        SelectedStatus = order.Status;
-    }
-
-    public override bool OnClosing()
-    {
-        if (DatabaseContext.Entities.HasChanges())
-            DatabaseContext.Entities.CancelChanges();
-
-        return true;
     }
 }

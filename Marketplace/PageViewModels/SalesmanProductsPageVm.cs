@@ -1,16 +1,20 @@
-﻿using Marketplace.Database;
+﻿using CommunityToolkit.Mvvm.Input;
+using Marketplace.Database;
 using Marketplace.Database.Models;
 using Marketplace.DataTypes.Enums;
 using Marketplace.DataTypes.Records;
 using Marketplace.Models;
+using Marketplace.WindowViewModels;
+using Marketplace.WindowViews;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 
 namespace Marketplace.PageViewModels;
 
-public partial class ProductsPageVm : PageVmBase
+public partial class SalesmanProductsPageVm : PageVmBase
 {
     #region Properties
     public IEnumerable<ProductModel> ProductModels => GetFilteredAndSortedProducts();
@@ -74,6 +78,43 @@ public partial class ProductsPageVm : PageVmBase
     }
     #endregion
 
+    #region Commands
+    [RelayCommand]
+    private void AddProduct()
+    {
+        var editProductWindowVm = new AddEditProductWindowVm();
+        var editProductWindowView = new AddEditProductWindowView() { DataContext = editProductWindowVm };
+
+        var dialogWindow = new Wpf.Ui.Controls.MessageBox
+        {
+            Content = editProductWindowView,
+            Width = editProductWindowView.Width + 30,
+            Height = editProductWindowView.Height,
+            SizeToContent = SizeToContent.Height,
+            ResizeMode = ResizeMode.NoResize,
+            Title = editProductWindowVm.Title,
+            Topmost = false,
+            ShowFooter = false,
+            WindowStartupLocation = WindowStartupLocation.CenterScreen
+        };
+        editProductWindowVm.CloseWindowMethod += dialogWindow.Close;
+        dialogWindow.ShowDialog();
+
+        OnPropertyChanged(nameof(ProductModels));
+        OnPropertyChanged(nameof(AreThereProducts));
+    }
+
+    [RelayCommand]
+    private void DeleteProduct(Product product)
+    {
+        DatabaseContext.Entities.Products.Local.Remove(product);
+        DatabaseContext.Entities.SaveChanges();
+
+        OnPropertyChanged(nameof(ProductModels));
+        OnPropertyChanged(nameof(AreThereProducts));
+    }
+    #endregion
+
     #region Fields
     private const string DefaultFilterName = "Любой";
 
@@ -82,14 +123,20 @@ public partial class ProductsPageVm : PageVmBase
     private string _searchText = string.Empty;
     #endregion
 
-    public ProductsPageVm(ProductCategory productCategory)
+    public SalesmanProductsPageVm()
     {
         DatabaseContext.Entities.Products.Load();
 
         _allProductModels = DatabaseContext.Entities.Products.Local
-            .Where(p => p.Category == productCategory)
-            .Where(p => p.Status == ProductStatus.Active || p.Status == ProductStatus.RemovedFromSale)
+            .Where(p => p.Salesman == App.UserService.CurrentUser.Salesman!)
             .Select(p => new ProductModel(p));
+
+        foreach (var pm in _allProductModels)
+            pm.PropertyChanged += (_, _) =>
+            {
+                OnPropertyChanged(nameof(ProductModels));
+                OnPropertyChanged(nameof(AreThereProducts));
+            };
 
         Manufacturers = DatabaseContext.Entities.ProductManufacturers
             .ToList()
@@ -98,7 +145,7 @@ public partial class ProductsPageVm : PageVmBase
         SelectedSorting = Sortings.First();
         SelectedManufacturer = Manufacturers.First();
 
-        Statuses = new ProductStatus[] {ProductStatus.None, ProductStatus.Active, ProductStatus.RemovedFromSale};
+        Statuses = Enum.GetValues(typeof(ProductStatus)).Cast<ProductStatus>();
         SelectedStatus = Statuses.First();
 
         App.SearchService.SearchTextChanged += newSearchText =>
@@ -128,7 +175,7 @@ public partial class ProductsPageVm : PageVmBase
            ManufacturerFilter(pm);
 
     private bool SearchFilter(ProductModel pm)
-        =>  pm.Name.ToLower().Contains(_searchText.Trim().ToLower());
+        => pm.Name.ToLower().Contains(_searchText.Trim().ToLower());
 
     private bool ManufacturerFilter(ProductModel pm)
         => SelectedManufacturer.Name == DefaultFilterName || pm.Manufacturer == SelectedManufacturer;

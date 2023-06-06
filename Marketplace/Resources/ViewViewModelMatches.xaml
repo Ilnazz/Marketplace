@@ -36,4 +36,8 @@
         <windowviews:InfoWindowView />
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type windowvms:AddEditProductWindowVm}">
+        <windowviews:AddEditProductWindowView />
+    </DataTemplate>
+
 </ResourceDictionary>

@@ -8,29 +8,27 @@
     xmlns:windowvms="clr-namespace:Marketplace.WindowViewModels"
     Width="200"
     d:DataContext="{d:DesignInstance windowvms:InfoWindowVm}"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
     mc:Ignorable="d">
-    <ui:Card
-        HorizontalAlignment="Stretch"
-        VerticalAlignment="Stretch"
-        HorizontalContentAlignment="Stretch"
-        VerticalContentAlignment="Stretch">
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock
-                Margin="0,0,0,5"
-                FontSize="16"
-                FontWeight="Medium"
-                Text="Новый статус заказа" />
-            <ComboBox
-                Margin="0,0,0,10"
-                ItemsSource="{Binding OrderStatuses}"
-                SelectedItem="{Binding SelectedStatus}" />
-            <ui:Button
-                HorizontalAlignment="Stretch"
-                Command="{Binding OkCommand}"
-                Content="Ок"
-                FontSize="16" />
-        </StackPanel>
-    </ui:Card>
+    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+        <TextBlock
+            Margin="0,0,0,5"
+            FontSize="16"
+            FontWeight="Medium"
+            Text="Новый статус заказа" />
+        <ComboBox
+            Margin="0,0,0,10"
+            ItemsSource="{Binding OrderStatuses}"
+            SelectedItem="{Binding SelectedStatus}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding ., Converter={StaticResource OrderStatusToStringConverter}}" />
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <ui:Button
+            HorizontalAlignment="Stretch"
+            Command="{Binding OkCommand}"
+            Content="Ок"
+            FontSize="16" />
+    </StackPanel>
 </UserControl>

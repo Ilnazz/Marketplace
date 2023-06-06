@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
+using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Marketplace.Database;
@@ -9,6 +11,7 @@ using Marketplace.DataTypes.Enums;
 using Marketplace.Pages;
 using Marketplace.WindowViewModels;
 using Marketplace.WindowViews;
+using Microsoft.Win32;
 using Wpf.Ui.Controls;
 
 namespace Marketplace.Models;
@@ -116,7 +119,7 @@ public partial class ProductModel : ObservableValidator
     }
 
     [Required]
-    public ProductStatus Staus
+    public ProductStatus Status
     {
         get => _product.Status;
         set
@@ -127,7 +130,7 @@ public partial class ProductModel : ObservableValidator
         }
     }
 
-    public bool IsRemoved => Staus == ProductStatus.RemovedFromSale;
+    public bool IsRemoved => Status == ProductStatus.RemovedFromSale;
     #endregion
 
     #region Extra properties
@@ -153,16 +156,49 @@ public partial class ProductModel : ObservableValidator
         App.NavigationService.Navigate(typeof(BasketPage));
         App.NavigationWindowVm.CurrentPageTitle = $"Корзина ({App.BasketService.TotalItemsCount})";
     }
+
+
+    #region Salesman
+    [RelayCommand]
+    private void ShowEditProductWindow()
+    {
+        var editProductWindowVm = new AddEditProductWindowVm(this);
+        var editProductWindowView = new AddEditProductWindowView() { DataContext = editProductWindowVm };
+
+        var dialogWindow = new Wpf.Ui.Controls.MessageBox
+        {
+            Content = editProductWindowView,
+            Width = editProductWindowView.Width + 30,
+            Height = editProductWindowView.Height,
+            SizeToContent = SizeToContent.Height,
+            ResizeMode = ResizeMode.NoResize,
+            Topmost = false,
+            Title = editProductWindowVm.Title,
+            ShowFooter = false,
+            WindowStartupLocation = WindowStartupLocation.CenterScreen
+        };
+        editProductWindowVm.CloseWindowMethod += dialogWindow.Close;
+        dialogWindow.ShowDialog();
+    }
+
+
+    [RelayCommand]
+    private void ToggleStatus()
+    {
+        Status = Status == ProductStatus.Active ? ProductStatus.RemovedFromSale : ProductStatus.Active;
+        DatabaseContext.Entities.SaveChanges();
+    }
+    #endregion
     #endregion
 
     #region Photo functionality
-    private IEnumerable<byte[]> _photos => _product.ProductPhotos.Select(pp => pp.Data);
-    public int TotalPhotosNumber => _photos.Count();
+    private IEnumerable<byte[]> Photos => Product.ProductPhotos.Select(pp => pp.Data);
+    public int TotalPhotosNumber => Photos.Count();
 
-    public byte[]? MainPhoto => _photos.FirstOrDefault();
+    public byte[]? MainPhoto => Photos.FirstOrDefault();
 
     private int _currentPhotoIndex = 0;
-    public byte[]? CurrentPhoto => _photos.Count() > 0 ? _photos.ElementAt(_currentPhotoIndex) : null;
+    public byte[]? CurrentPhoto => Photos.Count() > 0 ? Photos.ElementAt(_currentPhotoIndex) : null;
     public int CurrentPhotoNumber => _currentPhotoIndex + 1;
 
 
@@ -184,9 +220,52 @@ public partial class ProductModel : ObservableValidator
         _currentPhotoIndex += 1;
         ShowPrevPhotoCommand.NotifyCanExecuteChanged();
         ShowNextPhotoCommand.NotifyCanExecuteChanged();
+        OnPropertyChanged(nameof(CurrentPhoto));
         OnPropertyChanged(nameof(CurrentPhotoNumber));
     }
     private bool CanShowNextPhoto() => _currentPhotoIndex < TotalPhotosNumber - 1;
+
+    [RelayCommand]
+    private void AddPhoto()
+    {
+        var openFileDialog = new OpenFileDialog
+        {
+            Filter = "Изображение (png, jpg, jpeg)|*.png;*.jpg;*.jpeg",
+            CheckFileExists = true
+        };
+
+        if (openFileDialog.ShowDialog() != true)
+            return;
+
+        var photoFilePath = openFileDialog.FileName;
+        var photoFileBytes = File.ReadAllBytes(photoFilePath);
+
+        Product.ProductPhotos.Add(new ProductPhoto
+        {
+            Product = Product,
+            Data = photoFileBytes,
+        });
+
+        _currentPhotoIndex += 1;
+
+        OnPropertyChanged(nameof(CurrentPhoto));
+        OnPropertyChanged(nameof(CurrentPhotoNumber));
+        OnPropertyChanged(nameof(TotalPhotosNumber));
+        DeletePhotoCommand.NotifyCanExecuteChanged();
+    }
+
+    [RelayCommand]
+    private void DeletePhoto()
+    {
+        var productPhotoToRemove = _product.ProductPhotos.ElementAt(_currentPhotoIndex);
+        _product.ProductPhotos.Remove(productPhotoToRemove);
+
+        OnPropertyChanged(nameof(CurrentPhoto));
+        OnPropertyChanged(nameof(CurrentPhotoNumber));
+        OnPropertyChanged(nameof(TotalPhotosNumber));
+        DeletePhotoCommand.NotifyCanExecuteChanged();
+    }
+    private bool CanDeletePhoto() => TotalPhotosNumber > 0;
     #endregion
 
     #region Basket functionality
@@ -203,7 +282,7 @@ public partial class ProductModel : ObservableValidator
         PutToBasketCommand.NotifyCanExecuteChanged();
     }
     private bool CanPutToBasket() =>
-        IsAvailable && Staus == ProductStatus.Active && IsInBasket == false;
+        IsAvailable && Status == ProductStatus.Active && IsInBasket == false;
 
 
     [RelayCommand]

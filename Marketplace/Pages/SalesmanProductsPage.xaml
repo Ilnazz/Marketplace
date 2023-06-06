@@ -1,5 +1,5 @@
 ﻿<ui:UiPage
-    x:Class="Marketplace.Pages.ProductsPageBase"
+    x:Class="Marketplace.Pages.SalesmanProductsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -9,6 +9,10 @@
     xmlns:viewmodels="clr-namespace:Marketplace.PageViewModels"
     d:DataContext="{d:DesignInstance viewmodels:ProductsPageVm}"
     mc:Ignorable="d">
+
+    <ui:UiPage.DataContext>
+        <viewmodels:SalesmanProductsPageVm />
+    </ui:UiPage.DataContext>
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -86,63 +90,19 @@
                                 Text="{Binding Name, Mode=OneWay}"
                                 TextWrapping="Wrap" />
 
-                            <DockPanel
+                            <ui:Button
                                 Grid.Row="3"
-                                Margin="0,0,0,10"
-                                VerticalAlignment="Bottom"
-                                Visibility="{Binding Source={x:Static enums:Permission.AddRemoveProductToBasket}, Converter={StaticResource PermissionToVisibilityConverter}}">
-
-                                <ui:Button Command="{Binding PutToBasketCommand}" Visibility="{Binding IsInBasket, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource False}}">
-                                    <ui:Button.Style>
-                                        <Style BasedOn="{StaticResource {x:Type ui:Button}}" TargetType="{x:Type ui:Button}">
-                                            <Setter Property="Content" Value="В корзину" />
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding IsAvailable}" Value="False">
-                                                    <Setter Property="Content" Value="Нет в наличии" />
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding IsRemoved}" Value="True">
-                                                    <Setter Property="Content" Value="Снят с продажи" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </ui:Button.Style>
-                                </ui:Button>
-
-                                <ui:Button
-                                    Appearance="Success"
-                                    Command="{Binding NavigateToBasketCommand}"
-                                    Content="Перейти"
-                                    Icon="Cart16"
-                                    Visibility="{Binding IsInBasket, Converter={StaticResource BoolToVisibilityConverter}}" />
-
-                                <StackPanel
-                                    Margin="10,0,0,0"
-                                    HorizontalAlignment="Right"
-                                    DockPanel.Dock="Right"
-                                    Orientation="Horizontal"
-                                    Visibility="{Binding IsInBasket, Converter={StaticResource BoolToVisibilityConverter}}">
-                                    <ui:Button Command="{Binding RemoveOneFromBasketCommand}" Content="-" />
-                                    <TextBlock
-                                        Margin="10,0"
-                                        VerticalAlignment="Center"
-                                        Text="{Binding QuantityInBasket}" />
-                                    <ui:Button
-                                        Command="{Binding AddOneToBasketCommand}"
-                                        CommandParameter="{Binding ElementName=ErrorMessageFlyout}"
-                                        Content="+" />
-                                    <ui:Flyout
-                                        x:Name="ErrorMessageFlyout"
-                                        Margin="5,0,0,0"
-                                        Content="Больше нет 😞"
-                                        Foreground="Red" />
-                                </StackPanel>
-                            </DockPanel>
-
+                                Margin="0,0,0,5"
+                                HorizontalAlignment="Stretch"
+                                Command="{Binding ShowEditProductWindowCommand}"
+                                Content="Редактировать" />
                             <ui:Button
                                 Grid.Row="4"
                                 HorizontalAlignment="Stretch"
-                                Command="{Binding ShowProductDetailsWindowCommand}"
-                                Content="Подробнее" />
+                                Appearance="Danger"
+                                Command="{Binding DataContext.DeleteProductCommand, RelativeSource={RelativeSource AncestorType={x:Type ui:UiPage}}}"
+                                CommandParameter="{Binding Product}"
+                                Content="Удалить" />
                         </Grid>
                     </ui:Card>
                 </DataTemplate>
@@ -179,6 +139,13 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
             </StackPanel>
+
+            <ui:Button
+                VerticalAlignment="Bottom"
+                Appearance="Success"
+                Command="{Binding AddProductCommand}"
+                Content="Добавить продукт"
+                DockPanel.Dock="Bottom" />
         </DockPanel>
 
         <ui:Card

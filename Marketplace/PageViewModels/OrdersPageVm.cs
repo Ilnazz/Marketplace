@@ -111,19 +111,107 @@ public partial class OrdersPageVm : PageVmBase
     [RelayCommand]
     private void CancelOrder(Order order)
     {
+        var infoWindowVm = new InfoWindowVm("Заказ отменён", "Информация");
+        var infoWindowView = new InfoWindowView() { DataContext = infoWindowVm };
 
+        var dialogWindow = new Wpf.Ui.Controls.MessageBox
+        {
+            Content = infoWindowView,
+            Width = infoWindowView.Width + 30,
+            Height = infoWindowView.Height,
+            SizeToContent = SizeToContent.Height,
+            ResizeMode = ResizeMode.NoResize,
+            Title = infoWindowVm.Title,
+            Topmost = false,
+            ShowFooter = false,
+            WindowStartupLocation = WindowStartupLocation.CenterScreen
+        };
+        infoWindowVm.CloseWindowMethod += dialogWindow.Close;
+        dialogWindow.ShowDialog();
+
+        order.Status = OrderStatus.Canceled;
+
+        foreach (var op in order.OrderProducts)
+            op.Product.QuantityInStock += op.Quantity;
+
+        DatabaseContext.Entities.SaveChanges();
+
+        OnPropertyChanged(nameof(Orders));
     }
 
     [RelayCommand]
     private void PayForOrder(Order order)
     {
+        var payForOrderWindowVm = new PayForOrderWindowVm(order.TotalCost);
+        var payForOrderWindowView = new PayForOrderWindowView() { DataContext = payForOrderWindowVm };
 
+        var messageBox = new Wpf.Ui.Controls.MessageBox
+        {
+            Content = payForOrderWindowView,
+            Width = payForOrderWindowView.Width + 30,
+            Height = payForOrderWindowView.Height,
+            SizeToContent = SizeToContent.Height,
+            ResizeMode = ResizeMode.NoResize,
+            Title = payForOrderWindowVm.Title,
+            Topmost = false,
+            ShowFooter = false,
+            WindowStartupLocation = WindowStartupLocation.CenterScreen
+        };
+        payForOrderWindowVm.CloseWindowMethod += messageBox.Close;
+        messageBox.ShowDialog();
+
+
+        if (payForOrderWindowVm.WasPaid)
+        {
+            order.Status = OrderStatus.Completed;
+            DatabaseContext.Entities.SaveChanges();
+            OnPropertyChanged(nameof(Orders));
+
+            var infoWindowVm = new InfoWindowVm("Товар получен", "Информация");
+            var infoWindowView = new InfoWindowView() { DataContext = infoWindowVm };
+
+            var dialogWindow = new Wpf.Ui.Controls.MessageBox
+            {
+                Content = infoWindowView,
+                Width = infoWindowView.Width + 30,
+                Height = infoWindowView.Height,
+                SizeToContent = SizeToContent.Height,
+                ResizeMode = ResizeMode.NoResize,
+                Title = infoWindowVm.Title,
+                Topmost = false,
+                ShowFooter = false,
+                WindowStartupLocation = WindowStartupLocation.CenterScreen
+            };
+            infoWindowVm.CloseWindowMethod += dialogWindow.Close;
+            dialogWindow.ShowDialog();
+        }
     }
 
     [RelayCommand]
     private void ReceiveOrder(Order order)
     {
+        var infoWindowVm = new InfoWindowVm("Товар получен", "Информация");
+        var infoWindowView = new InfoWindowView() { DataContext = infoWindowVm };
 
+        var dialogWindow = new Wpf.Ui.Controls.MessageBox
+        {
+            Content = infoWindowView,
+            Width = infoWindowView.Width + 30,
+            Height = infoWindowView.Height,
+            SizeToContent = SizeToContent.Height,
+            ResizeMode = ResizeMode.NoResize,
+            Title = infoWindowVm.Title,
+            Topmost = false,
+            ShowFooter = false,
+            WindowStartupLocation = WindowStartupLocation.CenterScreen
+        };
+        infoWindowVm.CloseWindowMethod += dialogWindow.Close;
+        dialogWindow.ShowDialog();
+
+        order.Status = OrderStatus.Completed;
+        DatabaseContext.Entities.SaveChanges();
+
+        OnPropertyChanged(nameof(Orders));
     }
     #endregion
 
@@ -141,11 +229,15 @@ public partial class OrdersPageVm : PageVmBase
             SizeToContent = SizeToContent.Height,
             ResizeMode = ResizeMode.NoResize,
             Title = editOrderStatusWindowVm.Title,
+            Topmost = false,
             ShowFooter = false,
             WindowStartupLocation = WindowStartupLocation.CenterScreen
         };
         editOrderStatusWindowVm.CloseWindowMethod += dialogWindow.Close;
         dialogWindow.ShowDialog();
+
+        OnPropertyChanged(nameof(Orders));
+        OnPropertyChanged(nameof(AreThereOrders));
     }
     #endregion
 

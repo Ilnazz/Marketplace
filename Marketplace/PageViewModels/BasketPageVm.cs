@@ -48,6 +48,7 @@ public partial class BasketPageVm : PageVmBase
                 SizeToContent = SizeToContent.Height,
                 ResizeMode = ResizeMode.NoResize,
                 Title = authWindowVm.Title,
+                Topmost = false,
                 ShowFooter = false,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen
             };

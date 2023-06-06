@@ -15,7 +15,6 @@ public class OrderStatusToStringConverter : IValueConverter
         return orderStatus switch
         {
             OrderStatus.None => "Любой",
-            OrderStatus.Created => "Создан",
             OrderStatus.InProcessing => "В обработке",
             OrderStatus.Canceled => "Отменён",
             OrderStatus.Delivered => "Доставлен",

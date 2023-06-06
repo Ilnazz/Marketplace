@@ -160,6 +160,7 @@
                 <views:UserMenuItemView />
                 <views:OrdersMenuItemView />
                 <views:BasketMenuItemView />
+                <views:SalesmanProductsMenuItemView />
             </Menu>
         </Grid>
 

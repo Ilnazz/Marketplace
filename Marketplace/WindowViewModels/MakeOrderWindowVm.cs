@@ -131,6 +131,7 @@ public partial class MakeOrderWindowVm : WindowVmBase
             Height = bankCardWindowView.Height,
             SizeToContent = SizeToContent.Height,
             ResizeMode = ResizeMode.NoResize,
+            Topmost = false,
             Title = bankCardWindowVm.Title,
             ShowFooter = false,
             WindowStartupLocation = WindowStartupLocation.CenterScreen
@@ -171,6 +172,7 @@ public partial class MakeOrderWindowVm : WindowVmBase
                 Height = payForOrderWindowView.Height,
                 SizeToContent = SizeToContent.Height,
                 ResizeMode = ResizeMode.NoResize,
+                Topmost = false,
                 Title = payForOrderWindowVm.Title,
                 ShowFooter = false,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen
@@ -209,6 +211,7 @@ public partial class MakeOrderWindowVm : WindowVmBase
             SizeToContent = SizeToContent.Height,
             ResizeMode = ResizeMode.NoResize,
             Title = infoWindowVm.Title,
+            Topmost = false,
             ShowFooter = false,
             WindowStartupLocation = WindowStartupLocation.CenterScreen
         };

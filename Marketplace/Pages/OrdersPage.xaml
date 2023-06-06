@@ -71,6 +71,9 @@
                                                     <DataTrigger Binding="{Binding Status}" Value="Delivered">
                                                         <Setter Property="Appearance" Value="Success" />
                                                     </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Status}" Value="Canceled">
+                                                        <Setter Property="Appearance" Value="Danger" />
+                                                    </DataTrigger>
                                                     <DataTrigger Binding="{Binding RequiresPay}" Value="True">
                                                         <Setter Property="Appearance" Value="Caution" />
                                                         <Setter Property="Content" Value="Доставлен. Ожидает оплаты" />
@@ -152,9 +155,9 @@
                                             <ui:Button
                                                 Margin="0,0,10,0"
                                                 Appearance="Caution"
-                                                Command="{Binding DataContext.PayForOrderCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                Command="{Binding DataContext.PayForOrderCommand, RelativeSource={RelativeSource AncestorType={x:Type ui:UiPage}}}"
                                                 CommandParameter="{Binding .}"
-                                                Content="Оплатить"
+                                                Content="Оплатить и получить"
                                                 Icon="Wallet16">
                                                 <ui:Button.Style>
                                                     <Style BasedOn="{StaticResource {x:Type ui:Button}}" TargetType="{x:Type ui:Button}">
@@ -173,7 +176,7 @@
                                             <ui:Button
                                                 Margin="0,0,10,0"
                                                 Appearance="Info"
-                                                Command="{Binding DataContext.ReceiveOrderCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                Command="{Binding DataContext.ReceiveOrderCommand, RelativeSource={RelativeSource AncestorType={x:Type ui:UiPage}}}"
                                                 CommandParameter="{Binding .}"
                                                 Content="Получить"
                                                 Icon="Box16">
@@ -197,7 +200,7 @@
                                             <ui:Button
                                                 Margin="0,0,10,0"
                                                 Appearance="Danger"
-                                                Command="{Binding DataContext.CancelOrderCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                Command="{Binding DataContext.CancelOrderCommand, RelativeSource={RelativeSource AncestorType={x:Type ui:UiPage}}}"
                                                 CommandParameter="{Binding .}"
                                                 Content="Отмена"
                                                 Icon="CalendarCancel16">
