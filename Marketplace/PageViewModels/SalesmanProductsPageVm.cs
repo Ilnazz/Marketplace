@@ -82,7 +82,7 @@ public partial class SalesmanProductsPageVm : PageVmBase
     [RelayCommand]
     private void AddProduct()
     {
-        var editProductWindowVm = new AddEditProductWindowVm();
+        var editProductWindowVm = new AddEditProductWindowVm(null);
         var editProductWindowView = new AddEditProductWindowView() { DataContext = editProductWindowVm };
 
         var dialogWindow = new Wpf.Ui.Controls.MessageBox

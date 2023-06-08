@@ -41,15 +41,18 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
 
                             <Image
                                 Grid.Row="0"
+                                Height="300"
+                                MaxHeight="300"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Stretch"
-                                Stretch="UniformToFill">
+                                Stretch="Uniform">
                                 <Image.Source>
                                     <Binding Path="MainPhoto">
                                         <Binding.TargetNullValue>
@@ -91,15 +94,14 @@
                                 TextWrapping="Wrap" />
 
                             <ui:Button
-                                Grid.Row="3"
+                                Grid.Row="4"
                                 Margin="0,0,0,5"
                                 HorizontalAlignment="Stretch"
                                 Command="{Binding ShowEditProductWindowCommand}"
                                 Content="Редактировать" />
                             <ui:Button
-                                Grid.Row="4"
+                                Grid.Row="5"
                                 HorizontalAlignment="Stretch"
-                                Appearance="Danger"
                                 Command="{Binding DataContext.DeleteProductCommand, RelativeSource={RelativeSource AncestorType={x:Type ui:UiPage}}}"
                                 CommandParameter="{Binding Product}"
                                 Content="Удалить" />
@@ -141,10 +143,11 @@
             </StackPanel>
 
             <ui:Button
+                HorizontalAlignment="Stretch"
                 VerticalAlignment="Bottom"
                 Appearance="Success"
                 Command="{Binding AddProductCommand}"
-                Content="Добавить продукт"
+                Content="Добавить товар"
                 DockPanel.Dock="Bottom" />
         </DockPanel>
 

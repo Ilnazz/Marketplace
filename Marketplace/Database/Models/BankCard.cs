@@ -11,6 +11,8 @@ public partial class BankCard
 
     public string Number { get; set; } = null!;
 
+    public decimal Balance { get; set; }
+
     public DateTime ExpirationDate { get; set; }
 
     public short ValidationCode { get; set; }

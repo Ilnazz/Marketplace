@@ -132,6 +132,18 @@
                                                 </Style>
                                             </StackPanel.Style>
                                         </StackPanel>
+                                        <TextBlock Margin="20,0,0,0" Text="{Binding Address, StringFormat='{}Адрес: {0}'}">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding DeliveryType}" Value="ToHome">
+                                                            <Setter Property="Visibility" Value="Visible" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
                                     </StackPanel>
                                     <StackPanel DockPanel.Dock="Top">
                                         <TextBlock

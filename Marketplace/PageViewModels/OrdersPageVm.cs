@@ -35,8 +35,8 @@ public partial class OrdersPageVm : PageVmBase
         new Sorting<Order>("По цене ↑", o => o.OrderBy(o => o.OrderProducts.Sum(op => op.Cost * op.Quantity)) ),
         new Sorting<Order>("По цене ↓", o => o.OrderByDescending(o => o.OrderProducts.Sum(op => op.Cost * op.Quantity)) ),
 
-        new Sorting<Order>("По количеству продуктов ↑", o => o.OrderBy(o => o.OrderProducts.Sum(op => op.Quantity)) ),
-        new Sorting<Order>("По количеству продуктов ↓", o => o.OrderByDescending(o => o.OrderProducts.Sum(op => op.Quantity)) ),
+        new Sorting<Order>("По количеству товаров ↑", o => o.OrderBy(o => o.OrderProducts.Sum(op => op.Quantity)) ),
+        new Sorting<Order>("По количеству товаров ↓", o => o.OrderByDescending(o => o.OrderProducts.Sum(op => op.Quantity)) ),
     };
 
     private Sorting<Order> _slectedSorting = null!;

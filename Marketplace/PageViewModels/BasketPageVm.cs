@@ -55,7 +55,7 @@ public partial class BasketPageVm : PageVmBase
             authWindowVm.CloseWindowMethod += dialogWindow.Close;
             dialogWindow.ShowDialog();
 
-            if (App.UserService.IsGuest() == false)
+            if (App.UserService.CurrentUser.Role == DataTypes.Enums.UserRole.Client)
                 new TitledContainerWindow(new MakeOrderWindowVm(ProductModels)).ShowDialog();
         }
         else

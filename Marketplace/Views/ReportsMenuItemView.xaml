@@ -1,24 +1,24 @@
 ﻿<ui:MenuItem
-    x:Class="Marketplace.Views.SalesmanProductsMenuItemView"
+    x:Class="Marketplace.Views.ReportsMenuItemView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:enums="clr-namespace:Marketplace.DataTypes.Enums"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:viewmodels="clr-namespace:Marketplace.ViewModels"
-    d:DataContext="{d:DesignInstance viewmodels:SalesmanProductsMenuItemVm}"
-    Command="{Binding NavigateToSalesmanProductsPageCommand}"
-    Visibility="{Binding UserHasPermission, Converter={StaticResource BoolToVisibilityConverter}}"
+    Command="{Binding NavigateToReportsPageCommand}"
+    Visibility="{Binding IsEmployee, Converter={StaticResource BoolToVisibilityConverter}}"
     mc:Ignorable="d">
 
     <ui:MenuItem.DataContext>
-        <viewmodels:SalesmanProductsMenuItemVm />
+        <viewmodels:ReportsMenuItemVm />
     </ui:MenuItem.DataContext>
 
     <ui:MenuItem.Header>
         <StackPanel>
-            <ui:SymbolIcon Symbol="DrinkBottle20" />
-            <TextBlock Text="Мои товары" />
+            <ui:SymbolIcon Symbol="DataHistogram20" />
+            <TextBlock Text="Отчёты" />
         </StackPanel>
     </ui:MenuItem.Header>
 </ui:MenuItem>

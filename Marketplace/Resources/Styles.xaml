@@ -11,7 +11,12 @@
             <Setter.Value>
                 <ControlTemplate>
                     <StackPanel>
-                        <AdornedElementPlaceholder x:Name="Placeholder" />
+                        <Border
+                            BorderBrush="Red"
+                            BorderThickness="0.5"
+                            CornerRadius="3">
+                            <AdornedElementPlaceholder x:Name="Placeholder" />
+                        </Border>
                         <Border
                             Margin="0,-1.5,0,0"
                             Padding="7.5"

@@ -39,6 +39,8 @@ public partial class BankCardWindowVm : WindowVmBase
         }
     }
 
+    public decimal Balance => _bankCard.Balance;
+
     private int _expirationMonth;
     public int ExpirationMonth
     {
@@ -111,6 +113,13 @@ public partial class BankCardWindowVm : WindowVmBase
         CloseWindow();
     }
     private bool CanSaveChanges() => HasErrors == false;
+
+    [RelayCommand]
+    private void TopUpBalance()
+    {
+
+        OnPropertyChanged(nameof(Balance));
+    }
     #endregion
 
     private BankCard _bankCard = null!;

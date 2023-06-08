@@ -8,7 +8,7 @@
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:windowvms="clr-namespace:Marketplace.WindowViewModels"
     Width="600"
-    Height="400"
+    Height="450"
     d:DataContext="{d:DesignInstance windowvms:ProductDetailsWindowVm}"
     mc:Ignorable="d">
 
@@ -30,9 +30,11 @@
 
                 <Image
                     Grid.Row="0"
+                    Height="350"
+                    MaxHeight="350"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
-                    Stretch="UniformToFill">
+                    Stretch="Uniform">
                     <Image.Source>
                         <Binding Path="CurrentPhoto">
                             <Binding.TargetNullValue>

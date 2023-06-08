@@ -14,5 +14,6 @@
     <converters:ProductCategoryToStringConverter x:Key="ProductCategoryToStringConverter" />
     <converters:OrderStatusToStringConverter x:Key="OrderStatusToStringConverter" />
     <converters:ProductStatusToStringConverter x:Key="ProductStatusToStringConverter" />
+    <converters:ReportTypeToStringConverter x:Key="ReportTypeToStringConverter" />
 
 </ResourceDictionary>

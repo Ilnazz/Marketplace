@@ -14,16 +14,16 @@ public partial class SalesmanProductsMenuItemVm : ObservableObject
     [RelayCommand]
     private void NavigateToSalesmanProductsPage()
     {
-        if (App.NavigationWindowVm.CurrentPageTitle?.Equals("Мои продукты") == false)
+        if (App.NavigationWindowVm.CurrentPageTitle?.Equals("Мои товары") == false)
         {
             App.NavigationService.Navigate(typeof(SalesmanProductsPage));
             UpdateNavWindowCurrentPageTitle();
         }
 
-        App.SearchService.IsEnabled = false;
+        App.SearchService.IsEnabled = true;
     }
     private void UpdateNavWindowCurrentPageTitle() =>
-        App.NavigationWindowVm.CurrentPageTitle = $"Мои продукты";
+        App.NavigationWindowVm.CurrentPageTitle = $"Мои товары";
 
     public SalesmanProductsMenuItemVm()
     {

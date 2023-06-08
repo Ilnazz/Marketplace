@@ -20,6 +20,8 @@ public partial class ProductModel : ObservableValidator
 {
     #region Main properties
 
+    public int CountInClientBaskets => Product.ClientProducts.Count();
+
     public Product Product => _product;
 
     [Required]
@@ -162,7 +164,7 @@ public partial class ProductModel : ObservableValidator
     [RelayCommand]
     private void ShowEditProductWindow()
     {
-        var editProductWindowVm = new AddEditProductWindowVm(this);
+        var editProductWindowVm = new AddEditProductWindowVm(Product);
         var editProductWindowView = new AddEditProductWindowView() { DataContext = editProductWindowVm };
 
         var dialogWindow = new Wpf.Ui.Controls.MessageBox
@@ -179,6 +181,15 @@ public partial class ProductModel : ObservableValidator
         };
         editProductWindowVm.CloseWindowMethod += dialogWindow.Close;
         dialogWindow.ShowDialog();
+
+        OnPropertyChanged(nameof(Name));
+        OnPropertyChanged(nameof(DiscountPercent));
+        OnPropertyChanged(nameof(Cost));
+        OnPropertyChanged(nameof(Status));
+        OnPropertyChanged(nameof(Category));
+        OnPropertyChanged(nameof(Manufacturer));
+        OnPropertyChanged(nameof(MainPhoto));
+        OnPropertyChanged(nameof(CurrentPhoto));
     }
 
 

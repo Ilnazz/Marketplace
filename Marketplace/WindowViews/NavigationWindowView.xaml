@@ -34,7 +34,10 @@
                 Margin="5,0,0,0"
                 VerticalAlignment="Center"
                 Navigation="{Binding ElementName=NavigationSideBar}" />
-            <ui:TitleBar Title="{Binding Title}" Grid.Column="1" />
+            <ui:TitleBar
+                Title="{Binding Title}"
+                Grid.Column="1"
+                ShowMaximize="False" />
         </Grid>
 
         <ui:NavigationCompact
@@ -157,6 +160,7 @@
                 PlaceholderText="Поиск..." />
 
             <Menu Grid.Column="1" Background="Transparent">
+                <views:ReportsMenuItemView />
                 <views:UserMenuItemView />
                 <views:OrdersMenuItemView />
                 <views:BasketMenuItemView />

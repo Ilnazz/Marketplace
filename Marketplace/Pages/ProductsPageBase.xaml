@@ -43,9 +43,10 @@
 
                             <Image
                                 Grid.Row="0"
+                                MaxHeight="300"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Stretch"
-                                Stretch="UniformToFill">
+                                Stretch="Uniform">
                                 <Image.Source>
                                     <Binding Path="MainPhoto">
                                         <Binding.TargetNullValue>
