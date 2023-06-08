@@ -17,7 +17,7 @@ public class UserRoleToStringConverter : IValueConverter
         {
             UserRole.Client => "Покупатель",
             UserRole.Salesman => "Продавец",
-            UserRole.Employee => "Работник",
+            UserRole.Employee => "Сотрудник",
         };
     }
 

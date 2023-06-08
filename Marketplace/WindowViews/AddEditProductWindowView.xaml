@@ -146,7 +146,7 @@
                     Margin="0,0,0,5"
                     FontWeight="Medium"
                     Text="Название" />
-                <ui:TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+                <ui:TextBox MaxLength="150" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
 
             <Grid Margin="0,0,0,10" DockPanel.Dock="Top">

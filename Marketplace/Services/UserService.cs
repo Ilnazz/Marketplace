@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -25,6 +26,12 @@ public class UserService
             var currentPageTitle = App.NavigationWindowVm?.CurrentPageTitle;
             if (currentPageTitle == null)
                 return;
+
+            if (_currentUser.Role == UserRole.Salesman)
+            {
+                App.NavigationService.Navigate(typeof(SalesmanProductsPage));
+                App.NavigationWindowVm.CurrentPageTitle = "Мои товары";
+            }
 
             if ((currentPageTitle.StartsWith("Заказы") &&
                     CurrentUser.Permissions.Contains(Permission.ViewOrdersPage) == false) ||

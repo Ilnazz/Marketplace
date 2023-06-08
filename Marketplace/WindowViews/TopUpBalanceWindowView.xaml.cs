@@ -18,9 +18,9 @@ namespace Marketplace.WindowViews
     /// <summary>
     /// Логика взаимодействия для PayForOrderWindowView.xaml
     /// </summary>
-    public partial class PayForOrderWindowView : UserControl
+    public partial class TopUpBalanceWindowView : UserControl
     {
-        public PayForOrderWindowView()
+        public TopUpBalanceWindowView()
         {
             InitializeComponent();
         }

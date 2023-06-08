@@ -40,4 +40,8 @@
         <windowviews:AddEditProductWindowView />
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type windowvms:TopUpBalanceWindowVm}">
+        <windowviews:TopUpBalanceWindowView />
+    </DataTemplate>
+
 </ResourceDictionary>

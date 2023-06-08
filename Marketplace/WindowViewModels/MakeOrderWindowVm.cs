@@ -159,6 +159,12 @@ public partial class MakeOrderWindowVm : WindowVmBase
             messageFlyout.Show();
             return;
         }
+        else if (PaymentMethod == PaymentMethod.ByBankCard && BankCard!.Balance < TotalCost)
+        {
+            messageFlyout.Content = "Недостаточно средств на счёте. Пополните баланс карты";
+            messageFlyout.Show();
+            return;
+        }
 
         if (PaymentMethod == PaymentMethod.ByBankCard)
         {

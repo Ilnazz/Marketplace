@@ -17,7 +17,7 @@ public partial class ContainerWindow : UiWindow
         Loaded += (_, _) =>
         {
             WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
-            SizeToContent = System.Windows.SizeToContent.WidthAndHeight;
+            WindowState = System.Windows.WindowState.Maximized;
         };
     }
 }

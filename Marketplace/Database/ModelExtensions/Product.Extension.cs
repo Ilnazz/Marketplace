@@ -5,6 +5,7 @@ namespace Marketplace.Database.Models;
 public partial class Product
 {
     public int AvailableQuantity => QuantityInStock - DatabaseContext.Entities.ClientProducts.Local
+            .Where(pac => pac.Client != App.UserService.CurrentUser.Client)
             .Where(pac => pac.Product == this)
             .Sum(pac => pac.Quantity);
 

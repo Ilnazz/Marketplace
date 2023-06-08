@@ -23,10 +23,11 @@
         <ui:VirtualizingItemsControl
             Grid.Column="0"
             ItemsSource="{Binding Orders, Mode=OneWay}"
+            ScrollViewer.CanContentScroll="True"
             Visibility="{Binding AreThereOrders, Converter={StaticResource BoolToVisibilityConverter}}">
             <ui:VirtualizingItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <VirtualizingStackPanel />
+                    <VirtualizingStackPanel ScrollViewer.CanContentScroll="True" />
                 </ItemsPanelTemplate>
             </ui:VirtualizingItemsControl.ItemsPanel>
             <ui:VirtualizingItemsControl.ItemTemplate>
@@ -96,8 +97,8 @@
                         <ui:CardExpander.Content>
                             <Grid>
                                 <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="300" />
                                     <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="2*" />
                                 </Grid.ColumnDefinitions>
 
                                 <DockPanel>
@@ -116,10 +117,12 @@
                                             <TextBlock
                                                 Margin="20,0,0,0"
                                                 FontSize="15"
+                                                Foreground="Black"
                                                 Text="{Binding DeliveryPoint.Name}" />
                                             <TextBlock
                                                 Margin="30,0,0,0"
                                                 FontSize="15"
+                                                Foreground="Black"
                                                 Text="{Binding DeliveryPoint.Address}" />
                                             <StackPanel.Style>
                                                 <Style TargetType="StackPanel">
@@ -156,6 +159,18 @@
                                             FontSize="15"
                                             FontWeight="Medium"
                                             Text="{Binding PaymentMethod, Converter={StaticResource PaymentMethodToStringConverter}}" />
+                                    </StackPanel>
+                                    <StackPanel DockPanel.Dock="Top">
+                                        <TextBlock
+                                            Margin="0,5,5,0"
+                                            FontSize="15"
+                                            FontWeight="Thin"
+                                            Text="Получатель:" />
+                                        <TextBlock
+                                            Margin="10,0,0,0"
+                                            FontSize="15"
+                                            FontWeight="Medium"
+                                            Text="{Binding Client.User.FullName}" />
                                     </StackPanel>
 
                                     <StackPanel
@@ -196,11 +211,11 @@
                                                     <Style BasedOn="{StaticResource {x:Type ui:Button}}" TargetType="{x:Type ui:Button}">
                                                         <Setter Property="Visibility" Value="Collapsed" />
                                                         <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding RequiresPay}" Value="True">
-                                                                <Setter Property="Visibility" Value="Collapsed" />
-                                                            </DataTrigger>
                                                             <DataTrigger Binding="{Binding Status}" Value="Delivered">
                                                                 <Setter Property="Visibility" Value="Visible" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding RequiresPay}" Value="True">
+                                                                <Setter Property="Visibility" Value="Collapsed" />
                                                             </DataTrigger>
                                                         </Style.Triggers>
                                                     </Style>
@@ -214,7 +229,7 @@
                                                 Appearance="Danger"
                                                 Command="{Binding DataContext.CancelOrderCommand, RelativeSource={RelativeSource AncestorType={x:Type ui:UiPage}}}"
                                                 CommandParameter="{Binding .}"
-                                                Content="Отмена"
+                                                Content="Отменить заказ"
                                                 Icon="CalendarCancel16">
                                                 <ui:Button.Style>
                                                     <Style BasedOn="{StaticResource {x:Type ui:Button}}" TargetType="{x:Type ui:Button}">
@@ -244,21 +259,23 @@
                                 <ui:VirtualizingItemsControl Grid.Column="1" ItemsSource="{Binding OrderProducts, Mode=OneWay}">
                                     <ui:VirtualizingItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate>
-                                            <ui:VirtualizingWrapPanel HorizontalAlignment="Center" SpacingMode="Uniform" />
+                                            <WrapPanel />
                                         </ItemsPanelTemplate>
                                     </ui:VirtualizingItemsControl.ItemsPanel>
                                     <ui:VirtualizingItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                            <ui:Card
-                                                Width="150"
-                                                Margin="0,0,0,10"
-                                                VerticalAlignment="Stretch">
-                                                <DockPanel>
+                                            <ui:Card Margin="10,0,0,10" VerticalAlignment="Stretch">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="100" />
+                                                        <ColumnDefinition Width="175" />
+                                                    </Grid.ColumnDefinitions>
+
                                                     <Image
                                                         Height="150"
+                                                        Margin="0,0,10,0"
                                                         HorizontalAlignment="Stretch"
-                                                        DockPanel.Dock="Top"
-                                                        Stretch="UniformToFill">
+                                                        Stretch="Fill">
                                                         <Image.Source>
                                                             <Binding Path="Product.MainPhoto">
                                                                 <Binding.TargetNullValue>
@@ -268,19 +285,41 @@
                                                         </Image.Source>
                                                     </Image>
 
-                                                    <TextBlock DockPanel.Dock="Bottom" Text="{Binding Quantity, StringFormat='{}{0} шт.'}" />
-                                                    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
-                                                        <TextBlock Text="Цена: " />
-                                                        <TextBlock FontWeight="Bold" Text="{Binding Cost, StringFormat='{}{0:0} ₽'}" />
-                                                    </StackPanel>
-                                                    <TextBlock
-                                                        Margin="0,5,0,0"
-                                                        DockPanel.Dock="Bottom"
-                                                        FontSize="14"
-                                                        FontWeight="Medium"
-                                                        Text="{Binding Product.Name}"
-                                                        TextWrapping="Wrap" />
-                                                </DockPanel>
+                                                    <DockPanel Grid.Column="1">
+                                                        <TextBlock
+                                                            Margin="0,0,0,5"
+                                                            DockPanel.Dock="Top"
+                                                            FontSize="16"
+                                                            FontWeight="Medium"
+                                                            Text="{Binding Product.Name}"
+                                                            TextWrapping="Wrap" />
+                                                        <DockPanel Margin="0,0,0,5" DockPanel.Dock="Top">
+                                                            <TextBlock
+                                                                Margin="0,0,5,0"
+                                                                FontSize="16"
+                                                                Text="Цена: " />
+                                                            <TextBlock
+                                                                FontSize="16"
+                                                                FontWeight="Bold"
+                                                                Text="{Binding Cost, StringFormat='{}{0:0} ₽'}" />
+                                                        </DockPanel>
+                                                        <DockPanel DockPanel.Dock="Top">
+                                                            <TextBlock
+                                                                Margin="0,0,5,0"
+                                                                FontSize="16"
+                                                                Text="Количество: " />
+                                                            <TextBlock
+                                                                FontSize="16"
+                                                                FontWeight="Bold"
+                                                                Text="{Binding Quantity, StringFormat='{}{0} шт.'}" />
+                                                        </DockPanel>
+                                                        <!--<ui:Button
+                                                            HorizontalAlignment="Right"
+                                                            VerticalAlignment="Bottom"
+                                                            Content="Вернуть товар"
+                                                            DockPanel.Dock="Bottom" />-->
+                                                    </DockPanel>
+                                                </Grid>
                                             </ui:Card>
                                         </DataTemplate>
                                     </ui:VirtualizingItemsControl.ItemTemplate>

@@ -185,6 +185,7 @@ public partial class ProductModel : ObservableValidator
         OnPropertyChanged(nameof(Name));
         OnPropertyChanged(nameof(DiscountPercent));
         OnPropertyChanged(nameof(Cost));
+        OnPropertyChanged(nameof(CostWithDiscount));
         OnPropertyChanged(nameof(Status));
         OnPropertyChanged(nameof(Category));
         OnPropertyChanged(nameof(Manufacturer));

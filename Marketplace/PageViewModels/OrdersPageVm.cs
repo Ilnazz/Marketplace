@@ -111,7 +111,19 @@ public partial class OrdersPageVm : PageVmBase
     [RelayCommand]
     private void CancelOrder(Order order)
     {
-        var infoWindowVm = new InfoWindowVm("Заказ отменён", "Информация");
+        order.Status = OrderStatus.Canceled;
+
+        foreach (var op in order.OrderProducts)
+            op.Product.QuantityInStock += op.Quantity;
+
+        if (App.UserService.CurrentUser.Client.BankCard != null)
+            App.UserService.CurrentUser.Client.BankCard.Balance += order.TotalCost;
+        
+        DatabaseContext.Entities.SaveChanges();
+
+        var msg = App.UserService.CurrentUser.Client.BankCard != null ? "Заказ отменён. Средства зачислены на карту" : "Заказ отменё";
+
+        var infoWindowVm = new InfoWindowVm(msg, "Информация");
         var infoWindowView = new InfoWindowView() { DataContext = infoWindowVm };
 
         var dialogWindow = new Wpf.Ui.Controls.MessageBox
@@ -128,13 +140,6 @@ public partial class OrdersPageVm : PageVmBase
         };
         infoWindowVm.CloseWindowMethod += dialogWindow.Close;
         dialogWindow.ShowDialog();
-
-        order.Status = OrderStatus.Canceled;
-
-        foreach (var op in order.OrderProducts)
-            op.Product.QuantityInStock += op.Quantity;
-
-        DatabaseContext.Entities.SaveChanges();
 
         OnPropertyChanged(nameof(Orders));
     }
@@ -239,6 +244,8 @@ public partial class OrdersPageVm : PageVmBase
         OnPropertyChanged(nameof(Orders));
         OnPropertyChanged(nameof(AreThereOrders));
     }
+
+
     #endregion
 
     private readonly IEnumerable<Order> _allOrders = null!;

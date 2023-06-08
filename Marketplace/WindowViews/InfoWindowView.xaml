@@ -6,7 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:windowvms="clr-namespace:Marketplace.WindowViewModels"
-    Width="200"
+    Width="400"
     d:DataContext="{d:DesignInstance windowvms:InfoWindowVm}"
     mc:Ignorable="d">
     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">

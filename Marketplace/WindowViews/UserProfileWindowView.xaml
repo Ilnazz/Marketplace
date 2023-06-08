@@ -159,7 +159,8 @@
                 Grid.Row="6"
                 Grid.ColumnSpan="2"
                 HorizontalAlignment="Stretch"
-                VerticalAlignment="Bottom">
+                VerticalAlignment="Bottom"
+                Visibility="{Binding CanAttachBankCard, Converter={StaticResource BoolToVisibilityConverter}}">
                 <DockPanel Margin="0,0,0,10">
                     <TextBlock
                         VerticalAlignment="Center"

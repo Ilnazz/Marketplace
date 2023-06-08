@@ -7,8 +7,6 @@
     xmlns:pages="clr-namespace:Marketplace.Pages"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:views="clr-namespace:Marketplace.Views"
-    Width="1280"
-    Height="720"
     mc:Ignorable="d">
 
     <Grid>
@@ -34,10 +32,7 @@
                 Margin="5,0,0,0"
                 VerticalAlignment="Center"
                 Navigation="{Binding ElementName=NavigationSideBar}" />
-            <ui:TitleBar
-                Title="{Binding Title}"
-                Grid.Column="1"
-                ShowMaximize="False" />
+            <ui:TitleBar Title="{Binding Title}" Grid.Column="1" />
         </Grid>
 
         <ui:NavigationCompact
@@ -54,6 +49,14 @@
                     FontWeight="Medium"
                     Foreground="Black"
                     Text="Каталог" />
+                <ui:NavigationItem
+                    Content="Книги"
+                    Icon="Library16"
+                    PageType="{x:Type pages:BookProductsPage}" />
+                <ui:NavigationItem
+                    Content="Хобби и творчество"
+                    Icon="Image20"
+                    PageType="{x:Type pages:HobbyAndCreativityProductsPage}" />
                 <ui:NavigationItem
                     Content="Электроника"
                     Icon="Phone20"
@@ -99,10 +102,6 @@
                     Icon="AnimalCat20"
                     PageType="{x:Type pages:PetProductsPage}" />
                 <ui:NavigationItem
-                    Content="Книги"
-                    Icon="Library16"
-                    PageType="{x:Type pages:BookProductsPage}" />
-                <ui:NavigationItem
                     Content="Туризм, рыбалка, охота"
                     Icon="FoodFish20"
                     PageType="{x:Type pages:TourismFishingHuntingProductsPage}" />
@@ -114,10 +113,6 @@
                     Content="Мебель"
                     Icon="Bed20"
                     PageType="{x:Type pages:FurnitureProductsPage}" />
-                <ui:NavigationItem
-                    Content="Хобби и творчество"
-                    Icon="Image20"
-                    PageType="{x:Type pages:HobbyAndCreativityProductsPage}" />
                 <ui:NavigationItem
                     Content="Ювелирные украшения"
                     Icon="Trophy20"

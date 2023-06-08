@@ -245,6 +245,8 @@ public partial class AddEditProductWindowVm : WindowVmBase
             Salesman = App.UserService.CurrentUser.Salesman!
         };
 
+        _cost = product?.Cost.ToString("0") ?? "";
+
         Manufacturers = DatabaseContext.Entities.ProductManufacturers
             .ToList();
         Manufacturer = Manufacturers.First();

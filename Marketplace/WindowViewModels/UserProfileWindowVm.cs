@@ -96,8 +96,16 @@ public partial class UserProfileWindowVm : WindowVmBase
 
     public bool IsBankCardAttached => BankCard != null;
 
-    [ObservableProperty]
-    private byte[]? _photo;
+    public byte[]? Photo
+    {
+        get => _user.Photo;
+        set
+        {
+            _user.Photo = value;
+            OnPropertyChanged();
+            SaveChangesCommand.NotifyCanExecuteChanged();
+        }
+    }
 
     public UserRole Role => _user.Role;
     #endregion
