@@ -257,4 +257,12 @@ public partial class AddEditProductWindowVm : WindowVmBase
         Categories = Enum.GetValues(typeof(ProductCategory)).Cast<ProductCategory>().Skip(1);
         Category = Categories.First();
     }
+
+    public override bool OnClosing()
+    {
+        if (DatabaseContext.Entities.HasChanges())
+            DatabaseContext.Entities.CancelChanges();
+
+        return true;
+    }
 }
