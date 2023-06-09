@@ -149,7 +149,6 @@
             <ui:Button
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Bottom"
-                Appearance="Success"
                 Command="{Binding AddProductCommand}"
                 Content="Добавить товар"
                 DockPanel.Dock="Bottom" />

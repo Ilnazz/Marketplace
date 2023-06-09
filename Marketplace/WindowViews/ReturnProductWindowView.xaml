@@ -1,0 +1,24 @@
+﻿<UserControl
+    x:Class="Marketplace.WindowViews.ReturnProductWindowView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:windowvms="clr-namespace:Marketplace.WindowViewModels"
+    Width="125"
+    mc:Ignorable="d">
+
+    <StackPanel>
+        <TextBlock
+            FontSize="16"
+            Text="Вернуть товар?"
+            TextAlignment="Center" />
+        <ui:Button
+            Margin="0,10,0,0"
+            HorizontalAlignment="Stretch"
+            Command="{Binding ReturnCommand}"
+            Content="Вернуть" />
+    </StackPanel>
+
+</UserControl>

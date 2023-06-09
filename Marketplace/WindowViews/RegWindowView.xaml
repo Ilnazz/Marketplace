@@ -71,7 +71,6 @@
                 <ui:Button
                     Margin="0,0,0,10"
                     HorizontalAlignment="Stretch"
-                    Appearance="Light"
                     Command="{Binding RegisterCommand}"
                     CommandParameter="{Binding ElementName=MessageFlyout}"
                     Content="Зарегистрироваться"

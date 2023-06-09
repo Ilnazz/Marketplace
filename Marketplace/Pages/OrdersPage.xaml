@@ -32,7 +32,7 @@
             </ui:VirtualizingItemsControl.ItemsPanel>
             <ui:VirtualizingItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <ui:CardExpander Margin="0,0,0,10">
+                    <ui:CardExpander Margin="0,0,10,10">
                         <ui:CardExpander.Header>
                             <Grid>
                                 <Grid.RowDefinitions>
@@ -46,20 +46,17 @@
 
                                 <DockPanel Grid.ColumnSpan="2">
                                     <TextBlock
-                                        Width="200"
+                                        Width="150"
                                         Margin="0,0,10,0"
                                         VerticalAlignment="Center"
                                         FontSize="16"
                                         FontWeight="Medium"
-                                        Text="{Binding DateTime, StringFormat='{}Заказ от {0:dd.MM.yyyy HH:mm}', ConverterCulture='ru-RU'}" />
-                                    <ui:Badge Padding="10,5" VerticalAlignment="Center">
+                                        Text="{Binding DateTime, StringFormat='{}Заказ от {0:dd.MM.yyyy}', ConverterCulture='ru-RU'}" />
+                                    <ui:Badge VerticalAlignment="Center" Foreground="White">
                                         <ui:Badge.Style>
                                             <Style BasedOn="{StaticResource {x:Type ui:Badge}}" TargetType="{x:Type ui:Badge}">
                                                 <Setter Property="Content" Value="{Binding Status, Converter={StaticResource OrderStatusToStringConverter}}" />
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding Status}" Value="Created">
-                                                        <Setter Property="Appearance" Value="Light" />
-                                                    </DataTrigger>
                                                     <DataTrigger Binding="{Binding Status}" Value="InProcessing">
                                                         <Setter Property="Appearance" Value="Info" />
                                                     </DataTrigger>
@@ -101,7 +98,24 @@
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
 
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
                                 <DockPanel>
+                                    <StackPanel Margin="0,0,0,5" DockPanel.Dock="Top">
+                                        <TextBlock
+                                            Margin="0,0,5,0"
+                                            FontSize="15"
+                                            FontWeight="Thin"
+                                            Text="Дата доставки:" />
+                                        <TextBlock
+                                            Margin="10,0,0,0"
+                                            FontSize="15"
+                                            FontWeight="Medium"
+                                            Text="{Binding DeliveryDate, StringFormat=dd.MM.yyyy}" />
+                                    </StackPanel>
                                     <StackPanel Margin="0,0,0,5" DockPanel.Dock="Top">
                                         <TextBlock
                                             Margin="0,0,5,0"
@@ -172,89 +186,89 @@
                                             FontWeight="Medium"
                                             Text="{Binding Client.User.FullName}" />
                                     </StackPanel>
-
-                                    <StackPanel
-                                        VerticalAlignment="Bottom"
-                                        DockPanel.Dock="Bottom"
-                                        Orientation="Horizontal">
-
-                                        <StackPanel Visibility="{Binding Source={x:Static enums:Permission.PayForOrder}, Converter={StaticResource PermissionToVisibilityConverter}}">
-                                            <ui:Button
-                                                Margin="0,0,10,0"
-                                                Appearance="Caution"
-                                                Command="{Binding DataContext.PayForOrderCommand, RelativeSource={RelativeSource AncestorType={x:Type ui:UiPage}}}"
-                                                CommandParameter="{Binding .}"
-                                                Content="Оплатить и получить"
-                                                Icon="Wallet16">
-                                                <ui:Button.Style>
-                                                    <Style BasedOn="{StaticResource {x:Type ui:Button}}" TargetType="{x:Type ui:Button}">
-                                                        <Setter Property="Visibility" Value="Collapsed" />
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding RequiresPay}" Value="True">
-                                                                <Setter Property="Visibility" Value="Visible" />
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </ui:Button.Style>
-                                            </ui:Button>
-                                        </StackPanel>
-
-                                        <StackPanel Visibility="{Binding Source={x:Static enums:Permission.ReceiveOrder}, Converter={StaticResource PermissionToVisibilityConverter}}">
-                                            <ui:Button
-                                                Margin="0,0,10,0"
-                                                Appearance="Info"
-                                                Command="{Binding DataContext.ReceiveOrderCommand, RelativeSource={RelativeSource AncestorType={x:Type ui:UiPage}}}"
-                                                CommandParameter="{Binding .}"
-                                                Content="Получить"
-                                                Icon="Box16">
-                                                <ui:Button.Style>
-                                                    <Style BasedOn="{StaticResource {x:Type ui:Button}}" TargetType="{x:Type ui:Button}">
-                                                        <Setter Property="Visibility" Value="Collapsed" />
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding Status}" Value="Delivered">
-                                                                <Setter Property="Visibility" Value="Visible" />
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding RequiresPay}" Value="True">
-                                                                <Setter Property="Visibility" Value="Collapsed" />
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </ui:Button.Style>
-                                            </ui:Button>
-                                        </StackPanel>
-
-                                        <StackPanel Visibility="{Binding Source={x:Static enums:Permission.CancelOrder}, Converter={StaticResource PermissionToVisibilityConverter}}">
-                                            <ui:Button
-                                                Margin="0,0,10,0"
-                                                Appearance="Danger"
-                                                Command="{Binding DataContext.CancelOrderCommand, RelativeSource={RelativeSource AncestorType={x:Type ui:UiPage}}}"
-                                                CommandParameter="{Binding .}"
-                                                Content="Отменить заказ"
-                                                Icon="CalendarCancel16">
-                                                <ui:Button.Style>
-                                                    <Style BasedOn="{StaticResource {x:Type ui:Button}}" TargetType="{x:Type ui:Button}">
-                                                        <Setter Property="Visibility" Value="Collapsed" />
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding Status}" Value="InProcessing">
-                                                                <Setter Property="Visibility" Value="Visible" />
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </ui:Button.Style>
-                                            </ui:Button>
-                                        </StackPanel>
-
-                                        <ui:Button
-                                            Margin="0,0,10,0"
-                                            Appearance="Light"
-                                            Command="{Binding DataContext.ShowEditOrderStatusWindowCommand, RelativeSource={RelativeSource AncestorType={x:Type ui:UiPage}}}"
-                                            CommandParameter="{Binding .}"
-                                            Content="Изменить статус заказа"
-                                            Icon="Status16"
-                                            Visibility="{Binding Source={x:Static enums:Permission.EditOrderStatus}, Converter={StaticResource PermissionToVisibilityConverter}}" />
-
-                                    </StackPanel>
                                 </DockPanel>
+
+                                <StackPanel
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Right"
+                                    Orientation="Horizontal">
+
+                                    <StackPanel Visibility="{Binding Source={x:Static enums:Permission.PayForOrder}, Converter={StaticResource PermissionToVisibilityConverter}}">
+                                        <ui:Button
+                                            Margin="10,0,0,0"
+                                            Command="{Binding DataContext.PayForOrderCommand, RelativeSource={RelativeSource AncestorType={x:Type ui:UiPage}}}"
+                                            CommandParameter="{Binding .}"
+                                            Content="Оплатить и получить"
+                                            Icon="Wallet16">
+                                            <ui:Button.Style>
+                                                <Style BasedOn="{StaticResource {x:Type ui:Button}}" TargetType="{x:Type ui:Button}">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding RequiresPay}" Value="True">
+                                                            <Setter Property="Visibility" Value="Visible" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </ui:Button.Style>
+                                        </ui:Button>
+                                    </StackPanel>
+
+                                    <StackPanel Visibility="{Binding Source={x:Static enums:Permission.ReceiveOrder}, Converter={StaticResource PermissionToVisibilityConverter}}">
+                                        <ui:Button
+                                            Margin="10,0,0,0"
+                                            Command="{Binding DataContext.ReceiveOrderCommand, RelativeSource={RelativeSource AncestorType={x:Type ui:UiPage}}}"
+                                            CommandParameter="{Binding .}"
+                                            Content="Получить"
+                                            Icon="Box16">
+                                            <ui:Button.Style>
+                                                <Style BasedOn="{StaticResource {x:Type ui:Button}}" TargetType="{x:Type ui:Button}">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Status}" Value="Delivered">
+                                                            <Setter Property="Visibility" Value="Visible" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding RequiresPay}" Value="True">
+                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </ui:Button.Style>
+                                        </ui:Button>
+                                    </StackPanel>
+
+                                    <StackPanel Visibility="{Binding Source={x:Static enums:Permission.CancelOrder}, Converter={StaticResource PermissionToVisibilityConverter}}">
+                                        <ui:Button
+                                            Margin="10,0,0,0"
+                                            Command="{Binding DataContext.CancelOrderCommand, RelativeSource={RelativeSource AncestorType={x:Type ui:UiPage}}}"
+                                            CommandParameter="{Binding .}"
+                                            Content="Отменить заказ"
+                                            Icon="CalendarCancel16">
+                                            <ui:Button.Style>
+                                                <Style BasedOn="{StaticResource {x:Type ui:Button}}" TargetType="{x:Type ui:Button}">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Status}" Value="Completed">
+                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Status}" Value="Canceled">
+                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </ui:Button.Style>
+                                        </ui:Button>
+                                    </StackPanel>
+
+                                    <ui:Button
+                                        Margin="10,0,0,0"
+                                        Command="{Binding DataContext.ShowEditOrderStatusWindowCommand, RelativeSource={RelativeSource AncestorType={x:Type ui:UiPage}}}"
+                                        CommandParameter="{Binding .}"
+                                        Content="Изменить статус заказа"
+                                        Icon="Status16"
+                                        Visibility="{Binding Source={x:Static enums:Permission.EditOrderStatus}, Converter={StaticResource PermissionToVisibilityConverter}}" />
+
+                                </StackPanel>
 
                                 <ui:VirtualizingItemsControl Grid.Column="1" ItemsSource="{Binding OrderProducts, Mode=OneWay}">
                                     <ui:VirtualizingItemsControl.ItemsPanel>
@@ -313,11 +327,38 @@
                                                                 FontWeight="Bold"
                                                                 Text="{Binding Quantity, StringFormat='{}{0} шт.'}" />
                                                         </DockPanel>
-                                                        <!--<ui:Button
+                                                        <StackPanel
                                                             HorizontalAlignment="Right"
                                                             VerticalAlignment="Bottom"
-                                                            Content="Вернуть товар"
-                                                            DockPanel.Dock="Bottom" />-->
+                                                            DockPanel.Dock="Bottom"
+                                                            Visibility="{Binding Source={x:Static enums:Permission.ReturnProduct}, Converter={StaticResource PermissionToVisibilityConverter}}">
+                                                            <ui:Button
+                                                                Command="{Binding DataContext.ReturnCommand, RelativeSource={RelativeSource AncestorType={x:Type ui:UiPage}}}"
+                                                                CommandParameter="{Binding .}"
+                                                                Content="Вернуть товар">
+                                                                <ui:Button.Style>
+                                                                    <Style BasedOn="{StaticResource {x:Type ui:Button}}" TargetType="{x:Type ui:Button}">
+                                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                                        <Style.Triggers>
+                                                                            <DataTrigger Binding="{Binding DataContext.Status, RelativeSource={RelativeSource AncestorType={x:Type ui:VirtualizingItemsControl}}}" Value="Completed">
+                                                                                <Setter Property="Visibility" Value="Visible" />
+                                                                            </DataTrigger>
+                                                                            <DataTrigger Binding="{Binding IsReturned}" Value="True">
+                                                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                                            </DataTrigger>
+                                                                        </Style.Triggers>
+                                                                    </Style>
+                                                                </ui:Button.Style>
+                                                            </ui:Button>
+                                                        </StackPanel>
+                                                        <TextBlock
+                                                            HorizontalAlignment="Right"
+                                                            VerticalAlignment="Bottom"
+                                                            DockPanel.Dock="Bottom"
+                                                            FontWeight="Medium"
+                                                            Foreground="Red"
+                                                            Text="Возвращён"
+                                                            Visibility="{Binding IsReturned, Converter={StaticResource BoolToVisibilityConverter}}" />
                                                     </DockPanel>
                                                 </Grid>
                                             </ui:Card>

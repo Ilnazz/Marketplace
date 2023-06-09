@@ -63,6 +63,9 @@
     <Compile Update="WindowViews\AddEditDeliveryPointWindowView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="WindowViews\ReturnProductWindowView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="WindowViews\TopUpBalanceWindowView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

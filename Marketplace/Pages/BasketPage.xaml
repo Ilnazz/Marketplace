@@ -220,7 +220,6 @@
                     <ui:Button
                         Margin="0,10,0,0"
                         HorizontalAlignment="Stretch"
-                        Appearance="Primary"
                         Command="{Binding ShowMakeOrderWindowCommand}"
                         Content="Перейти к оформлению" />
                 </StackPanel>
@@ -234,7 +233,6 @@
                 <ui:Button
                     Margin="0,10,0,0"
                     HorizontalAlignment="Stretch"
-                    Appearance="Danger"
                     Command="{Binding ClearBasketCommand}"
                     Content="Очистить корзину" />
             </ui:Card>

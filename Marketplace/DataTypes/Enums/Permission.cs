@@ -22,5 +22,7 @@ public enum Permission
     PayForOrder,
     ReceiveOrder,
     CancelOrder,
-    EditOrderStatus
+    EditOrderStatus,
+
+    ReturnProduct
 }

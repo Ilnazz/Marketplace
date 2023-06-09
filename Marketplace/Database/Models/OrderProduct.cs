@@ -5,6 +5,8 @@ namespace Marketplace.Database.Models;
 
 public partial class OrderProduct
 {
+    public bool IsReturned { get; set; }
+
     public int OrderId { get; set; }
 
     public int ProductId { get; set; }

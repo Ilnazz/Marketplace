@@ -33,6 +33,8 @@ public static class RolePermissions
                 Permission.ReceiveOrder,
                 Permission.CancelOrder,
                 Permission.ViewOrdersPage,
+
+                Permission.ReturnProduct,
             }
         },
         {

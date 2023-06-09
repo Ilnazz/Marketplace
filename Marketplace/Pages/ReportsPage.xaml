@@ -19,15 +19,34 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <StackPanel HorizontalAlignment="Left">
-            <TextBlock Margin="0,0,0,5" Text="Тип отчёта" />
-            <ComboBox ItemsSource="{Binding ReportTypes}" SelectedItem="{Binding SelectedReportType}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding ., Converter={StaticResource ReportTypeToStringConverter}}" />
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
+        <StackPanel Orientation="Horizontal">
+            <StackPanel HorizontalAlignment="Left">
+                <TextBlock
+                    Margin="0,0,0,5"
+                    FontSize="14"
+                    Text="Тип отчёта" />
+                <ComboBox ItemsSource="{Binding ReportTypes}" SelectedItem="{Binding SelectedReportType}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding ., Converter={StaticResource ReportTypeToStringConverter}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </StackPanel>
+            <StackPanel Width="150" Margin="10,0,0,0">
+                <TextBlock
+                    Margin="0,0,0,5"
+                    FontSize="14"
+                    Text="Начало периода" />
+                <DatePicker SelectedDate="{Binding StartDate}" />
+            </StackPanel>
+            <StackPanel Width="150" Margin="10,0,0,0">
+                <TextBlock
+                    Margin="0,0,0,5"
+                    FontSize="14"
+                    Text="Конец периода" />
+                <DatePicker SelectedDate="{Binding EndDate}" />
+            </StackPanel>
         </StackPanel>
 
         <lvc:CartesianChart

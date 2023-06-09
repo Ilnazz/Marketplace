@@ -107,9 +107,11 @@
                 Text="{Binding Name}"
                 TextWrapping="Wrap" />
 
-            <TextBlock
+            <ui:TextBox
                 Grid.Row="1"
                 VerticalAlignment="Stretch"
+                ClearButtonEnabled="False"
+                IsReadOnly="True"
                 Text="{Binding Description}"
                 TextWrapping="Wrap" />
 

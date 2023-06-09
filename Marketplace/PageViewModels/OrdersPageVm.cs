@@ -246,6 +246,30 @@ public partial class OrdersPageVm : PageVmBase
     }
 
 
+    [RelayCommand]
+    private void Return(OrderProduct orderProduct)
+    {
+        var vm = new ReturnProductWindowVm(orderProduct);
+        var view = new ReturnProductWindowView() { DataContext = vm };
+
+        var dialogWindow = new Wpf.Ui.Controls.MessageBox
+        {
+            Content = view,
+            Width = view.Width + 30,
+            Height = view.Height,
+            SizeToContent = SizeToContent.Height,
+            ResizeMode = ResizeMode.NoResize,
+            Title = vm.Title,
+            Topmost = false,
+            ShowFooter = false,
+            WindowStartupLocation = WindowStartupLocation.CenterScreen
+        };
+        vm.CloseWindowMethod += dialogWindow.Close;
+        dialogWindow.ShowDialog();
+
+        OnPropertyChanged(nameof(Orders));
+    }
+
     #endregion
 
     private readonly IEnumerable<Order> _allOrders = null!;
