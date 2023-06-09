@@ -274,11 +274,6 @@ public partial class OrdersPageVm : PageVmBase
         var user = App.UserService.CurrentUser;
         if (user.Role == DataTypes.Enums.UserRole.Client)
             return user.Client!.Orders;
-        else if (user.Role == DataTypes.Enums.UserRole.Salesman)
-            return DatabaseContext.Entities.Orders.Local
-                .SelectMany(o => o.OrderProducts)
-                .Where(op => user.Salesman!.Products.Any(p => p == op.Product))
-                .Select(op => op.Order);
         else if (user.Role == DataTypes.Enums.UserRole.Employee)
             return DatabaseContext.Entities.Orders.Local.ToList();
 

@@ -88,7 +88,6 @@ public partial class ProductsPageVm : PageVmBase
 
         _allProductModels = DatabaseContext.Entities.Products.Local
             .Where(p => p.Category == productCategory)
-            .Where(p => p.Status == ProductStatus.Active || p.Status == ProductStatus.RemovedFromSale)
             .Select(p => new ProductModel(p));
 
         Manufacturers = DatabaseContext.Entities.ProductManufacturers

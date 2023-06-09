@@ -1,5 +1,5 @@
 ﻿<ui:UiPage
-    x:Class="Marketplace.Pages.CategoriesPage"
+    x:Class="Marketplace.Pages.DeliveryPointsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -9,7 +9,7 @@
     mc:Ignorable="d">
 
     <ui:UiPage.DataContext>
-        <vms:CategoriesPageVm />
+        <vms:DeliveryPointsPageVm />
     </ui:UiPage.DataContext>
 
     <Grid>
@@ -19,7 +19,7 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
-        <ItemsControl ItemsSource="{Binding Manufacturers}">
+        <ItemsControl ItemsSource="{Binding DeliveryPoints}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <ui:VirtualizingWrapPanel SpacingMode="Uniform" />
@@ -32,8 +32,15 @@
                             <StackPanel>
                                 <TextBlock Text="Название" />
                                 <TextBlock
+                                    Margin="5,0,0,10"
                                     FontWeight="Medium"
                                     Text="{Binding Name}"
+                                    TextWrapping="Wrap" />
+                                <TextBlock Text="Адрес" />
+                                <TextBlock
+                                    Margin="5,0,0,0"
+                                    FontWeight="Medium"
+                                    Text="{Binding Address}"
                                     TextWrapping="Wrap" />
                             </StackPanel>
 
@@ -67,6 +74,6 @@
             VerticalAlignment="Top"
             Command="{Binding DataContext.AddCommand, RelativeSource={RelativeSource AncestorType={x:Type ui:UiPage}}}"
             CommandParameter="{Binding .}"
-            Content="Добавить производителя" />
+            Content="Добавить пункт выдачи" />
     </Grid>
 </ui:UiPage>

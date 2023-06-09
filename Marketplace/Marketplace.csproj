@@ -34,7 +34,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Pages\DeliveryPointsPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Pages\SalesmanProductsPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\DeliveryPointMenuItemView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\CategoriesManuItemView.xaml.cs">
@@ -53,6 +59,9 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Update="WindowViews\AddEditDeliveryPointWindowView.xaml.cs">
+      <SubType>Code</SubType>
     </Compile>
     <Compile Update="WindowViews\TopUpBalanceWindowView.xaml.cs">
       <SubType>Code</SubType>

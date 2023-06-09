@@ -82,22 +82,23 @@ public partial class SalesmanProductsPageVm : PageVmBase
     [RelayCommand]
     private void AddProduct()
     {
-        var editProductWindowVm = new AddEditProductWindowVm(null);
-        var editProductWindowView = new AddEditProductWindowView() { DataContext = editProductWindowVm };
+        var vm = new AddEditProductWindowVm(null);
+        var view = new AddEditProductWindowView() { DataContext = vm };
 
         var dialogWindow = new Wpf.Ui.Controls.MessageBox
         {
-            Content = editProductWindowView,
-            Width = editProductWindowView.Width + 30,
-            Height = editProductWindowView.Height,
+            Content = view,
+            Width = view.Width + 30,
+            Height = view.Height,
             SizeToContent = SizeToContent.Height,
             ResizeMode = ResizeMode.NoResize,
-            Title = editProductWindowVm.Title,
+            Title = vm.Title,
             Topmost = false,
             ShowFooter = false,
             WindowStartupLocation = WindowStartupLocation.CenterScreen
         };
-        editProductWindowVm.CloseWindowMethod += dialogWindow.Close;
+        vm.CloseWindowMethod = dialogWindow.Close;
+        dialogWindow.Closing += (_, e) => e.Cancel = vm.OnClosing() == false;
         dialogWindow.ShowDialog();
 
         OnPropertyChanged(nameof(ProductModels));

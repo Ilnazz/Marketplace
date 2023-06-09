@@ -34,6 +34,7 @@ public partial class DatabaseContext
             entity.Property(d => d.DeliveryType).HasConversion<int>();
             entity.Property(d => d.PaymentMethod).HasConversion<int>();
 
+            entity.Navigation(d => d.DeliveryPoint).AutoInclude();
             entity.Navigation(d => d.OrderProducts).AutoInclude();
         });
     }

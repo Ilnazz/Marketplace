@@ -167,7 +167,7 @@
                                             FontWeight="Thin"
                                             Text="Получатель:" />
                                         <TextBlock
-                                            Margin="10,0,0,0"
+                                            Margin="10,0,0,10"
                                             FontSize="15"
                                             FontWeight="Medium"
                                             Text="{Binding Client.User.FullName}" />

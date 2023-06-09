@@ -155,11 +155,13 @@
                 PlaceholderText="Поиск..." />
 
             <Menu Grid.Column="1" Background="Transparent">
-                <views:ReportsMenuItemView />
                 <views:UserMenuItemView />
+                <views:ReportsMenuItemView />
                 <views:OrdersMenuItemView />
                 <views:BasketMenuItemView />
                 <views:SalesmanProductsMenuItemView />
+                <views:CategoriesMenuItemView />
+                <views:DeliveryPointsMenuItemView />
             </Menu>
         </Grid>
 

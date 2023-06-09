@@ -4,7 +4,7 @@ using Marketplace.Pages;
 
 namespace Marketplace.ViewModels;
 
-public partial class CategoriesMenuItemVm : ObservableObject
+public partial class DeliveryPointMenuItemVm : ObservableObject
 {
     public bool IsEmployee => App.UserService.CurrentUser.Role == DataTypes.Enums.UserRole.Employee;
 
@@ -12,9 +12,9 @@ public partial class CategoriesMenuItemVm : ObservableObject
     [RelayCommand]
     private void NavigateToCategoriesPage()
     {
-        if (App.NavigationWindowVm.CurrentPageTitle?.StartsWith("Производители товаров") == false)
+        if (App.NavigationWindowVm.CurrentPageTitle?.StartsWith("Пункты выдачи товаров") == false)
         {
-            App.NavigationService.Navigate(typeof(CategoriesPage));
+            App.NavigationService.Navigate(typeof(DeliveryPointsPage));
             UpdateNavWindowCurrentPageTitle();
         }
 
@@ -22,7 +22,7 @@ public partial class CategoriesMenuItemVm : ObservableObject
     }
     #endregion
 
-    public CategoriesMenuItemVm()
+    public DeliveryPointMenuItemVm()
     {
         App.UserService.StateChanged += () =>
         {
@@ -32,5 +32,5 @@ public partial class CategoriesMenuItemVm : ObservableObject
     }
 
     private void UpdateNavWindowCurrentPageTitle() =>
-        App.NavigationWindowVm.CurrentPageTitle = "Производители товаров";
+        App.NavigationWindowVm.CurrentPageTitle = "Пункты выдачи товаров";
 }

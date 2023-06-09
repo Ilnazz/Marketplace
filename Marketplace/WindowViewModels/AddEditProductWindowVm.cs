@@ -231,7 +231,10 @@ public partial class AddEditProductWindowVm : WindowVmBase
     {
         if (Product.Id == 0)
             return HasErrors == false;
-        
+
+        DatabaseContext.Entities.HasChanges();
+        //var c = DatabaseContext.Entities.HasChanges();
+        //var r = HasErrors == false && DatabaseContext.Entities.HasChanges();
         return HasErrors == false && DatabaseContext.Entities.HasChanges();
     }
     #endregion
@@ -249,13 +252,15 @@ public partial class AddEditProductWindowVm : WindowVmBase
 
         Manufacturers = DatabaseContext.Entities.ProductManufacturers
             .ToList();
-        Manufacturer = Manufacturers.First();
-
         Statuses = Enum.GetValues(typeof(ProductStatus)).Cast<ProductStatus>().Skip(1);
-        Status = Statuses.First();
-
         Categories = Enum.GetValues(typeof(ProductCategory)).Cast<ProductCategory>().Skip(1);
-        Category = Categories.First();
+
+        if (product == null)
+        {
+            Manufacturer = Manufacturers.First();
+            Status = Statuses.First();
+            Category = Categories.First();
+        }
     }
 
     public override bool OnClosing()

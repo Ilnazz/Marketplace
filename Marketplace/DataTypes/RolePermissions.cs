@@ -46,8 +46,6 @@ public static class RolePermissions
                 Permission.AddProduct,
                 Permission.EditProduct,
                 Permission.RemoveProduct,
-
-                Permission.ViewOrdersPage,
             }
         },
         {

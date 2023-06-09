@@ -6,7 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:windowvms="clr-namespace:Marketplace.WindowViewModels"
-    Width="400"
+    Width="300"
     d:DataContext="{d:DesignInstance windowvms:InfoWindowVm}"
     mc:Ignorable="d">
     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -14,7 +14,8 @@
             Margin="0,0,0,10"
             FontSize="16"
             FontWeight="Medium"
-            Text="{Binding Text}" />
+            Text="{Binding Text}"
+            TextWrapping="Wrap" />
         <ui:Button
             HorizontalAlignment="Stretch"
             Command="{Binding OkCommand}"

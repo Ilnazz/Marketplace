@@ -12,10 +12,12 @@ public partial class OrdersMenuItemVm : ObservableObject
     public bool UserHasPermission =>
          App.UserService.CurrentUser.Permissions.Contains(Permission.ViewOrdersPage);
 
+    private string _title => App.UserService.CurrentUser.Role != UserRole.Client ? "Заказы покупателей" : "Заказы";
+
     [RelayCommand]
     private void NavigateToOrdersPage()
     {
-        if (App.NavigationWindowVm.CurrentPageTitle?.Equals("Заказы") == false)
+        if (App.NavigationWindowVm.CurrentPageTitle?.Equals(_title) == false)
         {
             App.NavigationService.Navigate(typeof(OrdersPage));
             UpdateNavWindowCurrentPageTitle();
@@ -24,7 +26,7 @@ public partial class OrdersMenuItemVm : ObservableObject
         App.SearchService.IsEnabled = false;
     }
     private void UpdateNavWindowCurrentPageTitle() =>
-        App.NavigationWindowVm.CurrentPageTitle = $"Заказы";
+        App.NavigationWindowVm.CurrentPageTitle = _title;
 
     public OrdersMenuItemVm()
     {

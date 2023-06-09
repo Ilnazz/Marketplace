@@ -179,6 +179,7 @@ public partial class ProductModel : ObservableValidator
             ShowFooter = false,
             WindowStartupLocation = WindowStartupLocation.CenterScreen
         };
+        dialogWindow.Closing += (_, e) => e.Cancel = editProductWindowVm.OnClosing() == false;
         editProductWindowVm.CloseWindowMethod += dialogWindow.Close;
         dialogWindow.ShowDialog();
 

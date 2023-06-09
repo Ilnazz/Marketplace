@@ -5,22 +5,22 @@ using System.Windows;
 using CommunityToolkit.Mvvm.Input;
 using Marketplace.Database;
 using Marketplace.Database.Models;
-using Marketplace.Models;
 using Marketplace.WindowViewModels;
 using Marketplace.WindowViews;
+using Microsoft.EntityFrameworkCore;
 
 namespace Marketplace.PageViewModels;
 
-public partial class CategoriesPageVm : PageVmBase
+public partial class DeliveryPointsPageVm : PageVmBase
 {
-    public IEnumerable<ProductManufacturer> Manufacturers => DatabaseContext.Entities.ProductManufacturers.Local.ToList();
+    public IEnumerable<DeliveryPoint> DeliveryPoints => DatabaseContext.Entities.DeliveryPoints.Local.ToList();
 
     [RelayCommand]
-    private void Delete(ProductManufacturer manufacturer)
+    private void Delete(DeliveryPoint dp)
     {
-        if (manufacturer.Products.Any())
+        if (dp.Orders.Any())
         {
-            var infoWindowVm = new InfoWindowVm("Нельзя удалить - есть товары этого производителя", "Ошибка");
+            var infoWindowVm = new InfoWindowVm("Нельзя удалить - есть заказы с этим пунктом выдачи", "Ошибка");
             var infoWindowView = new InfoWindowView() { DataContext = infoWindowVm };
 
             var dw = new Wpf.Ui.Controls.MessageBox
@@ -40,17 +40,17 @@ public partial class CategoriesPageVm : PageVmBase
             return;
         }
 
-        DatabaseContext.Entities.Remove(manufacturer);
+        DatabaseContext.Entities.Remove(dp);
         DatabaseContext.Entities.SaveChanges();
 
-        OnPropertyChanged(nameof(Manufacturers));
+        OnPropertyChanged(nameof(DeliveryPoints));
     }
 
     [RelayCommand]
-    private void Edit(ProductManufacturer manufacturer)
+    private void Edit(DeliveryPoint dp)
     {
-        var vm = new AddEditManufacturerWindowVm(manufacturer);
-        var view = new AddEditManufacturerWindowView() { DataContext = vm };
+        var vm = new AddEditDeliveryPointWindowVm(dp);
+        var view = new AddEditDeliveryPointWindowView() { DataContext = vm };
 
         var dialogWindow = new Wpf.Ui.Controls.MessageBox
         {
@@ -68,14 +68,14 @@ public partial class CategoriesPageVm : PageVmBase
         dialogWindow.Closing += (_, e) => e.Cancel = vm.OnClosing() == false;
         dialogWindow.ShowDialog();
 
-        OnPropertyChanged(nameof(Manufacturers));
+        OnPropertyChanged(nameof(DeliveryPoints));
     }
 
     [RelayCommand]
     private void Add()
     {
-        var vm = new AddEditManufacturerWindowVm(new ProductManufacturer());
-        var view = new AddEditManufacturerWindowView() { DataContext = vm };
+        var vm = new AddEditDeliveryPointWindowVm(new DeliveryPoint());
+        var view = new AddEditDeliveryPointWindowView() { DataContext = vm };
 
         var dialogWindow = new Wpf.Ui.Controls.MessageBox
         {
@@ -93,10 +93,11 @@ public partial class CategoriesPageVm : PageVmBase
         dialogWindow.Closing += (_, e) => e.Cancel = vm.OnClosing() == false;
         dialogWindow.ShowDialog();
 
-        OnPropertyChanged(nameof(Manufacturers));
+        OnPropertyChanged(nameof(DeliveryPoints));
     }
 
-    public CategoriesPageVm()
+    public DeliveryPointsPageVm()
     {
+        DatabaseContext.Entities.DeliveryPoints.Load();
     }
 }
