@@ -18,6 +18,7 @@ public partial class ContainerWindow : UiWindow
         {
             WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             WindowState = System.Windows.WindowState.Maximized;
+            ResizeMode = System.Windows.ResizeMode.CanResize;
         };
     }
 }

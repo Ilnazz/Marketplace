@@ -14,9 +14,9 @@ public class ReportTypeToStringConverter : IValueConverter
 
         return rp switch
         {
-            ReportType.ByOrdersCount => "По количеству заказов",
-            ReportType.ByProductsCount => "По количеству товаров в заказе",
-            ReportType.ByTotalCost => "По общей стоимости заказа"
+            ReportType.ByOrdersCount => "Количество заказов",
+            ReportType.ByProductsCount => "Количество товаров",
+            ReportType.ByTotalCost => "Общая сумма заказа"
         };
     }
 

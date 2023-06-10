@@ -29,7 +29,7 @@
                 <DataTemplate>
                     <ui:Card
                         Width="250"
-                        Height="350"
+                        Height="400"
                         Margin="0,0,10,10"
                         VerticalAlignment="Stretch"
                         VerticalContentAlignment="Stretch">

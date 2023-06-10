@@ -54,19 +54,7 @@ public partial class ReportsPageVm : PageVmBase
         {
             Labeler = value => new DateTime((long) value).ToString("dd MMMM"),
             LabelsRotation = 80,
-
-            // when using a date time type, let the library know your unit 
             UnitWidth = TimeSpan.FromDays(1).Ticks, 
-
-            // if the difference between our points is in hours then we would:
-            // UnitWidth = TimeSpan.FromHours(1).Ticks,
-
-            // since all the months and years have a different number of days
-            // we can use the average, it would not cause any visible error in the user interface
-            // Months: TimeSpan.FromDays(30.4375).Ticks
-            // Years: TimeSpan.FromDays(365.25).Ticks
-
-            // The MinStep property forces the separator to be greater than 1 day.
             MinStep = TimeSpan.FromDays(1).Ticks
         }
     };

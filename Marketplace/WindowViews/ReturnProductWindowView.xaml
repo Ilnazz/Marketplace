@@ -6,14 +6,20 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:windowvms="clr-namespace:Marketplace.WindowViewModels"
-    Width="125"
+    Width="150"
     mc:Ignorable="d">
 
     <StackPanel>
         <TextBlock
             FontSize="16"
-            Text="Вернуть товар?"
+            Text="Количество для возврата"
             TextAlignment="Center" />
+        <ui:NumberBox
+            ClearButtonEnabled="False"
+            IntegersOnly="True"
+            Max="{Binding Max}"
+            Min="{Binding Min}"
+            Text="{Binding Quantity}" />
         <ui:Button
             Margin="0,10,0,0"
             HorizontalAlignment="Stretch"

@@ -340,11 +340,8 @@
                                                                     <Style BasedOn="{StaticResource {x:Type ui:Button}}" TargetType="{x:Type ui:Button}">
                                                                         <Setter Property="Visibility" Value="Collapsed" />
                                                                         <Style.Triggers>
-                                                                            <DataTrigger Binding="{Binding DataContext.Status, RelativeSource={RelativeSource AncestorType={x:Type ui:VirtualizingItemsControl}}}" Value="Completed">
+                                                                            <DataTrigger Binding="{Binding CanReturn}" Value="True">
                                                                                 <Setter Property="Visibility" Value="Visible" />
-                                                                            </DataTrigger>
-                                                                            <DataTrigger Binding="{Binding IsReturned}" Value="True">
-                                                                                <Setter Property="Visibility" Value="Collapsed" />
                                                                             </DataTrigger>
                                                                         </Style.Triggers>
                                                                     </Style>
@@ -352,12 +349,14 @@
                                                             </ui:Button>
                                                         </StackPanel>
                                                         <TextBlock
+                                                            Margin="0,10,0,5"
                                                             HorizontalAlignment="Right"
                                                             VerticalAlignment="Bottom"
                                                             DockPanel.Dock="Bottom"
+                                                            FontSize="12"
                                                             FontWeight="Medium"
                                                             Foreground="Red"
-                                                            Text="Возвращён"
+                                                            Text="{Binding ReturnedQuantity, StringFormat='{}Возвращено: {0} шт.'}"
                                                             Visibility="{Binding IsReturned, Converter={StaticResource BoolToVisibilityConverter}}" />
                                                     </DockPanel>
                                                 </Grid>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows;
 using Marketplace.Database.Models;
 using Marketplace.Pages;
@@ -42,5 +43,13 @@ public partial class App : Application
         new ContainerWindow(NavigationWindowVm).Show();
 
         App.NavigationService.Navigate(typeof(BookProductsPage));
+    }
+
+    public App()
+    {
+        AppDomain.CurrentDomain.UnhandledException += (_, e) => { };
+        Dispatcher.UnhandledException += (_, e) => { e.Handled = true; };
+        Current.DispatcherUnhandledException += (_, e) => { e.Handled = true; };
+        TaskScheduler.UnobservedTaskException += (_, e) => { e.SetObserved(); };
     }
 }

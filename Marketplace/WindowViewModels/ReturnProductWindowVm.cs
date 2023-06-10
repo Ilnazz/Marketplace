@@ -11,6 +11,12 @@ public partial class ReturnProductWindowVm : WindowVmBase
 {
     public Product Product { get; set; }
 
+    public int Min => 1;
+
+    public int Max => _orderProduct.Quantity - _orderProduct.ReturnedQuantity;
+
+    public int Quantity { get; set; }
+
     private OrderProduct _orderProduct;
 
     [ObservableProperty]
@@ -20,8 +26,8 @@ public partial class ReturnProductWindowVm : WindowVmBase
     [RelayCommand]
     private void Return()
     {
-        _orderProduct.IsReturned = true;
-        Product.QuantityInStock += _orderProduct.Quantity;
+        Product.QuantityInStock += Quantity;
+        _orderProduct.ReturnedQuantity += Quantity;
         WasReturned = true;
 
         if (App.UserService.CurrentUser.Client.BankCard != null)

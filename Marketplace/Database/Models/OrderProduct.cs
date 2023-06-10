@@ -1,11 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Marketplace.Database.Models;
 
 public partial class OrderProduct
 {
-    public bool IsReturned { get; set; }
+    public int ReturnedQuantity { get; set; }
+
+    public bool CanReturn => Quantity - ReturnedQuantity > 0 && Order.Status == DataTypes.Enums.OrderStatus.Completed;
+
+    [NotMapped]
+    public bool IsReturned => ReturnedQuantity > 0;
 
     public int OrderId { get; set; }
 
