@@ -52,12 +52,12 @@
                                 </Grid.ColumnDefinitions>
 
                                 <Image
-                                    Width="75"
-                                    Height="100"
+                                    MaxWidth="150"
+                                    MaxHeight="150"
                                     Margin="0,0,10,0"
                                     HorizontalAlignment="Stretch"
                                     VerticalAlignment="Stretch"
-                                    Stretch="UniformToFill">
+                                    Stretch="Uniform">
                                     <Image.Source>
                                         <Binding Path="MainPhoto">
                                             <Binding.TargetNullValue>

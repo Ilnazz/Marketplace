@@ -50,7 +50,7 @@
                         Grid.Row="0"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
-                        Stretch="UniformToFill">
+                        Stretch="Uniform">
                         <Image.Source>
                             <Binding Path="CurrentPhoto">
                                 <Binding.TargetNullValue>

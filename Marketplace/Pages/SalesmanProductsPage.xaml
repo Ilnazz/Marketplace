@@ -44,7 +44,7 @@
 
                             <Image
                                 Grid.Row="0"
-                                MaxHeight="250"
+                                MaxHeight="175"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Stretch"
                                 Stretch="Uniform">
